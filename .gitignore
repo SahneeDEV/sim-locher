@@ -1,0 +1,4 @@
+# Kompilierte Dateien haben idR in Versionskontrolle nichts zu suchen
+*.class
+# Komische BlueJ meta file
+*.ctxt
