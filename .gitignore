@@ -2,3 +2,5 @@
 *.class
 # Komische BlueJ meta file
 *.ctxt
+# JavaDoc
+doc/
