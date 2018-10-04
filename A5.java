@@ -8,6 +8,6 @@ public class A5 extends Papier
     
         //Konstruktor
     public A5(){
-        
+        super(maximaleAnzahlLochen);
     }
 }
