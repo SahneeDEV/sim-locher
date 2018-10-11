@@ -4,6 +4,9 @@ import javafx.scene.Scene;
 import javafx.scene.Group;
 import javafx.scene.image.Image;
 import javafx.scene.layout.*;
+import javafx.scene.control.Button;
+import javafx.geometry.Insets;
+import javafx.geometry.*;
 
 import java.awt.GraphicsEnvironment;
 import java.awt.GraphicsDevice;
@@ -20,8 +23,29 @@ public class StageMainMenu extends Application
         //Generating and setting the Objects
         BorderPane mainPane = new BorderPane();
 
+        //Background setzen
         BackgroundImage backgroundImageMainMenu = new BackgroundImage(new Image("images/locher_animated.gif"), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,BackgroundSize.DEFAULT);
         mainPane.setBackground(new Background(backgroundImageMainMenu));
+
+
+        //Gruppe für die Buttons
+        VBox buttonBox = new VBox();
+        buttonBox.setPadding(new Insets(25,8,25,8));
+        buttonBox.setSpacing(20);
+        buttonBox.setPrefWidth(100);
+
+        //Buttons
+        Button button_playgame = new Button("Play_Game()");
+            button_playgame.setMinWidth(buttonBox.getPrefWidth());
+        Button button_settings = new Button("Settings()");
+            button_settings.setMinWidth(buttonBox.getPrefWidth());
+        Button button_exit = new Button("Exit()");
+            button_exit.setMinWidth(buttonBox.getPrefWidth());
+
+
+        //Adding the Buttons to the VBox and the VBox to the BorderPane
+        buttonBox.getChildren().addAll(button_playgame, button_settings, button_exit);
+        mainPane.setCenter(buttonBox);
 
 
         //Get Scene size and create a new Instance
