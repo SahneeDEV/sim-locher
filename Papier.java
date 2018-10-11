@@ -1,10 +1,20 @@
 public abstract class Papier
 {
     private final int maximaleAnzahlLochen;
+    private Farbe farbe;
     private int lochAnzahl;
     
     protected Papier(int maximaleAnzahlLochen) {
+        this.farbe = Farbe.WEISS;
         this.maximaleAnzahlLochen = maximaleAnzahlLochen;
+    }
+
+    public Farbe getFarbe() {
+        return this.farbe;
+    }
+
+    public void setFarbe(Farbe farbe) {
+        this.farbe = farbe;
     }
     
     public int getMaximaleLochAnzahl() {
