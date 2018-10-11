@@ -17,3 +17,5 @@ cd scripts
 ./run.sh 
 # or .bat on windows
 ```
+
+#RGB Locher 4 the Win
