@@ -2,6 +2,9 @@ import javafx.application.Application;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
 import javafx.scene.Group;
+import javafx.scene.image.Image;
+import javafx.scene.layout.*;
+
 import java.awt.GraphicsEnvironment;
 import java.awt.GraphicsDevice;
 
@@ -12,19 +15,20 @@ public class StageMainMenu extends Application
     
     @Override
     public void start(Stage stage) throws Exception{
-        stage.setTitle(windowTitle);
-        
-        //Create the Scene Content
-        Group mainFrame = new Group();
-        
+        stage.setTitle(windowTitle);        
+
+        //Generating and setting the Objects
+        BorderPane mainPane = new BorderPane();
+
+        BackgroundImage backgroundImageMainMenu = new BackgroundImage(new Image("images/locher_base.png"), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,BackgroundSize.DEFAULT);
+        mainPane.setBackground(new Background(backgroundImageMainMenu));
+
+
         //Get Scene size and create a new Instance
         int[] screenSizes = GetScreenSize();
-        Scene sceneMainWindow = new Scene(mainFrame, (int)(screenSizes[0] * 0.5), (int)(screenSizes[1] * 0.5));
+        Scene sceneMainWindow = new Scene(mainPane, (int)(screenSizes[0] * 0.5), (int)(screenSizes[1] * 0.5));
         
-        
-        
-        //Generating and adding the 
-        
+
         //Put everything together
         stage.setScene(sceneMainWindow);
         
@@ -32,13 +36,17 @@ public class StageMainMenu extends Application
         stage.show();
     }
     
-    //Konstruktor
+    /**
+     * Konstruktor
+     */
     public void StageMainMenu(){
         Application.launch();
     }
     
-    //To get the Screen Size
-    //Returns int[width_screen1, height_screen1, width_screen2, height_screen2,...]
+    /**
+     * Holt sich die größe aller angeschlossenen Monitore
+     * @return int[width_screen1, height_screen1, width_screen2, height_screen2,...]
+     */
     private int[] GetScreenSize(){
         //Define 
         GraphicsEnvironment graphEnv = GraphicsEnvironment.getLocalGraphicsEnvironment();
