@@ -40,4 +40,15 @@ public class PapierStapel<TPapier extends Papier>
     public int groesse() {
         return papiere.size();
     }
+
+    /**
+     * Wird aufgerufen wenn alle Papiere auf diesem Stapel gelocht worden sind. 
+     * Benachrichtig alle Papiere dass diese gelocht worden sind.
+     */
+    public void gelocht() {
+        for(int i = 0; i < papiere.size(); i++) {
+            Papier papier = papiere.get(i);
+            papier.gelocht();
+        }
+    }
 }

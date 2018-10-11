@@ -31,8 +31,14 @@ public class SimLocher
         return this.stapel;
     }
 
-    /** locht... */
+    /** 
+     * Locht den aktuell eingelegten Papier Stapel.
+     * @exception IllegalStateException Es ist kein Papier Stapel eingelegt.
+     */
     public void lochen() {
-        // Stapel lochen ....
+        if(this.stapel == null) {
+            throw new IllegalStateException("Es ist kein Papier Stapel eingelegt.");
+        }
+        this.stapel.gelocht();
     }
 }
