@@ -20,7 +20,7 @@ public class StageMainMenu extends Application
         //Generating and setting the Objects
         BorderPane mainPane = new BorderPane();
 
-        BackgroundImage backgroundImageMainMenu = new BackgroundImage(new Image("images/locher_base.png"), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,BackgroundSize.DEFAULT);
+        BackgroundImage backgroundImageMainMenu = new BackgroundImage(new Image("images/locher_base.png"), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,BackgroundSize.DEFAULT);
         mainPane.setBackground(new Background(backgroundImageMainMenu));
 
 
@@ -53,7 +53,7 @@ public class StageMainMenu extends Application
         GraphicsDevice[] graphDev = graphEnv.getScreenDevices();
         
         //Variables
-        int[] screenSizes = new int[(graphDev.length + 2)];
+        int[] screenSizes = new int[(graphDev.length * 2)];
         int count = 0;
         
         for(int i = 0; i < graphDev.length; i++){
