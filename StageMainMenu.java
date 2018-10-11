@@ -20,7 +20,7 @@ public class StageMainMenu extends Application
         //Generating and setting the Objects
         BorderPane mainPane = new BorderPane();
 
-        BackgroundImage backgroundImageMainMenu = new BackgroundImage(new Image("images/locher_base.png"), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,BackgroundSize.DEFAULT);
+        BackgroundImage backgroundImageMainMenu = new BackgroundImage(new Image("images/locher_animated.gif"), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,BackgroundSize.DEFAULT);
         mainPane.setBackground(new Background(backgroundImageMainMenu));
 
 
@@ -34,13 +34,6 @@ public class StageMainMenu extends Application
         
         //Show the Stage
         stage.show();
-    }
-    
-    /**
-     * Konstruktor
-     */
-    public void StageMainMenu(){
-        Application.launch();
     }
     
     /**
@@ -60,10 +53,6 @@ public class StageMainMenu extends Application
             screenSizes[count] = graphDev[i].getDisplayMode().getWidth();
             screenSizes[count + 1] = graphDev[i].getDisplayMode().getHeight();
             count = count + 2;
-        }
-        
-        for(int i: screenSizes){
-            System.out.println(i);
         }
         
         return screenSizes;
