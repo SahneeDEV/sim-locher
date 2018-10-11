@@ -6,6 +6,9 @@ import javafx.scene.layout.BorderPane;
 
 public class Gui
 {
-    //
-    
+    //Konstruktor
+    public void Gui(){
+       StageMainMenu sMM = new StageMainMenu();
+       
+    }
 }
