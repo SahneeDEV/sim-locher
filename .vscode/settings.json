@@ -1,0 +1,7 @@
+{
+  "files.exclude": {
+    "**/*.class": true,
+    "**/*.ctxt": true,
+    "**/*.bluej": true
+  }
+}
