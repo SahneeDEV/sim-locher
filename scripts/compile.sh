@@ -1,2 +1,3 @@
 #!/bin/sh
+echo Compiling World of Lochercraft ...
 javac ../*.java
