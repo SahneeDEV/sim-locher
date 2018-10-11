@@ -13,10 +13,14 @@ public class PapierStapel<TPapier extends Papier>
     
     /**
      * Legt ein Blatt Papier auf dem Stapel ab. Wenn das Papier breits auf dem Stapel ist, wird es nicht abgelegt.
+     * @exception IllegalArgumentException Kann keine nicht existierenden Papiere auf den Stapel legen.
      * @param papier Das Papier, welches auf dem Stapel abgelegt werden soll.
      * @return true wenn das Papier abgelegt wurde, sonst false.
      */
     public boolean ablegen(TPapier papier) {
+        if (!papier.existiert()) {
+            throw new IllegalArgumentException("Kann keine nicht existierenden Papiere auf den Stapel legen.");
+        }
         if (papiere.contains(papier)) {
             return false;
         }
@@ -49,6 +53,11 @@ public class PapierStapel<TPapier extends Papier>
         for(int i = 0; i < papiere.size(); i++) {
             Papier papier = papiere.get(i);
             papier.gelocht();
+            // Wenn das Papier nach dem Lochen zu viele Löcher hat(= kaputtgelocht ist) 
+            // wird es aus dem Stapel entnommen.
+            if (!papier.existiert()) {
+                this.papiere.remove(papier);
+            }
         }
     }
 }
