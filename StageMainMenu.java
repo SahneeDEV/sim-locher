@@ -53,7 +53,7 @@ public class StageMainMenu extends Application
         GraphicsDevice[] graphDev = graphEnv.getScreenDevices();
         
         //Variables
-        int[] screenSizes = new int[(graphDev.length + 2)];
+        int[] screenSizes = new int[(graphDev.length * 2)];
         int count = 0;
         
         for(int i = 0; i < graphDev.length; i++){
