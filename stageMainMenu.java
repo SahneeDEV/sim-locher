@@ -5,10 +5,9 @@ import javafx.scene.Group;
 import javafx.scene.control.Button;
 import javafx.scene.layout.BorderPane;
 
-public class stageMainMenu extends Application
+public class StageMainMenu extends Application
 {
     private final String windowTitle = "World of Locher Craft";
-    
     
     @Override
     public void start(Stage stage) throws Exception{

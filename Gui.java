@@ -8,7 +8,7 @@ public class Gui
 {
     //Konstruktor
     public void Gui(){
-       stageMainMenu sMM = new stageMainMenu();
+       StageMainMenu sMM = new StageMainMenu();
        
     }
 }
