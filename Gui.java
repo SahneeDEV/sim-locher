@@ -9,6 +9,6 @@ public class Gui
     //Konstruktor
     public void Gui(){
        StageMainMenu sMM = new StageMainMenu();
-       
+       sMM.StageMainMenu();
     }
 }
