@@ -10,9 +10,6 @@ import javafx.geometry.*;
 import javafx.event.*;
 import javafx.scene.control.Labeled;
 
-import java.awt.GraphicsEnvironment;
-import java.awt.GraphicsDevice;
-
 public class MainMenu{
 
     private final String backgroundImageLocation = "images/locher_animated.gif";
@@ -24,7 +21,8 @@ public class MainMenu{
         BorderPane mainPane = new BorderPane();
 
         //Get Scene size and create a new Instance
-        int[] screenSizes = GetScreenSize();
+        MultiUse mU = new MultiUse();
+        int[] screenSizes = mU.GetScreenSize();
         Scene sceneMainWindow = new Scene(mainPane, (int)(screenSizes[0] * 0.5), (int)(screenSizes[1] * 0.5));
 
         //Background setzen
@@ -93,25 +91,4 @@ public class MainMenu{
         return sceneMainWindow;
     }
 
-        /**
-     * Holt sich die größe aller angeschlossenen Monitore
-     * @return int[width_screen1, height_screen1, width_screen2, height_screen2,...]
-     */
-    private int[] GetScreenSize(){
-        //Define 
-        GraphicsEnvironment graphEnv = GraphicsEnvironment.getLocalGraphicsEnvironment();
-        GraphicsDevice[] graphDev = graphEnv.getScreenDevices();
-        
-        //Variables
-        int[] screenSizes = new int[(graphDev.length * 2)];
-        int count = 0;
-        
-        for(int i = 0; i < graphDev.length; i++){
-            screenSizes[count] = graphDev[i].getDisplayMode().getWidth();
-            screenSizes[count + 1] = graphDev[i].getDisplayMode().getHeight();
-            count = count + 2;
-        }
-        
-        return screenSizes;
-    }
 }
