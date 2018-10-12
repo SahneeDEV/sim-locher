@@ -1,5 +1,8 @@
 package de.wolc.spiel.papier;
 
+import de.wolc.spiel.Farbe;
+import de.wolc.spiel.locher.Lochprozess;
+
 public abstract class Papier
 {
     private final int maximaleAnzahlLochen;

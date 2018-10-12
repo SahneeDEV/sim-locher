@@ -1,6 +1,8 @@
 package de.wolc.spiel.papier;
 
 import java.util.ArrayList;
+import de.wolc.spiel.papier.Papier;
+import de.wolc.spiel.locher.Lochprozess;
 
 /**
  * Mehrere Papiere eines Types auf einmal um sie lochen zu können.

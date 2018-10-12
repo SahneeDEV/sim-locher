@@ -1,5 +1,7 @@
 package de.wolc.spiel.papier;
 
+import de.wolc.spiel.Farbe;
+
 /**
  * Ein einzelnes Konfetti. 
  */

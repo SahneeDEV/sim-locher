@@ -1,5 +1,8 @@
 package de.wolc.spiel.locher;
 
+import de.wolc.spiel.papier.PapierStapel;
+import de.wolc.spiel.locher.Lochprozess;
+
 /**
  * Der eigentliche Locher. Er ist in der Lage Papier Stapel zu lochen.
  */
