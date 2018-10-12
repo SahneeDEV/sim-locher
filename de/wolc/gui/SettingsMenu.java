@@ -43,7 +43,7 @@ public class SettingsMenu{
 
 
         //Buttons
-        Button backButton = new Button("Back");
+        Button backButton = new Button("Zur\u00fcck");
             backButton.addEventHandler(ActionEvent.ACTION, new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent actionEvent){

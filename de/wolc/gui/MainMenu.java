@@ -16,9 +16,13 @@ import javafx.scene.control.Labeled;
 public class MainMenu{
 
     private final String backgroundImageLocation = "images/locher_animated.gif";
+    private final String windowTitle = "World of Locher Craft - Hauptmen\u00fc";
 
 
     public Scene MainMenuStage(Stage stage){
+
+        //Set Window title
+        stage.setTitle(windowTitle);
 
         //Generating and setting the Objects
         BorderPane mainPane = new BorderPane();
