@@ -48,16 +48,21 @@ public class PapierStapel<TPapier extends Papier>
     /**
      * Wird aufgerufen wenn alle Papiere auf diesem Stapel gelocht worden sind. 
      * Benachrichtig alle Papiere dass diese gelocht worden sind.
+     * @return Alle Konfettis, die bei diesem Lochprozess entstanden sind.
      */
-    public void gelocht() {
+    public Konfetti[] gelocht() {
+        ArrayList<Konfetti> konfettis = new ArrayList<Konfetti>();
         for(int i = 0; i < papiere.size(); i++) {
             Papier papier = papiere.get(i);
-            papier.gelocht();
+            for(Konfetti konfetti: papier.gelocht()) {
+                konfettis.add(konfetti);
+            }
             // Wenn das Papier nach dem Lochen zu viele Löcher hat(= kaputtgelocht ist) 
             // wird es aus dem Stapel entnommen.
             if (!papier.existiert()) {
                 this.papiere.remove(papier);
             }
         }
+        return konfettis.toArray(new Konfetti[konfettis.size()]);
     }
 }

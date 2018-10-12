@@ -3,5 +3,6 @@
     "**/*.class": true,
     "**/*.ctxt": true,
     "**/*.bluej": true
-  }
+  },
+  "editor.tabSize": 4
 }
