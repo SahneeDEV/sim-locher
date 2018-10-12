@@ -4,3 +4,5 @@
 *.ctxt
 # JavaDoc
 doc/
+# Compiler meta
+scripts/sources.txt
