@@ -40,10 +40,16 @@ public abstract class Papier
 
     /**
      * Wird aufgerufen wenn das Papier gelocht wurde.
+     * @return Alle Konfettis, die bei diesem Lochprozess entstanden sind.
      */
-    public void gelocht() {
+    public Konfetti[] gelocht() {
         if (this.existiert()) {
             this.lochAnzahl += 2;
+            Konfetti[] konfettis = new Konfetti[2];
+            konfettis[0] = new Konfetti(this.getFarbe());
+            konfettis[1] = new Konfetti(this.getFarbe());
+            return konfettis;
         }
+        return new Konfetti[0];
     }
 }

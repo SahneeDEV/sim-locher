@@ -34,11 +34,12 @@ public class SimLocher
     /** 
      * Locht den aktuell eingelegten Papier Stapel.
      * @exception IllegalStateException Es ist kein Papier Stapel eingelegt.
+     * @return Alle Konfettis, die bei diesem Lochprozess entstanden sind.
      */
-    public void lochen() {
+    public Konfetti[] lochen() {
         if(this.stapel == null) {
             throw new IllegalStateException("Es ist kein Papier Stapel eingelegt.");
         }
-        this.stapel.gelocht();
+        return this.stapel.gelocht();
     }
 }
