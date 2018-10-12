@@ -1,3 +1,5 @@
+package de.wolc.spiel;
+
 public enum Farbe {
   WEISS,
   ROT,

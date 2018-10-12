@@ -1,3 +1,5 @@
+package de.wolc.spiel.papier;
+
 public abstract class Papier
 {
     private final int maximaleAnzahlLochen;

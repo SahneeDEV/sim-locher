@@ -1,3 +1,5 @@
+package de.wolc.gui;
+
 import java.util.Random;
 
 import javafx.application.Application;

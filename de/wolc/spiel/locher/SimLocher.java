@@ -1,3 +1,5 @@
+package de.wolc.spiel.locher;
+
 /**
  * Der eigentliche Locher. Er ist in der Lage Papier Stapel zu lochen.
  */

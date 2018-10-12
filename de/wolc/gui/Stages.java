@@ -1,3 +1,5 @@
+package de.wolc.gui;
+
 import javafx.application.Application;
 import javafx.stage.Stage;
 import javafx.scene.image.Image;

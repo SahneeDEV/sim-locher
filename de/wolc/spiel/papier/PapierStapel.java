@@ -1,3 +1,5 @@
+package de.wolc.spiel.papier;
+
 import java.util.ArrayList;
 
 /**

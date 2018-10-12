@@ -1,3 +1,5 @@
+package de.wolc.spiel.papier;
+
 /**
  * Ein einzelnes Konfetti. 
  */

@@ -1,3 +1,5 @@
+package de.wolc;
+
 import java.awt.GraphicsEnvironment;
 import java.awt.GraphicsDevice;
 

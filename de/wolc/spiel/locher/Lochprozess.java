@@ -1,3 +1,5 @@
+package de.wolc.spiel.locher;
+
 import java.util.ArrayList;
 
 /**
