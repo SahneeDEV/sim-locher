@@ -1,2 +1,5 @@
 echo Compiling World of Lochercraft ...
-javac ../*.java
+cd ..
+dir *.java /s /B > scripts/sources.txt
+cd scripts
+javac @sources.txt

@@ -1,5 +1,6 @@
 @echo off
 call compile.bat
 echo Running World of Lochercraft ...
-cd ..
+cd ../de/wolc/gui/
 java Gui
+cd ../../../scripts
