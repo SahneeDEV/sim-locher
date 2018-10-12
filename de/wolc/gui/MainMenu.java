@@ -87,7 +87,6 @@ public class MainMenu{
     
             });
 
-
         //Adding the Buttons to the VBox and the VBox to the BorderPane
         buttonBox.getChildren().addAll(button_playgame, button_settings, button_exit);
         mainPane.setCenter(buttonBox);
