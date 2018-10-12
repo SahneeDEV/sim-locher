@@ -67,7 +67,9 @@ public class MainMenu{
             button_settings.addEventHandler(ActionEvent.ACTION, new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent actionEvent){
-                    button_settings.setText("NO Settings!");
+                    SettingsMenu sm = new SettingsMenu();
+                    stage.setScene(sm.SettingsScene(stage));
+                    stage.centerOnScreen();
                 }
     
             });

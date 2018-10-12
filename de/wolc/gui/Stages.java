@@ -26,5 +26,6 @@ public class Stages extends Application
         
         //Show the Stage
         stage.show();
+        stage.centerOnScreen();
     }
 }
