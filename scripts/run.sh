@@ -1,6 +1,6 @@
 #!/bin/sh
 ./compile.sh
 echo Running World of Lochercraft ...
-cd ../de/wolc/gui/
-java Gui
-cd ../../../scripts
+cd ..
+java de/wolc/gui/Gui
+cd scripts
