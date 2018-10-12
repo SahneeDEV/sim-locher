@@ -13,21 +13,19 @@ import javafx.scene.control.Labeled;
 import java.awt.GraphicsEnvironment;
 import java.awt.GraphicsDevice;
 
+public class MainMenu{
 
-
-public class StageMainMenu extends Application
-{
-    //Variables
-    private final String windowTitle = "World of Locher Craft";
     private final String backgroundImageLocation = "images/locher_animated.gif";
-    private final String iconLocation = "images/locher_base.png";
-    
-    @Override
-    public void start(Stage stage) throws Exception{
-        stage.setTitle(windowTitle);        
+
+
+    public Scene MainMenuStage(Stage stage){
 
         //Generating and setting the Objects
         BorderPane mainPane = new BorderPane();
+
+        //Get Scene size and create a new Instance
+        int[] screenSizes = GetScreenSize();
+        Scene sceneMainWindow = new Scene(mainPane, (int)(screenSizes[0] * 0.5), (int)(screenSizes[1] * 0.5));
 
         //Background setzen
         BackgroundImage backgroundImageMainMenu = new BackgroundImage(new Image(backgroundImageLocation), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,BackgroundSize.DEFAULT);
@@ -92,21 +90,10 @@ public class StageMainMenu extends Application
         mainPane.setCenter(buttonBox);
 
 
-        //Get Scene size and create a new Instance
-        int[] screenSizes = GetScreenSize();
-        Scene sceneMainWindow = new Scene(mainPane, (int)(screenSizes[0] * 0.5), (int)(screenSizes[1] * 0.5));
-        
-        //stage decoration
-        stage.getIcons().add(new Image(iconLocation));
-
-        //Put everything together
-        stage.setScene(sceneMainWindow);
-        
-        //Show the Stage
-        stage.show();
+        return sceneMainWindow;
     }
-    
-    /**
+
+        /**
      * Holt sich die größe aller angeschlossenen Monitore
      * @return int[width_screen1, height_screen1, width_screen2, height_screen2,...]
      */
@@ -127,7 +114,4 @@ public class StageMainMenu extends Application
         
         return screenSizes;
     }
-
-
-    
 }

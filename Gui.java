@@ -18,6 +18,6 @@ public class Gui
     public static void main(String[] args) {
         Gui.args = args;
         Gui.gui = new Gui();
-        Application.launch(StageMainMenu.class);
+        Application.launch(Stages.class);
     }
 }
