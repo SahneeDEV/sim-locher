@@ -4,5 +4,6 @@
     "**/*.ctxt": true,
     "**/*.bluej": true
   },
-  "editor.tabSize": 4
+  "editor.tabSize": 4,
+  "editor.rulers": [120]
 }

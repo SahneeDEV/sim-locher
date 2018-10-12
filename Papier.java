@@ -42,14 +42,23 @@ public abstract class Papier
      * Wird aufgerufen wenn das Papier gelocht wurde.
      * @return Alle Konfettis, die bei diesem Lochprozess entstanden sind.
      */
-    public Konfetti[] gelocht() {
-        if (this.existiert()) {
-            this.lochAnzahl += 2;
-            Konfetti[] konfettis = new Konfetti[2];
-            konfettis[0] = new Konfetti(this.getFarbe());
-            konfettis[1] = new Konfetti(this.getFarbe());
-            return konfettis;
+    public void gelocht(Lochprozess prozess) {
+        // Füge neue soviele Löcher wie möglich hinzu, und der Locher Stanzer hat.
+        int loecher = Math.max(this.moeglicheLoecher(), prozess.getLocher().getStanzer());
+        this.lochAnzahl += loecher;
+        // Für jedes erstellte Loch soll ein Konfetti erstellt werden.
+        for(int i = 0; i < loecher; i++) {
+            Konfetti konfetti = new Konfetti(this.getFarbe());
+            prozess.getKonfetti().add(konfetti);
         }
-        return new Konfetti[0];
+    }
+
+    /**
+     * Überprüft wieviele Löcher noch in das Papier gemacht werden können, bevor es nicht mehr existiert. 
+     * @return Die Anzahl der möglichen Löcher, oder 0.
+     */
+    private int moeglicheLoecher() {
+        int lochZahl = this.maximaleAnzahlLochen - this.lochAnzahl;
+        return Math.max(lochZahl, 0);
     }
 }
