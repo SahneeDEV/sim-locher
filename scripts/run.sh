@@ -1,6 +1,8 @@
 #!/bin/sh
-./compile.sh
+mvn compile
 echo Running World of Lochercraft ...
-cd ..
+find ../src -name "*.class" -delete
+find ../src -name "*.ctx" -delete
+cd ../target/classes
 java de/wolc/gui/Gui
-cd scripts
+cd ../../scripts

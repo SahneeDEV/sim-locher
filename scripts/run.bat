@@ -1,6 +1,6 @@
 @echo off
-call compile.bat
+mvn compile
 echo Running World of Lochercraft ...
-cd ..
+cd ../target/classes
 java de/wolc/gui/Gui
-cd scripts
+cd ../../scripts
