@@ -4,6 +4,19 @@
 public class SimLocher
 {
     private PapierStapel stapel;
+    private int stanzer;
+
+    public SimLocher() {
+        this.stanzer = 2;
+    }
+
+    /**
+     * Gibt die aktuelle Anzahl der Stanzer zurück.
+     * @return Die Stanzer.
+     */
+    public int getStanzer() {
+        return stanzer;
+    }
 
     /**
      * Legt einen Papier Stapel in den Locher ein.
@@ -36,10 +49,12 @@ public class SimLocher
      * @exception IllegalStateException Es ist kein Papier Stapel eingelegt.
      * @return Alle Konfettis, die bei diesem Lochprozess entstanden sind.
      */
-    public Konfetti[] lochen() {
-        if(this.stapel == null) {
-            throw new IllegalStateException("Es ist kein Papier Stapel eingelegt.");
+    public Lochprozess lochen() {
+        Lochprozess vorgang = new Lochprozess(this);
+        if(this.stapel != null) {
+            // Erzeuge einen Lochprozess welcher dem Stapel übergeben wird.
+            this.stapel.gelocht(vorgang);
         }
-        return this.stapel.gelocht();
+        return vorgang;
     }
 }
