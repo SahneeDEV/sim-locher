@@ -40,28 +40,28 @@ public class SettingsMenu{
             diagnoseDatenCheckBox.setDisable(true);
 
         //ComboBox
-        ComboBox<Label> anisotropeFilterungComboBox = new ComboBox<Label>();
-            anisotropeFilterungComboBox.getItems().addAll(
-                new Label(baseSettingNames[0]),
-                new Label(baseSettingNames[1]),
-                new Label(baseSettingNames[2]),
-                new Label(baseSettingNames[3]),
-                new Label(baseSettingNames[4])
-            );
-            anisotropeFilterungComboBox.setStyle(" -fx-text-fill: black");
+        ComboBox anisotropeFilterungComboBox = new ComboBox();
+        anisotropeFilterungComboBox.getItems().addAll(
+            baseSettingNames[0],
+            baseSettingNames[1],
+            baseSettingNames[2],
+            baseSettingNames[3],
+            baseSettingNames[4]
+        );
+            //anisotropeFilterungComboBox.setStyle(" -fx-text-fill: black");
             
 
-        ComboBox<Label> antiAliasingComboBox = new ComboBox<Label>();
-            antiAliasingComboBox.getItems().addAll(
-                new Label(baseSettingNames[5]),
-                new Label(baseSettingNames[6]),
-                new Label(baseSettingNames[7]),
-                new Label(baseSettingNames[8]),
-                new Label(baseSettingNames[9]),
-                new Label(baseSettingNames[10]),
-                new Label(baseSettingNames[11]),
-                new Label(baseSettingNames[12])
-            );
+        ComboBox antiAliasingComboBox = new ComboBox();
+        antiAliasingComboBox.getItems().addAll(
+            baseSettingNames[5],
+            baseSettingNames[6],
+            baseSettingNames[7],
+            baseSettingNames[8],
+            baseSettingNames[9],
+            baseSettingNames[10],
+            baseSettingNames[11],
+            baseSettingNames[12]
+        );
 
         //Positioning
         settingsPane.add(anisotropeFilterung, 0, 0);
