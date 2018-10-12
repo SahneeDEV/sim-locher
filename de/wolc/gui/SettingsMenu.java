@@ -102,9 +102,6 @@ public class SettingsMenu{
 
 
         //Get Scene size and create a new Instance
-        MultiUse mU = new MultiUse();
-        int[] screenSizes = mU.GetScreenSize();
-
         settingsPane.setCenter(settingsGridPane);
 
         Scene sceneMainWindow = new Scene(settingsPane, 500, 250);

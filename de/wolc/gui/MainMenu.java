@@ -1,5 +1,6 @@
 package de.wolc.gui;
 
+import de.wolc.MultiUse;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
