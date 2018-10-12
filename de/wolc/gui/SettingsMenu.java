@@ -1,8 +1,8 @@
 package de.wolc.gui;
 
-import java.util.Random;
-
 import javafx.application.Application;
+import javafx.beans.value.ChangeListener;
+import javafx.concurrent.Task;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
 import javafx.scene.Group;
@@ -17,6 +17,8 @@ import javafx.geometry.*;
 import javafx.event.*;
 import javafx.scene.control.Labeled;
 import javafx.scene.control.ProgressIndicator;
+
+import java.lang.Thread;
 
 public class SettingsMenu{
 
@@ -62,6 +64,8 @@ public class SettingsMenu{
                     uploadingFiles.setVisible(true);
 
                     diagnoseDatenCheckBox.setSelected(true);
+
+                    uploadingFiles.setProgress(100);
                 }
             });
 
