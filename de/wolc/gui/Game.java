@@ -16,6 +16,18 @@ public class Game{
 
     public Scene GameMainStage(Stage stage){
 
-        return null;
+        //Main Orientation Node
+        BorderPane mainPane = new BorderPane();
+
+        //Setting and creating the new Scene
+        Scene gameScene = new Scene(mainPane);
+
+        //Set Fullscreen
+        stage.setFullScreen(true);
+
+        //Creating the Component-nodes
+        
+
+        return gameScene;
     }
 }
