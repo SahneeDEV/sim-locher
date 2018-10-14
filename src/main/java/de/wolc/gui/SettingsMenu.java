@@ -48,14 +48,14 @@ public class SettingsMenu{
 
 
         //ProgressIndicator
-        ProgressIndicator uploadingFiles = new ProgressIndicator();
+        final ProgressIndicator uploadingFiles = new ProgressIndicator();
         uploadingFiles.setVisible(false);
 
 
         //CheckBoxes
         CheckBox RTXSupport = new CheckBox("RTX Einschalten/Ausschalten");
             RTXSupport.setSelected(true);
-        CheckBox diagnoseDatenCheckBox = new CheckBox("Diagnosedaten an Entwickler senden");
+            final CheckBox diagnoseDatenCheckBox = new CheckBox("Diagnosedaten an Entwickler senden");
             diagnoseDatenCheckBox.setSelected(true);
             diagnoseDatenCheckBox.addEventHandler(ActionEvent.ACTION, new EventHandler<ActionEvent>() {
 
