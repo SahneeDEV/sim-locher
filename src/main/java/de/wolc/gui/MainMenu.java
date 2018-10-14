@@ -13,9 +13,13 @@ import javafx.event.*;
 public class MainMenu{
 
     private final String backgroundImageLocation = "images/locher_animated.gif";
+    private final String windowTitle = "World of Locher Craft - Hauptmen\u00fc";
 
 
     public Scene MainMenuStage(final Stage stage){
+
+        //Set Window title
+        stage.setTitle(windowTitle);
 
         //Generating and setting the Objects
         BorderPane mainPane = new BorderPane();
@@ -64,7 +68,9 @@ public class MainMenu{
             button_settings.addEventHandler(ActionEvent.ACTION, new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent actionEvent){
-                    button_settings.setText("NO Settings!");
+                    SettingsMenu sm = new SettingsMenu();
+                    stage.setScene(sm.SettingsScene(stage));
+                    stage.centerOnScreen();
                 }
     
             });
@@ -81,7 +87,6 @@ public class MainMenu{
                 }
     
             });
-
 
         //Adding the Buttons to the VBox and the VBox to the BorderPane
         buttonBox.getChildren().addAll(button_playgame, button_settings, button_exit);

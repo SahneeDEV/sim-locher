@@ -31,6 +31,18 @@ public class SettingsMenu{
         settingsGridPane.setAlignment(Pos.CENTER);
         settingsGridPane.setMinHeight(100);
 
+
+        //Buttons
+        Button backButton = new Button("Zur\u00fcck");
+            backButton.addEventHandler(ActionEvent.ACTION, new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent actionEvent){
+                    MainMenu mm = new MainMenu();
+                    stage.setScene(mm.MainMenuStage(stage));
+                    stage.centerOnScreen();
+                }
+            });
+
         //Labels
         Label credits = new Label("Credits: " + creditsString);
         Label anisotropeFilterung = new Label("Anisotrope Filterung:");
@@ -93,6 +105,7 @@ public class SettingsMenu{
         settingsGridPane.add(uploadingFiles, 1 , 2);
         settingsGridPane.add(RTXSupport, 0, 3);
         settingsGridPane.add(credits, 0, 4);
+        settingsGridPane.add(backButton,0,6);
 
 
         //Get Scene size and create a new Instance
