@@ -19,7 +19,7 @@ public class MainMenu{
     private final String windowTitle = "World of Locher Craft - Hauptmen\u00fc";
 
 
-    public Scene MainMenuStage(Stage stage){
+    public Scene MainMenuStage(final Stage stage){
 
         //Set Window title
         stage.setTitle(windowTitle);
@@ -48,7 +48,7 @@ public class MainMenu{
         //Buttons
 
         //Button1
-        Button button_playgame = new Button("Play_Game()");
+        final Button button_playgame = new Button("Play_Game()");
             button_playgame.setMinWidth(buttonBox.getPrefWidth());
             button_playgame.setMinHeight(buttonBox.getPrefHeight());
             
@@ -63,7 +63,7 @@ public class MainMenu{
             });
 
         //Button2
-        Button button_settings = new Button("Settings()");
+        final Button button_settings = new Button("Settings()");
             button_settings.setMinWidth(buttonBox.getPrefWidth());
             button_settings.setMinHeight(buttonBox.getPrefHeight());
 
