@@ -12,7 +12,7 @@ import javafx.scene.paint.Color;
 public class Game{
 
     private final String windowTitle = "World of Locher Craft";
-    private final String backgroundImageLocation = "images/Test_Bild.jpg";
+    private final String backgroundImageLocation = "de/wolc/gui/images/Test_Bild.jpg";
 
 
     public Scene GameMainStage(Stage stage){
@@ -52,6 +52,9 @@ public class Game{
         mainPane.setRight(rightVBox);
         mainPane.setAlignment(rightVBox, Pos.CENTER);
 
+
+        //Set Window Titel
+        stage.setTitle(windowTitle);
         return gameScene;
     }
 }
