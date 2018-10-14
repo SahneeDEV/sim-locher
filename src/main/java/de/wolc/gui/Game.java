@@ -1,6 +1,10 @@
 package de.wolc.gui;
 
+import java.util.ArrayList;
+
 import de.wolc.MultiUse;
+import de.wolc.spiel.Spieler;
+import de.wolc.spiel.papier.Konfetti;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
@@ -13,6 +17,11 @@ public class Game{
 
     private final String windowTitle = "World of Locher Craft";
     private final String backgroundImageLocation = "de/wolc/gui/images/Test_Bild.jpg";
+    private Spieler spieler;
+
+    public Game () {
+       this.spieler = new Spieler();
+    }
 
 
     public Scene GameMainStage(Stage stage){
@@ -39,9 +48,11 @@ public class Game{
         //Creating the VBox for the right Output
         VBox rightVBox = new VBox();
         //Creating Label for outputing score
+        ArrayList<Konfetti> konfettiList = spieler.getKonfetti();
+        int scoreValue = konfettiList.size();
         Label score = new Label();
         score.setTextFill(Color.RED);
-        score.setText("Score: 0"); 
+        score.setText("Score: "+scoreValue); 
         //Creating Label for remaining Time
         Label remainingTime = new Label();
         remainingTime.setTextFill(Color.RED);
@@ -51,7 +62,6 @@ public class Game{
         //Adding VBox to mainPane
         mainPane.setRight(rightVBox);
         BorderPane.setAlignment(rightVBox, Pos.CENTER);
-
 
         //Set Window Titel
         stage.setTitle(windowTitle);
