@@ -1,0 +1,15 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "World of Lochercraft",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "console": "internalConsole",
+            "stopOnEntry": false,
+            "mainClass": "de.wolc.gui.Gui",
+            "args": "",
+            "projectName": "wolc"
+        }
+    ]
+}

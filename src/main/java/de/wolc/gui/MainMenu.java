@@ -18,7 +18,7 @@ public class MainMenu{
     private final String backgroundImageLocation = "images/locher_animated.gif";
 
 
-    public Scene MainMenuStage(Stage stage){
+    public Scene MainMenuStage(final Stage stage){
 
         //Generating and setting the Objects
         BorderPane mainPane = new BorderPane();
@@ -44,7 +44,7 @@ public class MainMenu{
         //Buttons
 
         //Button1
-        Button button_playgame = new Button("Play_Game()");
+        final Button button_playgame = new Button("Play_Game()");
             button_playgame.setMinWidth(buttonBox.getPrefWidth());
             button_playgame.setMinHeight(buttonBox.getPrefHeight());
             
@@ -59,7 +59,7 @@ public class MainMenu{
             });
 
         //Button2
-        Button button_settings = new Button("Settings()");
+        final Button button_settings = new Button("Settings()");
             button_settings.setMinWidth(buttonBox.getPrefWidth());
             button_settings.setMinHeight(buttonBox.getPrefHeight());
 
