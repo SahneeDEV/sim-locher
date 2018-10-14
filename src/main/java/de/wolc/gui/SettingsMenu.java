@@ -1,24 +1,14 @@
 package de.wolc.gui;
 
-import javafx.application.Application;
-import javafx.beans.value.ChangeListener;
-import javafx.concurrent.Task;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
-import javafx.scene.Group;
-import javafx.scene.image.Image;
 import javafx.scene.layout.*;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.CheckBox;
-import javafx.geometry.Insets;
 import javafx.geometry.*;
 import javafx.event.*;
-import javafx.scene.control.Labeled;
 import javafx.scene.control.ProgressIndicator;
-
-import java.lang.Thread;
 
 public class SettingsMenu{
 
