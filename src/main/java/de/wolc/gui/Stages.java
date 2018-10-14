@@ -8,7 +8,7 @@ public class Stages extends Application
 {
     //Variables
     private final String windowTitle = "World of Locher Craft";
-    private final String iconLocation = "images/locher_base.png";
+    private final String iconLocation = "de/wolc/gui/images/locher_base.png";
     
     @Override
     public void start(Stage stage) throws Exception{

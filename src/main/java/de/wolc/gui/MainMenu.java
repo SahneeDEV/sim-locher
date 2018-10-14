@@ -12,7 +12,7 @@ import javafx.event.*;
 
 public class MainMenu{
 
-    private final String backgroundImageLocation = "images/locher_animated.gif";
+    private final String backgroundImageLocation = "de/wolc/gui/images/locher_animated.gif";
     private final String windowTitle = "World of Locher Craft - Hauptmen\u00fc";
 
 
