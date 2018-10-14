@@ -20,9 +20,12 @@ public class Stages extends Application
         //Put everything together
         MainMenu mm = new MainMenu();
         SettingsMenu sm = new SettingsMenu();
+        Game g = new Game();
 
         stage.setScene(mm.MainMenuStage(stage));
         //stage.setScene(nm.SettingsScene(stage));
+        //stage.setScene(g.GameMainStage(stage));
+        
         
         //Show the Stage
         stage.show();
