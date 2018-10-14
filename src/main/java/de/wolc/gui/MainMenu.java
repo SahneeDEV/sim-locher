@@ -1,24 +1,25 @@
 package de.wolc.gui;
 
 import de.wolc.MultiUse;
-import javafx.application.Application;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
-import javafx.scene.Group;
 import javafx.scene.image.Image;
 import javafx.scene.layout.*;
 import javafx.scene.control.Button;
 import javafx.geometry.Insets;
 import javafx.geometry.*;
 import javafx.event.*;
-import javafx.scene.control.Labeled;
 
 public class MainMenu{
 
-    private final String backgroundImageLocation = "images/locher_animated.gif";
+    private final String backgroundImageLocation = "de/wolc/gui/images/locher_animated.gif";
+    private final String windowTitle = "World of Locher Craft - Hauptmen\u00fc";
 
 
     public Scene MainMenuStage(final Stage stage){
+
+        //Set Window title
+        stage.setTitle(windowTitle);
 
         //Generating and setting the Objects
         BorderPane mainPane = new BorderPane();
@@ -67,7 +68,9 @@ public class MainMenu{
             button_settings.addEventHandler(ActionEvent.ACTION, new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent actionEvent){
-                    button_settings.setText("NO Settings!");
+                    SettingsMenu sm = new SettingsMenu();
+                    stage.setScene(sm.SettingsScene(stage));
+                    stage.centerOnScreen();
                 }
     
             });
@@ -84,7 +87,6 @@ public class MainMenu{
                 }
     
             });
-
 
         //Adding the Buttons to the VBox and the VBox to the BorderPane
         buttonBox.getChildren().addAll(button_playgame, button_settings, button_exit);

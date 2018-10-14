@@ -1,24 +1,18 @@
 package de.wolc.gui;
 
 import de.wolc.MultiUse;
-import javafx.application.Application;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
-import javafx.scene.Group;
 import javafx.scene.image.Image;
 import javafx.scene.layout.*;
-import javafx.scene.control.Button;
-import javafx.geometry.Insets;
 import javafx.geometry.*;
-import javafx.event.*;
-import javafx.scene.control.Labeled;
 import javafx.scene.control.Label;
 import javafx.scene.paint.Color;
 
 public class Game{
 
     private final String windowTitle = "World of Locher Craft";
-    private final String backgroundImageLocation = "images/Test_Bild.jpg";
+    private final String backgroundImageLocation = "de/wolc/gui/images/Test_Bild.jpg";
 
 
     public Scene GameMainStage(Stage stage){
@@ -56,8 +50,11 @@ public class Game{
         rightVBox.getChildren().addAll(score, remainingTime);
         //Adding VBox to mainPane
         mainPane.setRight(rightVBox);
-        mainPane.setAlignment(rightVBox, Pos.CENTER);
+        BorderPane.setAlignment(rightVBox, Pos.CENTER);
 
+
+        //Set Window Titel
+        stage.setTitle(windowTitle);
         return gameScene;
     }
 }

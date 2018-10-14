@@ -1,24 +1,15 @@
 package de.wolc.gui;
 
-import javafx.application.Application;
-import javafx.beans.value.ChangeListener;
-import javafx.concurrent.Task;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
-import javafx.scene.Group;
-import javafx.scene.image.Image;
 import javafx.scene.layout.*;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.CheckBox;
-import javafx.geometry.Insets;
+import javafx.scene.control.Button;
 import javafx.geometry.*;
 import javafx.event.*;
-import javafx.scene.control.Labeled;
 import javafx.scene.control.ProgressIndicator;
-
-import java.lang.Thread;
 
 public class SettingsMenu{
 
@@ -40,6 +31,18 @@ public class SettingsMenu{
         settingsGridPane.setVgap(10);
         settingsGridPane.setAlignment(Pos.CENTER);
         settingsGridPane.setMinHeight(100);
+
+
+        //Buttons
+        Button backButton = new Button("Zur\u00fcck");
+            backButton.addEventHandler(ActionEvent.ACTION, new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent actionEvent){
+                    MainMenu mm = new MainMenu();
+                    stage.setScene(mm.MainMenuStage(stage));
+                    stage.centerOnScreen();
+                }
+            });
 
         //Labels
         Label credits = new Label("Credits: " + creditsString);
@@ -103,6 +106,7 @@ public class SettingsMenu{
         settingsGridPane.add(uploadingFiles, 1 , 2);
         settingsGridPane.add(RTXSupport, 0, 3);
         settingsGridPane.add(credits, 0, 4);
+        settingsGridPane.add(backButton,0,6);
 
 
         //Get Scene size and create a new Instance
