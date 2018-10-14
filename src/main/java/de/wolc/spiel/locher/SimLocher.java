@@ -14,11 +14,13 @@ public class SimLocher
     private String skin;
     private Class<? extends Papier> format;
     private int stanzer;
+    private int staerke;
 
     public SimLocher() {
         this.stanzer = 2;
         this.skin = "locher_base";
         this.format = A4.class;
+        this.staerke = 7;
     }
 
     /**
@@ -26,7 +28,15 @@ public class SimLocher
      * @return Die Stanzer.
      */
     public int getStanzer() {
-        return stanzer;
+        return this.stanzer;
+    }
+
+    /**
+     * Gibt an wieviele Blätter maximal auf einmal gelocht werden können.
+     * @return Die Anzahl der Blätter.
+     */
+    public int getStaerke() {
+        return this.staerke;
     }
 
     /**
@@ -35,7 +45,7 @@ public class SimLocher
      * @return Der Skin name.
      */
     public String getSkin() {
-        return skin;
+        return this.skin;
     }
 
     /**
@@ -52,7 +62,7 @@ public class SimLocher
      * @return Die Klasse des Formats(A4.class, A5.class, A6.class).
      */
     public Class<? extends Papier> getFormat() {
-        return format;
+        return this.format;
     }
 
     /**
@@ -101,8 +111,8 @@ public class SimLocher
      */
     public Lochprozess lochen() {
         Lochprozess vorgang = new Lochprozess(this);
-        if(this.stapel != null) {
-            // Erzeuge einen Lochprozess welcher dem Stapel übergeben wird.
+        // Kann nur lochen wenn wir einen Stapel haben und der Locher stark genug für diesen ist.
+        if(this.stapel != null && this.stapel.groesse() <= this.getStaerke()) {
             this.stapel.gelocht(vorgang);
         }
         return vorgang;
