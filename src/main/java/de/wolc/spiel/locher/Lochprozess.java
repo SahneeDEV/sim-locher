@@ -3,7 +3,6 @@ package de.wolc.spiel.locher;
 import java.util.ArrayList;
 import de.wolc.spiel.locher.SimLocher;
 import de.wolc.spiel.papier.Konfetti;
-import de.wolc.spiel.papier.Papier;
 
 /**
  * Ein Lochprozess stellt den Vorgang dar, einen Papierstapel zu lochen. Er enthält alle dafür nötigen Daten, sovie das 
@@ -34,24 +33,4 @@ public class Lochprozess
     public ArrayList<Konfetti> getKonfetti() {
         return this.konfetti;
     }
-
-    // Prüft, ob die maximale Anzahl an Lochvorgängen für das Blatt überschritten wurde
-    // Wir verwenden den Getter "getMaximaleLochAnzahl" von Papier um die maximale Loch Anzahl herauszufinden.
-    private boolean anzahlBisherGelocht(int bisherGelocht, Papier DinA) {
-        if(checkGelochtAnzahl(bisherGelocht, DinA.getMaximaleLochAnzahl())) {
-            return true;
-        }
-        return false;
-    }
-    
-    //Prüft, ob die maximale Anzahl an Lochvorgängen für das Blatt überschritten wurde
-    // Integer für die Lochzahlen falls man öfters als 128 mal lochen kann. (Java bytes sind signed)
-    private boolean checkGelochtAnzahl(int bisherGelocht, int maximaleAnzahlLochen){
-        if(bisherGelocht <= maximaleAnzahlLochen){
-            return true;
-        }
-        else{
-            return false;
-        }
-     }
 }
