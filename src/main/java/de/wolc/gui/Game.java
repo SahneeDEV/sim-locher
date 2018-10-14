@@ -50,7 +50,7 @@ public class Game{
         rightVBox.getChildren().addAll(score, remainingTime);
         //Adding VBox to mainPane
         mainPane.setRight(rightVBox);
-        mainPane.setAlignment(rightVBox, Pos.CENTER);
+        BorderPane.setAlignment(rightVBox, Pos.CENTER);
 
 
         //Set Window Titel
