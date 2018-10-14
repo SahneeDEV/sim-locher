@@ -10,11 +10,21 @@ import de.wolc.spiel.locher.Lochprozess;
 public class PapierStapel<TPapier extends Papier>
 {
     private final ArrayList<TPapier> papiere;
+    private final Class<TPapier> format;
     
-    public PapierStapel() {
+    public PapierStapel(Class<TPapier> format) {
         this.papiere = new ArrayList<TPapier>();
+        this.format = format;
     }
     
+    /**
+     * Gibt das Format der Papiere auf diesem Stapel zurück.
+     * @return Das Format(A4.class, A5.class, A6.class)
+     */
+    public Class<TPapier> getFormat() {
+        return this.format;
+    }
+
     /**
      * Legt ein Blatt Papier auf dem Stapel ab. Wenn das Papier breits auf dem Stapel ist, wird es nicht abgelegt.
      * @exception IllegalArgumentException Kann keine nicht existierenden Papiere auf den Stapel legen.
