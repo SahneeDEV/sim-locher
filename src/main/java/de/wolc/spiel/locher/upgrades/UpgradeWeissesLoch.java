@@ -44,7 +44,7 @@ public class UpgradeWeissesLoch extends LocherUpgrade {
             return;
         }
         // Wir erzeugen eine zufällige Anzahl an Konfetti.
-        int anzahl = min + ZUFALL.nextInt(max);
+        int anzahl = min + ZUFALL.nextInt(max - min + 1);
         for (int i = 0; i < anzahl; i++) {
             // Jedes Konfetti (Zufällige Farbe) dem Lochprozess hinzufügen.
             Konfetti konfetti = new Konfetti(Farbe.zufallsfarbe());
