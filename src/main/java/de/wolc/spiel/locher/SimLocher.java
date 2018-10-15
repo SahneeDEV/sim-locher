@@ -20,12 +20,14 @@ public class SimLocher
     private PapierStapel<?> stapel;
     private String skin;
     private Class<? extends Papier> format;
+    private double cooldown;
     private ArrayList<LocherUpgrade> upgrades;
-
+    
     public SimLocher() {
         this.upgrades = new ArrayList<LocherUpgrade>();
         this.skin = "locher_base";
         this.format = A4.class;
+        this.cooldown = 0;
     }
 
     /**
@@ -58,6 +60,14 @@ public class SimLocher
      */
     public ArrayList<LocherUpgrade> getUpgrades() {
         return this.upgrades;
+    }
+
+    /**
+     * Gibt den aktuellen Cooldown des Lochers zurück.
+     * @return Der Cooldown in Sekunden. Achtung, Kommazahl!
+     */
+    public double getCooldown() {
+        return this.cooldown;
     }
 
     /**
@@ -127,18 +137,31 @@ public class SimLocher
 
     /** 
      * Locht den aktuell eingelegten Papier Stapel.
-     * @exception IllegalStateException Es ist kein Papier Stapel eingelegt.
+     * @exception IllegalStateException Der Cooldown ist nicht bereit.
      * @return Alle Konfettis, die bei diesem Lochprozess entstanden sind.
      */
     public Lochprozess lochen() {
+        if (this.getCooldown() > 0) {
+            throw new IllegalStateException("Der Locher ist noch auf Cooldown.");
+        }
         Lochprozess vorgang = new Lochprozess(this);
         // Kann nur lochen wenn wir einen Stapel haben und der Locher stark genug für diesen ist.
         if(this.stapel != null && this.stapel.groesse() <= this.getStaerke()) {
             this.stapel.gelocht(vorgang);
         }
-        for (LocherUpgrade upgrade : upgrades) {
+        for (LocherUpgrade upgrade : this.upgrades) {
             upgrade.upgradeLochprozess(this, vorgang);
         }
+        this.cooldown = vorgang.getCooldown();
         return vorgang;
+    }
+
+    /**
+     * Muss regelmäßig von der GUI aufgerufen werden um der Logik ein "Zeitgefühl" zu verschaffen.
+     * Wird automatisch von der "tick" Methode des Spielers aufgerufen. Sollte somit NICHT manuell aufgerufen werden!
+     * @param deltaZeit Die vergangene Zeit in Sekunden. (Kann/sollte auch Kommazahl sein!)
+     */
+    public void tick(double deltaZeit) {
+        this.cooldown = Math.max(this.cooldown - deltaZeit, 0);
     }
 }
