@@ -1,5 +1,6 @@
 package de.wolc.spiel.locher.upgrades;
 
+import de.wolc.spiel.locher.Lochprozess;
 import de.wolc.spiel.locher.SimLocher;
 
 /**
@@ -25,5 +26,15 @@ public abstract class LocherUpgrade {
      */
     public int upgradeStaerke(SimLocher locher, int staerke) {
         return staerke;
+    }
+
+
+    /**
+     * Wird nach jedem Lochprozess aufgerufen.
+     * @param locher Der Locher.
+     * @param stanzer Der Lochprozess.
+     */
+    public void upgradeLochprozess(SimLocher locher, Lochprozess prozess) {
+        
     }
 }

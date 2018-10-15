@@ -136,6 +136,9 @@ public class SimLocher
         if(this.stapel != null && this.stapel.groesse() <= this.getStaerke()) {
             this.stapel.gelocht(vorgang);
         }
+        for (LocherUpgrade upgrade : upgrades) {
+            upgrade.upgradeLochprozess(this, vorgang);
+        }
         return vorgang;
     }
 }
