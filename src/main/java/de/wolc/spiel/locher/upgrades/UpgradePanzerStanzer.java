@@ -3,11 +3,25 @@ package de.wolc.spiel.locher.upgrades;
 import de.wolc.spiel.locher.SimLocher;
 
 /**
- * Der Panzer Stanzer erhöht die Stärke der Stanzer um diesen zu erlauben über 10000 Blätter auf einal zu lochen.
+ * Der Panzer Stanzer erhöht die Stärke der Stanzer um mehr Blätter auf einal zu lochen.
  */
 public class UpgradePanzerStanzer extends LocherUpgrade {
+    private int staerke;
+
+    public UpgradePanzerStanzer(int staerke) {
+        this.staerke = staerke;
+    }
+
+    /**
+     * Gibt an wie umwieviel Stärke die Stanzer Stärke erhöht wird.
+     * @return Wie Stark sind die Stanzer?
+     */
+    public int getStaerke() {
+        return staerke;
+    }
+
     @Override
     public int upgradeStaerke(SimLocher locher, int staerke) {
-        return staerke + 10000;
+        return staerke + this.staerke;
     }
 }
