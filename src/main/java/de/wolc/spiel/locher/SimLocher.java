@@ -3,24 +3,29 @@ package de.wolc.spiel.locher;
 import de.wolc.spiel.papier.A4;
 import de.wolc.spiel.papier.Papier;
 import de.wolc.spiel.papier.PapierStapel;
+
+import java.util.ArrayList;
+
 import de.wolc.spiel.locher.Lochprozess;
+import de.wolc.spiel.locher.upgrades.LocherUpgrade;
 
 /**
  * Der eigentliche Locher. Er ist in der Lage Papier Stapel zu lochen.
  */
 public class SimLocher
 {
+    private static final int STANDARD_STAERKE = 7;
+    private static final int STANDARD_STANZER = 2;
+
     private PapierStapel<?> stapel;
     private String skin;
     private Class<? extends Papier> format;
-    private int stanzer;
-    private int staerke;
+    private ArrayList<LocherUpgrade> upgrades;
 
     public SimLocher() {
-        this.stanzer = 2;
+        this.upgrades = new ArrayList<LocherUpgrade>();
         this.skin = "locher_base";
         this.format = A4.class;
-        this.staerke = 7;
     }
 
     /**
@@ -28,7 +33,11 @@ public class SimLocher
      * @return Die Stanzer.
      */
     public int getStanzer() {
-        return this.stanzer;
+        int wert = STANDARD_STANZER;
+        for (LocherUpgrade upgrade : upgrades) {
+            wert = upgrade.upgradeStanzer(this, wert);
+        }
+        return wert;
     }
 
     /**
@@ -36,7 +45,19 @@ public class SimLocher
      * @return Die Anzahl der Blätter.
      */
     public int getStaerke() {
-        return this.staerke;
+        int wert = STANDARD_STAERKE;
+        for (LocherUpgrade upgrade : upgrades) {
+            wert = upgrade.upgradeStaerke(this, wert);
+        }
+        return wert;
+    }
+
+    /**
+     * Gibt die Upgrades des Lochers zurück, welche dann modifiziert werden können.
+     * @return Die Liste der Locher Upgrades.
+     */
+    public ArrayList<LocherUpgrade> getUpgrades() {
+        return this.upgrades;
     }
 
     /**
