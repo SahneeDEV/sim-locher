@@ -18,6 +18,7 @@ public class Game{
     private final String windowTitle = "World of Locher Craft";
     private final String backgroundImageLocation = "de/wolc/gui/images/Test_Bild.jpg";
     private Spieler spieler;
+    private final double remainingTime = 30.00;
 
     public Game () {
        this.spieler = new Spieler();
@@ -47,18 +48,22 @@ public class Game{
         //Creating the Component-nodes
         //Creating the VBox for the right Output
         VBox rightVBox = new VBox();
+
         //Creating Label for outputing score
         ArrayList<Konfetti> konfettiList = spieler.getKonfetti();
         int scoreValue = konfettiList.size();
         Label score = new Label();
         score.setTextFill(Color.RED);
         score.setText("Score: "+scoreValue); 
+
         //Creating Label for remaining Time
         Label remainingTime = new Label();
         remainingTime.setTextFill(Color.RED);
         remainingTime.setText("Zeit: 00:00");
+
         //Adding remainingTime and score to VBox 
         rightVBox.getChildren().addAll(score, remainingTime);
+
         //Adding VBox to mainPane
         mainPane.setRight(rightVBox);
         BorderPane.setAlignment(rightVBox, Pos.CENTER);
@@ -66,5 +71,8 @@ public class Game{
         //Set Window Titel
         stage.setTitle(windowTitle);
         return gameScene;
+
+        //Triggering selfe every 10 milliseconds with an second thread
+        
     }
 }
