@@ -119,7 +119,8 @@ public class Game{
                     lastNanoTimeTimer = System.currentTimeMillis();
                 }
                 else{
-                    //todo: Fehlermeldung an den User
+                    remainingTime.setText("Zeit Syncronisierung zu langsam!");
+                    lastNanoTimeTimer = System.currentTimeMillis();
                 }
                 
                 
