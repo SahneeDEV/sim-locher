@@ -115,11 +115,11 @@ public class Game{
                     remainingTimeAvailable = remainingTimeAvailable - 1;
                     remainingTime.setText("Zeit: 00:" + remainingTimeAvailable);
 
-                    System.out.println("Fuck off " + elapsed);
                     lastNanoTimeTimer = System.currentTimeMillis();
                 }
                 else{
-                    remainingTime.setText("Zeit Syncronisierung zu langsam!");
+                    //Notice if Timeing is not correct
+                    remainingTime.setText("Zeit Asyncron!");
                     lastNanoTimeTimer = System.currentTimeMillis();
                 }
                 
