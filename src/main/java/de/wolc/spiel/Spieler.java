@@ -14,8 +14,8 @@ public class Spieler implements Serializable {
     /** MUSS um 1 erhöht werden, wenn sich die Eigenschaften der Klasse ändern. */ 
     private static final long serialVersionUID = 1L;
     
-    private final SimLocher locher;
-    private final ArrayList<Konfetti> konfetti;
+    private SimLocher locher;
+    private ArrayList<Konfetti> konfetti;
 
     public Spieler() {
         this.locher = new SimLocher();
