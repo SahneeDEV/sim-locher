@@ -32,6 +32,12 @@ public class Game{
     //Variables for Countdown timer
     private long lastNanoTimeTimer = 0;
 
+    //Paper-Movement
+    private double currentPaperLocationX = 100;
+    private double currentPaperLocationY = 100;
+    private double paperMoveX;
+    private double paperMoveY;
+
 
 
     public Game () {
@@ -72,7 +78,7 @@ public class Game{
         //Creating Label for remaining Time
         Label remainingTime = new Label();
         remainingTime.setTextFill(Color.RED);
-        remainingTime.setText("Zeit: 00:" + remainingTimeAvailable);
+        remainingTime.setText("Zeit: " + remainingTimeAvailable + "s");
 
         //Adding remainingTime and score to VBox 
         rightVBox.getChildren().addAll(score, remainingTime);
@@ -81,12 +87,77 @@ public class Game{
         mainPane.setRight(rightVBox);
         BorderPane.setAlignment(rightVBox, Pos.CENTER);
 
-        //Animation Timer
+        //StackPane for Locher and Paper
+        StackPane gameArea = new StackPane();
+
+        //Setting the size of the gameArea in percent from windowSize
+        gameArea.setMinWidth(((double)windowSize[0] * 0.8));
+        gameArea.setMinHeight(((double)windowSize[1] * 0.8));
+        
+        //Spawn the paper
+        AnchorPane paperPane = new AnchorPane();
+        //Setting height of paperPane
+        paperPane.setMinWidth(gameArea.getMinWidth());
+        paperPane.setMinHeight(gameArea.getMinHeight());
+
+
+        ImageView paper = new ImageView("de/wolc/gui/images/paper_master.png");
+
+        //Setting the default Anchor points for the paper
+        paperPane.setBottomAnchor(paper, currentPaperLocationX);
+        paperPane.setLeftAnchor(paper, currentPaperLocationY);
+        
+        //
+        paperPane.getChildren().add(paper);
+
+        //Mouse Event
+        paper.setOnMousePressed(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent e) {
+                //Set the pressed mouse location
+                paperMoveX = e.getSceneX();
+                System.out.println(paperMoveX);
+                paperMoveY = e.getSceneY();
+                System.out.println(paperMoveY);                
+                                                    
+            }
+        });
+
+        paper.setOnMouseDragged(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent e){
+                //Change the location if the cursor has moved
+                //paper.setTranslateX(e.getSceneX() - paperMoveX);
+                //paper.setTranslateY(e.getSceneY() - paperMoveY);
+                paperPane.setLeftAnchor(paper, (e.getSceneX() - paperMoveX));
+                paperPane.setTopAnchor(paper, (e.getSceneY() - paperMoveY));
+                
+                currentPaperLocationX = paper.getTranslateX();
+                currentPaperLocationY = paper.getTranslateY();
+            }
+
+        });
+
+
+        paper.setOnMouseReleased(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent e){
+                paperMoveX = e.getSceneX();
+                System.out.println("Released " + paperMoveX);
+                paperMoveY = e.getSceneY();
+                System.out.println("Released " + paperMoveY);
+            }
+        });
+
+
+        //creating a new Animation Timer for refreshing GUI
         new AnimationTimer(){
             public void handle(long currentNanoTime){
+                //Getting new and last TimeStamp in Miliseconds and calculating 
                 long elapsedNanoSeconds = (System.currentTimeMillis() - lastNanoTimeTimer);
                 double elapsedSeconds = ((elapsedNanoSeconds / 1000d));
 
+                //Triggering Cooldown and giving him the elapsedSeconds
                 spieler.tick(elapsedSeconds);
 
                 if(hasLoched) {
@@ -101,10 +172,14 @@ public class Game{
                     if(remainingTimeAvailable == 0){
                         //TODO: End Game and Display Score Screen
                     }
+                    /** else{
+                    FIXME: Zeit geht ins negative
+                    }
+                    */
 
                     //Changing the Time
+                    //TODO: Eine 0 voransetzen wenn "remainingTimeAvailabe" einstellig ist
                     remainingTimeAvailable = remainingTimeAvailable - 1;
-                    //TODO: 
                     remainingTime.setText("Zeit: " + remainingTimeAvailable + "s");
 
                     lastNanoTimeTimer = System.currentTimeMillis();
@@ -128,11 +203,10 @@ public class Game{
         String skin = spieler.getLocher().getSkin();
 
         ImageView locher = new ImageView("de/wolc/gui/images/" +skin+ ".png"); 
-        locher.setOnMouseClicked(new EventHandler<MouseEvent>() { // (EventHandler<MouseEvent>)
+        locher.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent e) {
-                double cooldown = spieler.getLocher().getCooldown();
-                if (cooldown == 0) {
+                if (spieler.getLocher().getCooldown() == 0) {
                     Lochprozess prozess = spieler.getLocher().lochen();
                     ArrayList<Konfetti> spielerKonfetti = spieler.getKonfetti();
                     spielerKonfetti.addAll(prozess.getKonfetti());
@@ -140,10 +214,19 @@ public class Game{
                 }
             }
         });
-        locherBox.getChildren().add(locher);
 
-        mainPane.setCenter(locherBox);
-        BorderPane.setAlignment(locherBox, Pos.CENTER);
+        locherBox.setMinHeight(gameArea.getMinHeight());
+        locherBox.setMinWidth(gameArea.getMinWidth());
+
+        locherBox.getChildren().add(locher);
+        
+
+        //mainPane.setAlignment(locherBox, Pos.CENTER);
+        //mainPane.setCenter(locherBox);
+
+        //Add the elements to the Main Pane
+        gameArea.getChildren().addAll(locherBox, paperPane);
+        mainPane.setCenter(gameArea);
 
         //Set Window Titel
         stage.setTitle(windowTitle);
