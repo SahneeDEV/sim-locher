@@ -1,5 +1,6 @@
 package de.wolc.spiel.papier;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import de.wolc.spiel.papier.Papier;
 import de.wolc.spiel.locher.Lochprozess;
@@ -7,10 +8,13 @@ import de.wolc.spiel.locher.Lochprozess;
 /**
  * Mehrere Papiere eines Types auf einmal um sie lochen zu können.
  */
-public class PapierStapel<TPapier extends Papier>
+public class PapierStapel<TPapier extends Papier> implements Serializable
 {
-    private final ArrayList<TPapier> papiere;
-    private final Class<TPapier> format;
+    /** MUSS um 1 erhöht werden, wenn sich die Eigenschaften der Klasse ändern. */ 
+    private static final long serialVersionUID = 1L;
+
+    private ArrayList<TPapier> papiere;
+    private Class<TPapier> format;
     
     public PapierStapel(Class<TPapier> format) {
         this.papiere = new ArrayList<TPapier>();

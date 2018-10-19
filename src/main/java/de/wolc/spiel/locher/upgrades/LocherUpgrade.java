@@ -1,5 +1,7 @@
 package de.wolc.spiel.locher.upgrades;
 
+import java.io.Serializable;
+
 import de.wolc.spiel.locher.Lochprozess;
 import de.wolc.spiel.locher.SimLocher;
 
@@ -7,7 +9,10 @@ import de.wolc.spiel.locher.SimLocher;
  * Stellt ein Locher Upgrade dar.
  * Bitte Subklassen erstellen.
  */
-public abstract class LocherUpgrade {
+public abstract class LocherUpgrade implements Serializable {
+    /** MUSS um 1 erhöht werden, wenn sich die Eigenschaften der Klasse ändern. */ 
+    private static final long serialVersionUID = 1L;
+
     /**
      * Modifiziert die Stanzer des Lochers.
      * @param locher Der Locher.

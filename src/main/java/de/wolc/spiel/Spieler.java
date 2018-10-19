@@ -1,5 +1,6 @@
 package de.wolc.spiel;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import de.wolc.spiel.locher.SimLocher;
@@ -9,9 +10,12 @@ import de.wolc.spiel.papier.Konfetti;
  * Die Spieler Klasse ist die primäre öffentliche API. Die GUI Implementation sollte hiervon eine neue Instanz erstellen
  * und dann die Getter und Setter in dem erzeugen Objekt und deren Unterobjekte verwenden.
  */
-public class Spieler {
-    private final SimLocher locher;
-    private final ArrayList<Konfetti> konfetti;
+public class Spieler implements Serializable {
+    /** MUSS um 1 erhöht werden, wenn sich die Eigenschaften der Klasse ändern. */ 
+    private static final long serialVersionUID = 1L;
+    
+    private SimLocher locher;
+    private ArrayList<Konfetti> konfetti;
 
     public Spieler() {
         this.locher = new SimLocher();

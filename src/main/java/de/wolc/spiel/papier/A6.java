@@ -1,7 +1,12 @@
 package de.wolc.spiel.papier;
 
-public class A6 extends Papier
+import java.io.Serializable;
+
+public class A6 extends Papier implements Serializable
 {
+    /** MUSS um 1 erhöht werden, wenn sich die Eigenschaften der Klasse ändern. */ 
+    private static final long serialVersionUID = 1L;
+    
     private static int maximaleAnzahlLochen = 10;
     
     //Konstruktor

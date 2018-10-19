@@ -1,12 +1,17 @@
 package de.wolc.spiel.papier;
 
+import java.io.Serializable;
+
 import de.wolc.spiel.Farbe;
 
 /**
  * Ein einzelnes Konfetti. 
  */
-public class Konfetti 
+public class Konfetti implements Serializable
 {
+    /** MUSS um 1 erhöht werden, wenn sich die Eigenschaften der Klasse ändern. */ 
+    private static final long serialVersionUID = 1L;
+    
     private final Farbe farbe;
 
     /**
