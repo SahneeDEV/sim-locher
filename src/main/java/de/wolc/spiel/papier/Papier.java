@@ -1,10 +1,15 @@
 package de.wolc.spiel.papier;
 
+import java.io.Serializable;
+
 import de.wolc.spiel.Farbe;
 import de.wolc.spiel.locher.Lochprozess;
 
-public abstract class Papier
+public abstract class Papier implements Serializable
 {
+    /** MUSS um 1 erhöht werden, wenn sich die Eigenschaften der Klasse ändern. */ 
+    private static final long serialVersionUID = 1L;
+
     private final int maximaleAnzahlLochen;
     private Farbe farbe;
     private int lochAnzahl;

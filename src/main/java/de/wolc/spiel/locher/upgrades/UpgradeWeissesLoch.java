@@ -12,6 +12,9 @@ import de.wolc.spiel.papier.Konfetti;
  * Zufällige Menge an zusätzlichem Konfetti.
  */
 public class UpgradeWeissesLoch extends LocherUpgrade {
+    /** MUSS um 1 erhöht werden, wenn sich die Eigenschaften der Klasse ändern. */ 
+    private static final long serialVersionUID = 1L;
+    
     private static final Random ZUFALL = new Random();
 
     private int min, max;

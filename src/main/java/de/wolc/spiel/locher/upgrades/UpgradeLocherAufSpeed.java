@@ -9,6 +9,9 @@ import de.wolc.spiel.locher.SimLocher;
  * Reduziert den Cooldown um eine zufällige Anzahl an Sekunden.
  */
 public class UpgradeLocherAufSpeed extends LocherUpgrade {
+    /** MUSS um 1 erhöht werden, wenn sich die Eigenschaften der Klasse ändern. */ 
+    private static final long serialVersionUID = 1L;
+    
     private static final Random ZUFALL = new Random();
 
     private double min, max;

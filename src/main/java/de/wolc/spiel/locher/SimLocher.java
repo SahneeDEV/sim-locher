@@ -4,6 +4,7 @@ import de.wolc.spiel.papier.A4;
 import de.wolc.spiel.papier.Papier;
 import de.wolc.spiel.papier.PapierStapel;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import de.wolc.spiel.locher.Lochprozess;
@@ -12,8 +13,11 @@ import de.wolc.spiel.locher.upgrades.LocherUpgrade;
 /**
  * Der eigentliche Locher. Er ist in der Lage Papier Stapel zu lochen.
  */
-public class SimLocher
+public class SimLocher implements Serializable
 {
+    /** MUSS um 1 erhöht werden, wenn sich die Eigenschaften der Klasse ändern. */ 
+    private static final long serialVersionUID = 1L;
+
     private static final int STANDARD_STAERKE = 7;
     private static final int STANDARD_STANZER = 2;
 
