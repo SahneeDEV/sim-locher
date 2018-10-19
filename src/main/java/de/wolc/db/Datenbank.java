@@ -23,7 +23,13 @@ public class Datenbank {
     public void speichern(String key, Serializable objekt) throws IOException {
         ObjectOutputStream stream = null;
         try {
-            stream = new ObjectOutputStream(new FileOutputStream(new File(".db/" + key)));
+            File file = new File(".db/" + key + ".ser");
+            File directory = new File(file.getParent());
+            if (!directory.exists()) {
+                directory.mkdir();
+            }
+            System.out.println(file.getAbsolutePath());
+            stream = new ObjectOutputStream(new FileOutputStream(file));
             stream.writeObject(objekt);
         } finally {
             if (stream != null) {
@@ -40,12 +46,12 @@ public class Datenbank {
      * @throws ClassNotFoundException Ungültige Daten in der Datenbank.
      */
     public Serializable laden(String key) throws IOException, ClassNotFoundException {
-        File file = new File(key);
+        File file = new File(".db/" + key + ".ser");
         Serializable objekt = null;
         if (file.exists()) {
             ObjectInputStream stream = null;
             try {
-                stream = new ObjectInputStream(new FileInputStream(".db/" + key));
+                stream = new ObjectInputStream(new FileInputStream(file));
                 objekt = (Serializable) stream.readObject();
             } finally {
                 if (stream != null) {
