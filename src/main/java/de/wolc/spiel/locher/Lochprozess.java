@@ -5,7 +5,7 @@ import de.wolc.spiel.locher.SimLocher;
 import de.wolc.spiel.papier.Konfetti;
 
 /**
- * Ein Lochprozess stellt den Vorgang dar, einen Papierstapel zu lochen. Er enthält alle dafür nötigen Daten, sovie das 
+ * Ein Lochprozess stellt den Vorgang dar, einen Papierstapel zu lochen. Er enthält alle dafür nötigen Daten, sowie das 
  * Resultat des Vorgangs.
  */
 public class Lochprozess
