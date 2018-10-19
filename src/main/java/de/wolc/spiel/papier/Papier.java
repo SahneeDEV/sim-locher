@@ -10,7 +10,7 @@ public abstract class Papier implements Serializable
     /** MUSS um 1 erhöht werden, wenn sich die Eigenschaften der Klasse ändern. */ 
     private static final long serialVersionUID = 1L;
 
-    private final int maximaleAnzahlLochen;
+    private int maximaleAnzahlLochen;
     private Farbe farbe;
     private int lochAnzahl;
     
@@ -37,7 +37,7 @@ public abstract class Papier implements Serializable
      * @return true wenn das Papier existiert, sonst false.
      */
     public boolean existiert() {
-        return this.lochAnzahl >= this.getMaximaleLochAnzahl();
+        return this.lochAnzahl <= this.getMaximaleLochAnzahl();
     }
 
     /**
