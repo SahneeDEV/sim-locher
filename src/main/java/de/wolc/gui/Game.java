@@ -7,17 +7,19 @@ import de.wolc.spiel.Spieler;
 import de.wolc.spiel.locher.Lochprozess;
 import de.wolc.spiel.papier.Konfetti;
 
+//TODO: '*' entfernen und nur die benutzen objekte importieren
 import javafx.stage.Stage;
 import javafx.scene.Scene;
-import javafx.scene.image.Image;
+import javafx.scene.image.*;
 import javafx.scene.layout.*;
 import javafx.geometry.*;
 import javafx.scene.control.Label;
-import javafx.scene.paint.Color;
+import javafx.scene.paint.*;
 import javafx.animation.AnimationTimer;
 import javafx.event.EventHandler;
-import javafx.scene.input.MouseEvent;
+import javafx.scene.input.*;
 import javafx.scene.image.ImageView;
+import javafx.scene.shape.*;
 
 public class Game{
 
@@ -32,15 +34,10 @@ public class Game{
     //Variables for Countdown timer
     private long lastNanoTimeTimer = 0;
 
-    //Paper-Movement
-    private double paperMoveX;
-    private double paperMoveY;
-
-
-
     public Game () {
        this.spieler = new Spieler();
        this.lastNanoTimeTimer = System.currentTimeMillis();
+       
     }
 
 
@@ -53,6 +50,7 @@ public class Game{
         Scene gameScene = new Scene(mainPane);
 
         //Set Fullscreen
+        //TODO: wenn man den Fullscreen verlässt skalieren die Nodes nicht mehr nach bzw. ändern Ihre Position nicht erneut
         stage.setFullScreen(true);
 
         //Setting Background and width and height to screen
@@ -84,54 +82,71 @@ public class Game{
         //Adding VBox to mainPane
         mainPane.setRight(rightVBox);
         BorderPane.setAlignment(rightVBox, Pos.CENTER);
-
-        //StackPane for Locher and Paper
-        StackPane gameArea = new StackPane();
-
-        //Setting the size of the gameArea in percent from windowSize
-        gameArea.setMinWidth(((double)windowSize[0] * 0.8));
-        gameArea.setMinHeight(((double)windowSize[1] * 0.8));
         
         //Spawn the paper
-        AnchorPane paperPane = new AnchorPane();
+        AnchorPane gameArea = new AnchorPane();
         //Setting height of paperPane
-        paperPane.setMinWidth(150.0);
-        paperPane.setMinHeight(150.0);
+        gameArea.setMinWidth(((double)windowSize[0] * 0.8));
+        gameArea.setMinHeight(((double)windowSize[1] * 0.8));
+
+        //PAPER
+        Image paperImage = new Image("de/wolc/gui/images/paper_master.png");
+        Rectangle paper_new = new Rectangle();
+        paper_new.setHeight(paperImage.getHeight());
+        paper_new.setWidth(paperImage.getWidth());
+        paper_new.setFill(new ImagePattern(paperImage));
+
+        //Setting the default Anchor points for the paper        
+        AnchorPane.setBottomAnchor(paper_new, 100.0);
+        AnchorPane.setLeftAnchor(paper_new, 100.0);
 
 
-        ImageView paper = new ImageView("de/wolc/gui/images/paper_master.png");
+        //LOCHER
+        String skin = spieler.getLocher().getSkin();
+
+        Image locher_skin = new Image("de/wolc/gui/images/" + skin + ".png");
+        Rectangle locher_new = new Rectangle();
+        locher_new.setHeight(locher_skin.getHeight());
+        locher_new.setWidth(locher_skin.getWidth());
+        locher_new.setFill(new ImagePattern(locher_skin));
 
         //Setting the default Anchor points for the paper
-        AnchorPane.setBottomAnchor(paper, 100.0);
-        AnchorPane.setLeftAnchor(paper, 100.0);
-        
-        //
-        paperPane.getChildren().add(paper);
+        //TODO:Locher mittig setzen
+        AnchorPane.setBottomAnchor(locher_new, stage.getWidth() * 0.25);
+        AnchorPane.setLeftAnchor(locher_new, stage.getHeight() * 0.75);
 
-        //Mouse Event
-        paper.setOnMousePressed(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent e) {
-                //Set the pressed mouse location
-                paperMoveX = e.getSceneX();
-                System.out.println(paperMoveX);
-                paperMoveY = e.getSceneY();
-                System.out.println(paperMoveY);                
-                                                    
-            }
-        });
 
-        paper.setOnMouseDragged(new EventHandler<MouseEvent>() {
+        //Paper_new Mouse Events
+        paper_new.setOnMouseDragged(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent e){
                 //Change the location if the cursor has moved
-                paper.setTranslateX(paper.getTranslateX() + (e.getX() - 150));
-                paper.setTranslateY(paper.getTranslateY() + (e.getY() - 100));
+                paper_new.setTranslateX(paper_new.getTranslateX() + (e.getX() - 175));
+                paper_new.setTranslateY(paper_new.getTranslateY() + (e.getY() - 110));
+                checkForCollision(paper_new, locher_new, paperImage);
             }
         });
 
 
-        //creating a new Animation Timer for refreshing GUI
+        //Locher_new Mouse Events
+        locher_new.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent e) {
+                if (spieler.getLocher().getCooldown() == 0) {
+                    Lochprozess prozess = spieler.getLocher().lochen();
+                    ArrayList<Konfetti> spielerKonfetti = spieler.getKonfetti();
+                    spielerKonfetti.addAll(prozess.getKonfetti());
+                }
+            }
+        });
+        locher_new.setOnMouseDragged(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent e){
+                checkForCollision(paper_new, locher_new, paperImage);
+            }
+        });
+
+        //creating a new Animation Timer for refreshing the GUI
         new AnimationTimer(){
             public void handle(long currentNanoTime){
                 //Getting new and last TimeStamp in Miliseconds and calculating 
@@ -153,10 +168,6 @@ public class Game{
                     if(remainingTimeAvailable == 0){
                         //TODO: End Game and Display Score Screen
                     }
-                    /** else{
-                    FIXME: Zeit geht ins negative
-                    }
-                    */
 
                     //Changing the Time
                     //TODO: Eine 0 voransetzen wenn "remainingTimeAvailabe" einstellig ist
@@ -177,48 +188,34 @@ public class Game{
             }
         }.start();
 
-        //Creating VBox for Locher and displaying Locher
-        VBox locherBox = new VBox();
-        locherBox.setAlignment(Pos.CENTER);
-
-        String skin = spieler.getLocher().getSkin();
-
-        ImageView locher = new ImageView("de/wolc/gui/images/" +skin+ ".png"); 
-        locher.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent e) {
-                if (spieler.getLocher().getCooldown() == 0) {
-                    Lochprozess prozess = spieler.getLocher().lochen();
-                    ArrayList<Konfetti> spielerKonfetti = spieler.getKonfetti();
-                    spielerKonfetti.addAll(prozess.getKonfetti());
-                    hasLoched = true;
-                }
-            }
-        });
-
-        //TODO:
-        locher.setOnDragDetected(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent e) {
-                System.out.println("Dragged in");
-            }
-        });
-
-        //locherBox.setMinHeight(gameArea.getMinHeight());
-        //locherBox.setMinWidth(gameArea.getMinWidth());
-
-        locherBox.getChildren().add(locher);
-        
-
-        //mainPane.setAlignment(locherBox, Pos.CENTER);
-        //mainPane.setCenter(locherBox);
+        //Add Nodes to the AnchorPane
+        gameArea.getChildren().addAll(locher_new, paper_new);
 
         //Add the elements to the Main Pane
-        gameArea.getChildren().addAll(locherBox, paperPane);
         mainPane.setCenter(gameArea);
 
         //Set Window Titel
         stage.setTitle(windowTitle);
         return gameScene;
+    }
+
+    /**
+     * Prüft, ob sich die beiden übergebenen Shapes überschneiden, wenn ja, dann wird die Anzeige angepasst
+     */
+    private void checkForCollision(Shape paper, Shape locher, Image defaultSkin){
+        boolean collisionDetection = false;
+
+        Shape ueberschneidung = Shape.intersect(paper, locher);
+        if(ueberschneidung.getBoundsInLocal().getWidth() != -1){
+            collisionDetection = true;
+        }
+
+        if(collisionDetection){
+            //TODO: Hier muss noch weiteres gemacht werden
+            paper.setFill(Color.BLACK);
+        }
+        else{
+            paper.setFill(new ImagePattern(defaultSkin));
+        }
     }
 }
