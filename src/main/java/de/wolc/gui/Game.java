@@ -33,8 +33,6 @@ public class Game{
     private long lastNanoTimeTimer = 0;
 
     //Paper-Movement
-    private double currentPaperLocationX = 100;
-    private double currentPaperLocationY = 100;
     private double paperMoveX;
     private double paperMoveY;
 
@@ -97,15 +95,15 @@ public class Game{
         //Spawn the paper
         AnchorPane paperPane = new AnchorPane();
         //Setting height of paperPane
-        paperPane.setMinWidth(gameArea.getMinWidth());
-        paperPane.setMinHeight(gameArea.getMinHeight());
+        paperPane.setMinWidth(150.0);
+        paperPane.setMinHeight(150.0);
 
 
         ImageView paper = new ImageView("de/wolc/gui/images/paper_master.png");
 
         //Setting the default Anchor points for the paper
-        paperPane.setBottomAnchor(paper, currentPaperLocationX);
-        paperPane.setLeftAnchor(paper, currentPaperLocationY);
+        AnchorPane.setBottomAnchor(paper, 100.0);
+        AnchorPane.setLeftAnchor(paper, 100.0);
         
         //
         paperPane.getChildren().add(paper);
@@ -127,25 +125,8 @@ public class Game{
             @Override
             public void handle(MouseEvent e){
                 //Change the location if the cursor has moved
-                //paper.setTranslateX(e.getSceneX() - paperMoveX);
-                //paper.setTranslateY(e.getSceneY() - paperMoveY);
-                paperPane.setLeftAnchor(paper, (e.getSceneX() - paperMoveX));
-                paperPane.setTopAnchor(paper, (e.getSceneY() - paperMoveY));
-                
-                currentPaperLocationX = paper.getTranslateX();
-                currentPaperLocationY = paper.getTranslateY();
-            }
-
-        });
-
-
-        paper.setOnMouseReleased(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent e){
-                paperMoveX = e.getSceneX();
-                System.out.println("Released " + paperMoveX);
-                paperMoveY = e.getSceneY();
-                System.out.println("Released " + paperMoveY);
+                paper.setTranslateX(paper.getTranslateX() + (e.getX() - 150));
+                paper.setTranslateY(paper.getTranslateY() + (e.getY() - 100));
             }
         });
 
@@ -215,8 +196,16 @@ public class Game{
             }
         });
 
-        locherBox.setMinHeight(gameArea.getMinHeight());
-        locherBox.setMinWidth(gameArea.getMinWidth());
+        //TODO:
+        locher.setOnDragDetected(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent e) {
+                System.out.println("Dragged in");
+            }
+        });
+
+        //locherBox.setMinHeight(gameArea.getMinHeight());
+        //locherBox.setMinWidth(gameArea.getMinWidth());
 
         locherBox.getChildren().add(locher);
         
