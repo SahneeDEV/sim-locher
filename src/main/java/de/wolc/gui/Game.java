@@ -33,6 +33,7 @@ public class Game{
 
     //Variables for Countdown timer
     private long lastNanoTimeTimer = 0;
+    private String leadingZero;
 
     public Game () {
        this.spieler = new Spieler();
@@ -169,13 +170,15 @@ public class Game{
                     }
 
                     //Changing the Time
-                    //TODO: Eine 0 voransetzen wenn "remainingTimeAvailabe" einstellig ist
-                    if (remainingTimeAvailable instanceof Integer)
                     remainingTimeAvailable = remainingTimeAvailable - 1;
+                    //Setting a leading Zero if reamingTimeAvailable is one digit
                     if (remainingTimeAvailable < 10) {
-                        remainingTimeAvailable = String.valueOf(remainingTimeAvailable);
+                        leadingZero = "0";
                     }
-                    remainingTime.setText("Zeit: " + remainingTimeAvailable + "s");
+                    else {
+                        leadingZero = "";
+                    }
+                    remainingTime.setText("Zeit: " + leadingZero + + remainingTimeAvailable + "s");
 
                     lastNanoTimeTimer = System.currentTimeMillis();
                 }
