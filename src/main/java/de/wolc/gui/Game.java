@@ -7,6 +7,7 @@ import de.wolc.spiel.Spieler;
 import de.wolc.spiel.locher.Lochprozess;
 import de.wolc.spiel.papier.Konfetti;
 
+
 //TODO: '*' entfernen und nur die benutzen objekte importieren
 import javafx.stage.Stage;
 import javafx.scene.Scene;
@@ -18,7 +19,6 @@ import javafx.scene.paint.*;
 import javafx.animation.AnimationTimer;
 import javafx.event.EventHandler;
 import javafx.scene.input.*;
-import javafx.scene.image.ImageView;
 import javafx.scene.shape.*;
 
 public class Game{
@@ -112,8 +112,8 @@ public class Game{
 
         //Setting the default Anchor points for the paper
         //TODO:Locher mittig setzen
-        AnchorPane.setBottomAnchor(locher_new, stage.getWidth() * 0.25);
-        AnchorPane.setLeftAnchor(locher_new, stage.getHeight() * 0.75);
+        AnchorPane.setBottomAnchor(locher_new, stage.getWidth() * 0.20);
+        AnchorPane.setLeftAnchor(locher_new, stage.getHeight() * 0.65);
 
 
         //Paper_new Mouse Events
@@ -213,9 +213,12 @@ public class Game{
         if(collisionDetection){
             //TODO: Hier muss noch weiteres gemacht werden
             paper.setFill(Color.BLACK);
+            //TODO: Hier benötigen wir eine Rückgabe des Papier Formates
+
         }
         else{
             paper.setFill(new ImagePattern(defaultSkin));
         }
     }
+
 }
