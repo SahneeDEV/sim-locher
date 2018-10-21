@@ -50,13 +50,14 @@ public class Game{
         Scene gameScene = new Scene(mainPane);
 
         //Set Fullscreen
+        //TODO: wenn man den Fullscreen verlässt skalieren die Nodes nicht mehr nach bzw. ändern Ihre Position nicht erneut
         stage.setFullScreen(true);
 
-        //Use MultiUse
+        //Setting Background and width and height to screen
         MultiUse mu = new MultiUse();
         int[] windowSize = mu.GetScreenSize();
-        //Setting Background and width and height to screen
         Image backgroundImage = new Image(backgroundImageLocation, (double)windowSize[0], (double)windowSize[1], false, false);
+        
 
         BackgroundImage backgroundImageGame = new BackgroundImage(backgroundImage, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,BackgroundSize.DEFAULT);
         mainPane.setBackground(new Background(backgroundImageGame));
@@ -110,7 +111,6 @@ public class Game{
         locher_new.setFill(new ImagePattern(locher_skin));
 
         //Setting the default Anchor points for the paper
-        //TODO:Locher mittig setzen
         AnchorPane.setBottomAnchor(locher_new, stage.getWidth() * 0.20);
         AnchorPane.setLeftAnchor(locher_new, stage.getHeight() * 0.65);
 
@@ -170,7 +170,11 @@ public class Game{
 
                     //Changing the Time
                     //TODO: Eine 0 voransetzen wenn "remainingTimeAvailabe" einstellig ist
+                    if (remainingTimeAvailable instanceof Integer)
                     remainingTimeAvailable = remainingTimeAvailable - 1;
+                    if (remainingTimeAvailable < 10) {
+                        remainingTimeAvailable = String.valueOf(remainingTimeAvailable);
+                    }
                     remainingTime.setText("Zeit: " + remainingTimeAvailable + "s");
 
                     lastNanoTimeTimer = System.currentTimeMillis();
@@ -186,25 +190,6 @@ public class Game{
                 
             }
         }.start();
-
-        //Fullscreen to Normal fix
-        stage.setFullScreenExitKeyCombination(new KeyCodeCombination(KeyCode.ESCAPE));
-        gameScene.addEventFilter(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
-            @Override
-            public void handle(KeyEvent e){
-                //Rezise if leaving the Fullscreen Mode
-                Image resizedBackgroundImage = new Image(backgroundImageLocation, stage.getWidth(), stage.getHeight(), false, false);
-                BackgroundImage resizedbackgroundImageGame = new BackgroundImage(resizedBackgroundImage, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,BackgroundSize.DEFAULT);
-                mainPane.setBackground(new Background(resizedbackgroundImageGame));
-
-                //Nodes neu skalieren bzw. positionieren
-                gameArea.setMinWidth(((double)windowSize[0] * 0.8));
-                gameArea.setMinHeight(((double)windowSize[1] * 0.8));
-
-                AnchorPane.setBottomAnchor(locher_new, stage.getWidth() * 0.20);
-                AnchorPane.setLeftAnchor(locher_new, stage.getHeight() * 0.60);
-            }
-        });
 
         //Add Nodes to the AnchorPane
         gameArea.getChildren().addAll(locher_new, paper_new);
