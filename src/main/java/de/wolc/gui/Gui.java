@@ -17,6 +17,8 @@ import javafx.application.Application;
  * die "main(String[] args)" Methode in "Gui" und wählt "Debug".
  */
 public class Gui {
+    public static final Datenbank DB = new Datenbank();
+
     /**
      * Main Methode
      */

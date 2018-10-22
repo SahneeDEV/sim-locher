@@ -1,5 +1,6 @@
 package de.wolc.gui;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
@@ -35,13 +36,12 @@ public class Game{
     private Spieler spieler;
     private Class<? extends Papier> currentPapierFormat;
     private Rectangle locher_new;
-    private AnchorPane gameArea;
+    private AnchorPane gameArea;   
     
     private static final Random RANDOM = new Random();
     
     //Game Variables
     private double remainingTimeAvailable = 30d;
-    private boolean hasLoched = false;
 
     //Variables for Countdown timer
     private long firstNanoTimeTimer = 0;
@@ -53,9 +53,17 @@ public class Game{
     private HashMap<Farbe, Label> scoreLabels = new HashMap<>();
 
     public Game () {
-       this.spieler = new Spieler();
-       this.firstNanoTimeTimer = 0;
-       this.currentPapierFormat = A4.class;
+        try {
+            this.spieler = (Spieler) Gui.DB.laden("spieler");
+        } catch (Exception e) {
+            // TODO: Warnung dass der Spielstand nicht geladen werden konnte
+            this.spieler = null;
+        }
+        if (this.spieler == null) {
+            this.spieler = new Spieler();
+        }
+        this.firstNanoTimeTimer = 0;
+        this.currentPapierFormat = A4.class;
     }
 
     private void updateLabels() {
@@ -197,14 +205,9 @@ public class Game{
                     timeToNextPapier = 0.5d + (2d - 0.5d) * RANDOM.nextDouble();
                 }
 
-                if(hasLoched) {
-                    //Setting the new Score
-                    score.setText("Score: " + spieler.getKonfetti().size());
-                    hasLoched = false;
-                }
                 //Check for end of Time
-                if(remainingTimeAvailable == 0){
-                    //TODO: End Game and Display Score Screen
+                if(remainingTimeAvailable <= 0) {
+                    Game.this.spielEnde();
                 }
 
                 Game.this.updateLabels();
@@ -221,6 +224,16 @@ public class Game{
         //Set Window Titel
         stage.setTitle(windowTitle);
         return gameScene;
+    }
+
+    public void spielEnde() {
+        // TODO: End Game and Display Score Screen
+        try {
+            Gui.DB.speichern("spieler", this.spieler);
+        } catch (IOException e) {
+            // TODO: Warnung dass speichern fehlgeschlagen ist
+            e.printStackTrace();
+		}
     }
 
     /**
