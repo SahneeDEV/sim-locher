@@ -27,13 +27,15 @@ import javafx.scene.layout.BackgroundPosition;
 import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.VBox;
-import javafx.geometry.*;
+import javafx.geometry.Pos;
 import javafx.scene.control.Label;
-import javafx.scene.paint.*;
+import javafx.scene.paint.Color;
 import javafx.animation.AnimationTimer;
 import javafx.event.EventHandler;
-import javafx.scene.input.*;
-import javafx.scene.shape.*;
+import javafx.scene.paint.ImagePattern;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.Shape;
 
 public class Game{
 
