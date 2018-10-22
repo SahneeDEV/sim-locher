@@ -13,17 +13,11 @@ public class Stages extends Application
     @Override
     public void start(Stage stage) throws Exception{
         stage.setTitle(windowTitle);        
-        
         //stage decoration
         stage.getIcons().add(new Image(iconLocation));
-
         //Put everything together
         MainMenu mm = new MainMenu();
-        //SettingsMenu sm = new SettingsMenu();
-
-        stage.setScene(mm.MainMenuStage(stage));
-        //stage.setScene(nm.SettingsScene(stage));
-        
+        stage.setScene(mm.MainMenuStage(stage));        
         //Show the Stage
         stage.show();
         stage.centerOnScreen();

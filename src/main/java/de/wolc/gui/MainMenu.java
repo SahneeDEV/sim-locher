@@ -54,8 +54,10 @@ public class MainMenu{
             button_playgame.addEventHandler(ActionEvent.ACTION, new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent actionEvent){
-                    button_playgame.setText("NO GAME!");
-                }
+                    Game g = new Game();               
+                    stage.setScene(g.GameMainStage(stage));
+                    stage.setFullScreen(true);
+                }   
     
             });
 
