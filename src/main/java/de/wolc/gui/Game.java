@@ -47,10 +47,28 @@ public class Game{
 
     private double timeToNextPapier = 0;
 
+    private Label score, remainingTime, formatLabel, papierLabel;
+
     public Game () {
        this.spieler = new Spieler();
        this.firstNanoTimeTimer = 0;
        this.currentPapierFormat = A4.class;
+    }
+
+    private void updateLabels() {
+        this.score.setText("Score: " + this.spieler.getKonfetti().size()); 
+        this.formatLabel.setText("Format: " + this.spieler.getLocher().getFormat().getSimpleName());
+        this.papierLabel.setText("Stapel: " + this.spieler.getLocher().getStapel().groesse());
+        //TODO: Zeit wird negativ!!!! 0-3s 💩💩💩💩
+        //Changing the Time
+        //Setting a leading Zero if reamingTimeAvailable is one digit
+        if (remainingTimeAvailable < 10) {
+            leadingZero = "0";
+        }
+        else {
+            leadingZero = "";
+        }
+        remainingTime.setText("Zeit: " + this.leadingZero + Math.round(this.remainingTimeAvailable) + "s");   
     }
     
     public Scene GameMainStage(Stage stage){
@@ -85,17 +103,21 @@ public class Game{
         VBox rightVBox = new VBox();
 
         //Creating Label for outputing score
-        Label score = new Label();
+        score = new Label();
         score.setTextFill(Color.RED);
-        score.setText("Score: " + spieler.getKonfetti().size()); 
-
         //Creating Label for remaining Time
-        Label remainingTime = new Label();
+        remainingTime = new Label();
         remainingTime.setTextFill(Color.RED);
-        remainingTime.setText("Zeit: " + remainingTimeAvailable + "s");
+        //Format label
+        formatLabel = new Label();
+        formatLabel.setTextFill(Color.RED);
+        //Papier label
+        papierLabel = new Label();
+        papierLabel.setTextFill(Color.RED);
+        this.updateLabels();
 
         //Adding remainingTime and score to VBox 
-        rightVBox.getChildren().addAll(score, remainingTime);
+        rightVBox.getChildren().addAll(score, remainingTime, formatLabel, papierLabel);
 
         //Adding VBox to mainPane
         mainPane.setRight(rightVBox);
@@ -149,6 +171,8 @@ public class Game{
                 spieler.tick(elapsedSeconds);
 
                 timeToNextPapier -= elapsedSeconds;
+                remainingTimeAvailable -= elapsedSeconds;
+
                 if (timeToNextPapier <= 0) {
                     new PapierObjekt(Game.this, new A4());
                     timeToNextPapier = 0.5d + (2d - 0.5d) * RANDOM.nextDouble();
@@ -159,31 +183,12 @@ public class Game{
                     score.setText("Score: " + spieler.getKonfetti().size());
                     hasLoched = false;
                 }
-                //TODO: Zeit wird negativ!!!! 0-3s 💩💩💩💩
                 //Check for end of Time
                 if(remainingTimeAvailable == 0){
                     //TODO: End Game and Display Score Screen
                 }
 
-                //Changing the Time
-                remainingTimeAvailable -= elapsedSeconds;
-                //Setting a leading Zero if reamingTimeAvailable is one digit
-                if (remainingTimeAvailable < 10) {
-                    leadingZero = "0";
-                }
-                else {
-                    leadingZero = "";
-                }
-                remainingTime.setText("Zeit: " + leadingZero + Math.round(remainingTimeAvailable) + "s");
-                /** else{
-                    //Notice if Timeing is not correct
-                    remainingTime.setText("Zeit Asyncron!");
-                    lastNanoTimeTimer = System.currentTimeMillis();
-                    FIXME: Es wird immer else Ausgegeben
-                }
-                */
-                
-                
+                Game.this.updateLabels();
             }
         }.start();
 
