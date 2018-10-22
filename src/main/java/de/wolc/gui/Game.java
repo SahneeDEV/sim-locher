@@ -1,10 +1,12 @@
 package de.wolc.gui;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Random;
 
 import de.wolc.MultiUse;
 import de.wolc.gui.PapierObjekt;
+import de.wolc.spiel.Farbe;
 import de.wolc.spiel.Spieler;
 import de.wolc.spiel.locher.Lochprozess;
 import de.wolc.spiel.papier.A4;
@@ -48,6 +50,7 @@ public class Game{
     private double timeToNextPapier = 0;
 
     private Label score, remainingTime, formatLabel, papierLabel;
+    private HashMap<Farbe, Label> scoreLabels = new HashMap<>();
 
     public Game () {
        this.spieler = new Spieler();
@@ -56,7 +59,19 @@ public class Game{
     }
 
     private void updateLabels() {
-        this.score.setText("Score: " + this.spieler.getKonfetti().size()); 
+        // Score einteilen nach Farbe
+        HashMap<Farbe, Integer> hash = new HashMap<>();
+        for(Konfetti konfetti : this.spieler.getKonfetti()) {
+            Farbe farbe = konfetti.getFarbe();
+            Integer zahl = hash.getOrDefault(farbe, 0) + 1;
+            hash.put(farbe, zahl);
+        }
+        for(Farbe farbe : Farbe.values()) {
+            Label label = this.scoreLabels.get(farbe);
+            Integer zahl = hash.getOrDefault(farbe, 0);
+            label.setText("  " + farbe.getAnzeigeName() + ": " + zahl);
+        }
+        this.score.setText("Score: " + this.spieler.getKonfetti().size());
         this.formatLabel.setText("Format: " + this.spieler.getLocher().getFormat().getSimpleName());
         this.papierLabel.setText("Stapel: " + this.spieler.getLocher().getStapel().groesse());
         //TODO: Zeit wird negativ!!!! 0-3s 💩💩💩💩
@@ -102,22 +117,26 @@ public class Game{
         //Creating the VBox for the right Output
         VBox rightVBox = new VBox();
 
-        //Creating Label for outputing score
+        // Labels erstellen
         score = new Label();
-        score.setTextFill(Color.RED);
-        //Creating Label for remaining Time
-        remainingTime = new Label();
-        remainingTime.setTextFill(Color.RED);
-        //Format label
-        formatLabel = new Label();
-        formatLabel.setTextFill(Color.RED);
-        //Papier label
         papierLabel = new Label();
-        papierLabel.setTextFill(Color.RED);
+        formatLabel = new Label();
+        remainingTime = new Label();
+        papierLabel.setTextFill(Color.WHITE);
+        score.setTextFill(Color.WHITE);
+        remainingTime.setTextFill(Color.WHITE);
+        formatLabel.setTextFill(Color.WHITE);
+        rightVBox.getChildren().add(score);
+        for(Farbe farbe : Farbe.values()) {
+            Label label = new Label();
+            label.setTextFill(farbe.getGuiFarbe());
+            this.scoreLabels.put(farbe, label);
+            rightVBox.getChildren().add(label);
+        }
+        rightVBox.getChildren().addAll(remainingTime, formatLabel, papierLabel);
         this.updateLabels();
 
         //Adding remainingTime and score to VBox 
-        rightVBox.getChildren().addAll(score, remainingTime, formatLabel, papierLabel);
 
         //Adding VBox to mainPane
         mainPane.setRight(rightVBox);
