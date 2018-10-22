@@ -1,5 +1,7 @@
 package de.wolc.gui;
 
+import java.util.Random;
+
 import de.wolc.MultiUse;
 import de.wolc.spiel.Spieler;
 import de.wolc.spiel.locher.Lochprozess;
@@ -24,6 +26,15 @@ import javafx.scene.shape.*;
 
 public class PapierObjekt {
     private static final Image IMAGE = new Image("de/wolc/gui/images/paper_master.png");
+    private static final Random RANDOM = new Random();
+
+    public double zufallsBreite() {
+        return this.game.getArea().getWidth() * RANDOM.nextDouble();
+    }
+
+    public double zufallsHoehe() {
+        return this.game.getArea().getHeight() * RANDOM.nextDouble();
+    }
 
     private final Papier papier;
     private final Game game;
@@ -36,20 +47,27 @@ public class PapierObjekt {
         this.drawnPapier.setFill(new ImagePattern(IMAGE));
         this.drawnPapier.setWidth(IMAGE.getWidth());
         this.drawnPapier.setHeight(IMAGE.getHeight());
-        this.drawnPapier.setOnMouseDragged(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent e){
-                //Change the location if the cursor has moved
-                drawnPapier.setTranslateX(drawnPapier.getTranslateX() + (e.getX() - 175));
-                drawnPapier.setTranslateY(drawnPapier.getTranslateY() + (e.getY() - 110));
-                if (game.checkForLocherCollision(drawnPapier)) {
-                    //game.papierAufLocherGezogen();
-                }
+        this.drawnPapier.setTranslateX(this.zufallsBreite());
+        this.drawnPapier.setTranslateY(this.zufallsHoehe());
+        this.drawnPapier.setOnMouseDragged((MouseEvent e) -> {
+            //Change the location if the cursor has moved
+            //TODO: Grab area anpassen
+            this.drawnPapier.toFront();
+            this.drawnPapier.setTranslateX(this.drawnPapier.getTranslateX() + (e.getX() - 300));
+            this.drawnPapier.setTranslateY(this.drawnPapier.getTranslateY() + (e.getY() - 250));
+            if (this.game.checkForLocherCollision(this.drawnPapier)){
+                this.game.papierAufLocherGezogen(this);
+                e.consume();
             }
         });
+        this.game.getArea().getChildren().add(this.drawnPapier);
     }
 
     public Papier getPapier() {
         return this.papier;
+    }
+
+    public void zerstoeren() {
+        this.game.getArea().getChildren().remove(this.drawnPapier);
     }
 }

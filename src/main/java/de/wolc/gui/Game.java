@@ -31,6 +31,7 @@ public class Game{
     private Spieler spieler;
     private Class<? extends Papier> currentPapierFormat;
     private Rectangle locher_new;
+    private AnchorPane gameArea;
     
     //Game Variables
     private int remainingTimeAvailable = 30;
@@ -95,7 +96,7 @@ public class Game{
         BorderPane.setAlignment(rightVBox, Pos.CENTER);
         
         //Spawn the paper
-        AnchorPane gameArea = new AnchorPane();
+        gameArea = new AnchorPane();
         //Setting height of paperPane
         gameArea.setMinWidth(((double)windowSize[0] * 0.8));
         gameArea.setMinHeight(((double)windowSize[1] * 0.8));
@@ -235,6 +236,8 @@ public class Game{
             }
         }.start();
 
+        new PapierObjekt(this, new A4());
+
         //Add Nodes to the AnchorPane
         gameArea.getChildren().addAll(locher_new, paper_new);
 
@@ -266,14 +269,38 @@ public class Game{
         }
     }
 
+    public AnchorPane getArea() {
+        return this.gameArea;
+    }
+
     public boolean checkForLocherCollision(Shape papier) {
         return checkForCollision(papier, locher_new);
     }
 
+    @SuppressWarnings("unchecked")
     public void papierAufLocherGezogen(PapierObjekt objekt) {
-        // penis
-        if (this.currentPapierFormat == objekt.getPapier().getClass()) {
-            this.spieler.getLocher().getStapel().ablegen(objekt.getPapier());
+        // penis 🍆
+        Class<? extends Papier> papierTyp = objekt.getPapier().getClass();
+        if (this.currentPapierFormat == papierTyp) {
+            PapierStapel<?> stapel = this.spieler.getLocher().getStapel();
+            boolean abgelegt;
+            if(papierTyp == A4.class){
+                PapierStapel<A4> stapel_A4 = (PapierStapel<A4>)stapel;
+                abgelegt = stapel_A4.ablegen((A4)objekt.getPapier());
+            }
+            else if(papierTyp == A5.class){
+                PapierStapel<A5> stapel_A5 = (PapierStapel<A5>)stapel;
+                abgelegt = stapel_A5.ablegen((A5)objekt.getPapier());
+            }
+            else if(papierTyp == A6.class){
+                PapierStapel<A6> stapel_A6 = (PapierStapel<A6>)stapel;
+                abgelegt = stapel_A6.ablegen((A6)objekt.getPapier());
+            } else {
+                abgelegt = false;
+            }
+            if (abgelegt) {
+                objekt.zerstoeren();
+            }
         }
     }
 
