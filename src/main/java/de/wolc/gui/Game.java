@@ -203,20 +203,9 @@ public class Game{
      * Prüft, ob sich die beiden übergebenen Shapes überschneiden, wenn ja, dann wird die Anzeige angepasst
      * @return true=collision vorhanden, false= keine collision vorhanden
      */
-    private boolean checkForCollision(Shape paper, Shape locher){
-        boolean collisionDetection = false;
-
-        Shape ueberschneidung = Shape.intersect(paper, locher);
-        if(ueberschneidung.getBoundsInLocal().getWidth() != -1){
-            collisionDetection = true;
-        }
-
-        if(collisionDetection){
-            return true;
-        }
-        else{
-            return false;
-        }
+    private boolean checkForCollision(Shape shape1, Shape shape2){
+        Shape ueberschneidung = Shape.intersect(shape1, shape2);
+        return !ueberschneidung.getBoundsInLocal().isEmpty();
     }
 
     public AnchorPane getArea() {
