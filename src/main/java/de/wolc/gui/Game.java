@@ -30,6 +30,7 @@ public class Game{
     private final String backgroundImageLocation = "de/wolc/gui/images/Test_Bild.jpg";
     private Spieler spieler;
     private Class<? extends Papier> currentPapierFormat;
+    private Rectangle locher_new;
     
     //Game Variables
     private int remainingTimeAvailable = 30;
@@ -70,7 +71,7 @@ public class Game{
         PapierStapel<A5> stapel_A5 = new PapierStapel<>(A5.class);
         PapierStapel<A6> stapel_A6 = new PapierStapel<>(A6.class);
         this.spieler.getLocher().setFormat(this.currentPapierFormat);
-        this.spieler.getLocher().einlegen(stapel_A4); 
+        this.spieler.getLocher().einlegen(stapel_A4);
         
         //Creating the Component-nodes
         //Creating the VBox for the right Output
@@ -115,7 +116,7 @@ public class Game{
         String skin = spieler.getLocher().getSkin();
 
         Image locher_skin = new Image("de/wolc/gui/images/" + skin + ".png");
-        Rectangle locher_new = new Rectangle();
+        locher_new = new Rectangle();
         locher_new.setHeight(locher_skin.getHeight());
         locher_new.setWidth(locher_skin.getWidth());
         locher_new.setFill(new ImagePattern(locher_skin));
@@ -145,7 +146,7 @@ public class Game{
                         stapel_A4.ablegen(a4);
                         
                         //Wieder an Ursprungspunkt zurücksetzen
-                        this.paper_new.setOpacity(0);
+                        
 
 
                         e.consume();                        
@@ -262,6 +263,17 @@ public class Game{
         }
         else{
             return false;
+        }
+    }
+
+    public boolean checkForLocherCollision(Shape papier) {
+        return checkForCollision(papier, locher_new);
+    }
+
+    public void papierAufLocherGezogen(PapierObjekt objekt) {
+        // penis
+        if (this.currentPapierFormat == objekt.getPapier().getClass()) {
+            this.spieler.getLocher().getStapel().ablegen(objekt.getPapier());
         }
     }
 
