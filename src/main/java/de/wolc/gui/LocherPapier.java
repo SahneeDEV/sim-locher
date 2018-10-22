@@ -23,7 +23,7 @@ public class LocherPapier{
         this.locherPapier.setFill(new ImagePattern(paperImage));
         this.locherPapier.setWidth(paperImage.getWidth());
         this.locherPapier.setHeight(paperImage.getHeight());
-        //TODO: papier genauer einpassen + §D Effekt richtig einbinden
+        //TODO: papier genauer einpassen + 3D Effekt richtig einbinden
         this.locherPapier.setTranslateX(game.getArea().getWidth() * 0.339 - (stapelGroesse * 0.15));
         this.locherPapier.setTranslateY(game.getArea().getHeight() * 0.539 - (stapelGroesse * 0.15));
 
