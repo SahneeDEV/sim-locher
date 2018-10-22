@@ -32,28 +32,32 @@ public class LocherPapier{
 
     private final Rectangle locherPapier;
     private final Game game;
-    private final Spieler spieler;
+    private ArrayList<Rectangle> locherPapiere = new ArrayList<Rectangle>();
 
-    public LocherPapier(Game game, Spieler spieler){
+    public LocherPapier(Game game, int stapelGroesse){
         //
         this.game = game;
-        this.spieler = spieler;
-        int stapelGroesse = this.spieler.getLocher().getStapel().groesse();
 
-        for(int i = 0; i <= stapelGroesse; i++){
-            this.locherPapier = new Rectangle();
-            this.locherPapier.toFront();
-            this.locherPapier.setFill(new ImagePattern(paperImage));
-            this.locherPapier.setWidth(paperImage.getWidth());
-            this.locherPapier.setHeight(paperImage.getHeight());
-            //TODO: papier genauer einpassen
-            this.locherPapier.setTranslateX(game.getArea().getWidth() * 0.339);
-            this.locherPapier.setTranslateY(game.getArea().getHeight() * 0.539);
-        }
+        this.locherPapier = new Rectangle();
+        this.locherPapier.toFront();
+        this.locherPapier.setFill(new ImagePattern(paperImage));
+        this.locherPapier.setWidth(paperImage.getWidth());
+        this.locherPapier.setHeight(paperImage.getHeight());
+        //TODO: papier genauer einpassen
+        this.locherPapier.setTranslateX(game.getArea().getWidth() * 0.340 - (stapelGroesse * 0.15));
+        this.locherPapier.setTranslateY(game.getArea().getHeight() * 0.540 - (stapelGroesse * 0.15));
 
 
         this.game.getArea().getChildren().add(this.locherPapier);
         
         
+    }
+
+    /**
+     * Gibt das Array mit den Papieren zurück
+     * @return Die ArrayList<Rectangle>
+     */
+    public ArrayList<Rectangle> getPapierListe(){
+        return this.locherPapiere;
     }
 }
