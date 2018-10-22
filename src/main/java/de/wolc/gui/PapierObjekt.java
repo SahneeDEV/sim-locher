@@ -2,27 +2,12 @@ package de.wolc.gui;
 
 import java.util.Random;
 
-import de.wolc.MultiUse;
-import de.wolc.spiel.Spieler;
-import de.wolc.spiel.locher.Lochprozess;
-import de.wolc.spiel.papier.A4;
-import de.wolc.spiel.papier.A5;
-import de.wolc.spiel.papier.A6;
-import de.wolc.spiel.papier.Konfetti;
 import de.wolc.spiel.papier.Papier;
-import de.wolc.spiel.papier.PapierStapel;
-//TODO: '*' entfernen und nur die benutzen objekte importieren
-import javafx.stage.Stage;
-import javafx.scene.Scene;
-import javafx.scene.image.*;
-import javafx.scene.layout.*;
-import javafx.geometry.*;
-import javafx.scene.control.Label;
-import javafx.scene.paint.*;
-import javafx.animation.AnimationTimer;
-import javafx.event.EventHandler;
-import javafx.scene.input.*;
-import javafx.scene.shape.*;
+
+import javafx.scene.image.Image;
+import javafx.scene.paint.ImagePattern;
+import javafx.scene.shape.Rectangle;
+import javafx.scene.input.MouseEvent;
 
 public class PapierObjekt {
     private static final Image IMAGE = new Image("de/wolc/gui/images/paper_master.png");
