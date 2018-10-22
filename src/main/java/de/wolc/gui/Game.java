@@ -6,7 +6,10 @@ import de.wolc.MultiUse;
 import de.wolc.spiel.Spieler;
 import de.wolc.spiel.locher.Lochprozess;
 import de.wolc.spiel.papier.A4;
+import de.wolc.spiel.papier.A5;
+import de.wolc.spiel.papier.A6;
 import de.wolc.spiel.papier.Konfetti;
+import de.wolc.spiel.papier.Papier;
 import de.wolc.spiel.papier.PapierStapel;
 //TODO: '*' entfernen und nur die benutzen objekte importieren
 import javafx.stage.Stage;
@@ -26,6 +29,7 @@ public class Game{
     private final String windowTitle = "World of Locher Craft";
     private final String backgroundImageLocation = "de/wolc/gui/images/Test_Bild.jpg";
     private Spieler spieler;
+    private Class<? extends Papier> currentPapierFormat;
     
     //Game Variables
     private int remainingTimeAvailable = 30;
@@ -38,10 +42,9 @@ public class Game{
     public Game () {
        this.spieler = new Spieler();
        this.lastNanoTimeTimer = System.currentTimeMillis();
-       
+       this.currentPapierFormat = A4.class;
     }
-
-
+    
     public Scene GameMainStage(Stage stage){
         //Main Orientation Node and initale settings
         BorderPane mainPane = new BorderPane();
@@ -58,10 +61,16 @@ public class Game{
         MultiUse mu = new MultiUse();
         int[] windowSize = mu.GetScreenSize();
         Image backgroundImage = new Image(backgroundImageLocation, (double)windowSize[0], (double)windowSize[1], false, false);
-        
 
         BackgroundImage backgroundImageGame = new BackgroundImage(backgroundImage, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,BackgroundSize.DEFAULT);
         mainPane.setBackground(new Background(backgroundImageGame));
+
+        //Papierstapel creation
+        PapierStapel<A4> stapel_A4 = new PapierStapel<>(A4.class);
+        PapierStapel<A5> stapel_A5 = new PapierStapel<>(A5.class);
+        PapierStapel<A6> stapel_A6 = new PapierStapel<>(A6.class);
+        this.spieler.getLocher().setFormat(this.currentPapierFormat);
+        this.spieler.getLocher().einlegen(stapel_A4); 
         
         //Creating the Component-nodes
         //Creating the VBox for the right Output
@@ -131,8 +140,25 @@ public class Game{
 
                     //PapierStapel -> <Format> ablegen() aufnehmen()
                     //Papier auf den Papierstapel legen und ein neues Objekt Papier erzeugen und anzeigen lassen
+                    if(currentPapierFormat == A4.class){
+                        A4 a4 = new A4();
+                        stapel_A4.ablegen(a4);
+                        
+                        //Wieder an Ursprungspunkt zurücksetzen
+                        this.paper_new.setOpacity(0);
+
+
+                        e.consume();                        
+                    }
+                    else if(currentPapierFormat == A5.class){
+                        A5 a5 = new A5();
+                        stapel_A5.ablegen(a5);
+                    }
+                    else if(currentPapierFormat == A6.class){
+                        A6 a6 = new A6();
+                        stapel_A6.ablegen(a6);
+                    }
                     
-            
 
                 }
                 else{
