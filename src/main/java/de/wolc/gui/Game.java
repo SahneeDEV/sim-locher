@@ -5,9 +5,9 @@ import java.util.ArrayList;
 import de.wolc.MultiUse;
 import de.wolc.spiel.Spieler;
 import de.wolc.spiel.locher.Lochprozess;
+import de.wolc.spiel.papier.A4;
 import de.wolc.spiel.papier.Konfetti;
-
-
+import de.wolc.spiel.papier.PapierStapel;
 //TODO: '*' entfernen und nur die benutzen objekte importieren
 import javafx.stage.Stage;
 import javafx.scene.Scene;
@@ -123,7 +123,21 @@ public class Game{
                 //Change the location if the cursor has moved
                 paper_new.setTranslateX(paper_new.getTranslateX() + (e.getX() - 175));
                 paper_new.setTranslateY(paper_new.getTranslateY() + (e.getY() - 110));
-                checkForCollision(paper_new, locher_new, paperImage);
+
+
+                if(checkForCollision(paper_new, locher_new)){
+                    paper_new.setFill(Color.BLACK);
+                    //TODO: Hier muss noch weiteres gemacht werden
+
+                    //PapierStapel -> <Format> ablegen() aufnehmen()
+                    //Papier auf den Papierstapel legen und ein neues Objekt Papier erzeugen und anzeigen lassen
+                    
+            
+
+                }
+                else{
+                    paper_new.setFill(new ImagePattern(paperImage));
+                }
             }
         });
 
@@ -139,12 +153,12 @@ public class Game{
                 }
             }
         });
-        locher_new.setOnMouseDragged(new EventHandler<MouseEvent>() {
+        /*locher_new.setOnMouseDragged(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent e){
                 checkForCollision(paper_new, locher_new, paperImage);
             }
-        });
+        });*/
 
         //creating a new Animation Timer for refreshing the GUI
         new AnimationTimer(){
@@ -207,8 +221,9 @@ public class Game{
 
     /**
      * Prüft, ob sich die beiden übergebenen Shapes überschneiden, wenn ja, dann wird die Anzeige angepasst
+     * @return true=collision vorhanden, false= keine collision vorhanden
      */
-    private void checkForCollision(Shape paper, Shape locher, Image defaultSkin){
+    private boolean checkForCollision(Shape paper, Shape locher){
         boolean collisionDetection = false;
 
         Shape ueberschneidung = Shape.intersect(paper, locher);
@@ -217,13 +232,10 @@ public class Game{
         }
 
         if(collisionDetection){
-            //TODO: Hier muss noch weiteres gemacht werden
-            paper.setFill(Color.BLACK);
-            //TODO: Hier benötigen wir eine Rückgabe des Papier Formates
-
+            return true;
         }
         else{
-            paper.setFill(new ImagePattern(defaultSkin));
+            return false;
         }
     }
 
