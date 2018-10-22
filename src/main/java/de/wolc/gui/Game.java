@@ -62,7 +62,7 @@ public class Game{
         //TODO: Zeit wird negativ!!!! 0-3s 💩💩💩💩
         //Changing the Time
         //Setting a leading Zero if reamingTimeAvailable is one digit
-        if (remainingTimeAvailable < 10) {
+        if (remainingTimeAvailable < 10 && remainingTimeAvailable > 0) {
             leadingZero = "0";
         }
         else {
