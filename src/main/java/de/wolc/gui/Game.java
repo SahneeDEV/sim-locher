@@ -1,10 +1,12 @@
 package de.wolc.gui;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Random;
 
 import de.wolc.MultiUse;
 import de.wolc.gui.PapierObjekt;
+import de.wolc.spiel.Farbe;
 import de.wolc.spiel.Spieler;
 import de.wolc.spiel.locher.Lochprozess;
 import de.wolc.spiel.papier.A4;
@@ -47,10 +49,41 @@ public class Game{
 
     private double timeToNextPapier = 0;
 
+    private Label score, remainingTime, formatLabel, papierLabel;
+    private HashMap<Farbe, Label> scoreLabels = new HashMap<>();
+
     public Game () {
        this.spieler = new Spieler();
        this.firstNanoTimeTimer = 0;
        this.currentPapierFormat = A4.class;
+    }
+
+    private void updateLabels() {
+        // Score einteilen nach Farbe
+        HashMap<Farbe, Integer> hash = new HashMap<>();
+        for(Konfetti konfetti : this.spieler.getKonfetti()) {
+            Farbe farbe = konfetti.getFarbe();
+            Integer zahl = hash.getOrDefault(farbe, 0) + 1;
+            hash.put(farbe, zahl);
+        }
+        for(Farbe farbe : Farbe.values()) {
+            Label label = this.scoreLabels.get(farbe);
+            Integer zahl = hash.getOrDefault(farbe, 0);
+            label.setText("  " + farbe.getAnzeigeName() + ": " + zahl);
+        }
+        this.score.setText("Score: " + this.spieler.getKonfetti().size());
+        this.formatLabel.setText("Format: " + this.spieler.getLocher().getFormat().getSimpleName());
+        this.papierLabel.setText("Stapel: " + this.spieler.getLocher().getStapel().groesse());
+        //TODO: Zeit wird negativ!!!! 0-3s 💩💩💩💩
+        //Changing the Time
+        //Setting a leading Zero if reamingTimeAvailable is one digit
+        if (remainingTimeAvailable < 10 && remainingTimeAvailable > 0) {
+            leadingZero = "0";
+        }
+        else {
+            leadingZero = "";
+        }
+        remainingTime.setText("Zeit: " + this.leadingZero + Math.round(this.remainingTimeAvailable) + "s");   
     }
     
     public Scene GameMainStage(Stage stage){
@@ -84,18 +117,26 @@ public class Game{
         //Creating the VBox for the right Output
         VBox rightVBox = new VBox();
 
-        //Creating Label for outputing score
-        Label score = new Label();
-        score.setTextFill(Color.RED);
-        score.setText("Score: " + spieler.getKonfetti().size()); 
-
-        //Creating Label for remaining Time
-        Label remainingTime = new Label();
-        remainingTime.setTextFill(Color.RED);
-        remainingTime.setText("Zeit: " + remainingTimeAvailable + "s");
+        // Labels erstellen
+        score = new Label();
+        papierLabel = new Label();
+        formatLabel = new Label();
+        remainingTime = new Label();
+        papierLabel.setTextFill(Color.WHITE);
+        score.setTextFill(Color.WHITE);
+        remainingTime.setTextFill(Color.WHITE);
+        formatLabel.setTextFill(Color.WHITE);
+        rightVBox.getChildren().add(score);
+        for(Farbe farbe : Farbe.values()) {
+            Label label = new Label();
+            label.setTextFill(farbe.getGuiFarbe());
+            this.scoreLabels.put(farbe, label);
+            rightVBox.getChildren().add(label);
+        }
+        rightVBox.getChildren().addAll(remainingTime, formatLabel, papierLabel);
+        this.updateLabels();
 
         //Adding remainingTime and score to VBox 
-        rightVBox.getChildren().addAll(score, remainingTime);
 
         //Adding VBox to mainPane
         mainPane.setRight(rightVBox);
@@ -149,6 +190,8 @@ public class Game{
                 spieler.tick(elapsedSeconds);
 
                 timeToNextPapier -= elapsedSeconds;
+                remainingTimeAvailable -= elapsedSeconds;
+
                 if (timeToNextPapier <= 0) {
                     new PapierObjekt(Game.this, new A4());
                     timeToNextPapier = 0.5d + (2d - 0.5d) * RANDOM.nextDouble();
@@ -159,31 +202,12 @@ public class Game{
                     score.setText("Score: " + spieler.getKonfetti().size());
                     hasLoched = false;
                 }
-                //TODO: Zeit wird negativ!!!! 0-3s 💩💩💩💩
                 //Check for end of Time
                 if(remainingTimeAvailable == 0){
                     //TODO: End Game and Display Score Screen
                 }
 
-                //Changing the Time
-                remainingTimeAvailable -= elapsedSeconds;
-                //Setting a leading Zero if reamingTimeAvailable is one digit
-                if (remainingTimeAvailable < 10) {
-                    leadingZero = "0";
-                }
-                else {
-                    leadingZero = "";
-                }
-                remainingTime.setText("Zeit: " + leadingZero + Math.round(remainingTimeAvailable) + "s");
-                /** else{
-                    //Notice if Timeing is not correct
-                    remainingTime.setText("Zeit Asyncron!");
-                    lastNanoTimeTimer = System.currentTimeMillis();
-                    FIXME: Es wird immer else Ausgegeben
-                }
-                */
-                
-                
+                Game.this.updateLabels();
             }
         }.start();
 
