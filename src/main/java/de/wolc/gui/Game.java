@@ -58,7 +58,7 @@ public class Game{
 
     private double timeToNextPapier = 0;
 
-    private Label score, remainingTime, formatLabel, papierLabel;
+    private Label score, remainingTime, formatLabel, papierLabel, locherCooldown;
     private HashMap<Farbe, Label> scoreLabels = new HashMap<>();
 
     public Game () {
@@ -91,6 +91,7 @@ public class Game{
         this.score.setText("Score: " + this.spieler.getKonfetti().size());
         this.formatLabel.setText("Format: " + this.spieler.getLocher().getFormat().getSimpleName());
         this.papierLabel.setText("Stapel: " + this.spieler.getLocher().getStapel().groesse());
+        this.locherCooldown.setText("Cooldown: " + Math.ceil(spieler.getLocher().getCooldown() * 10) / 10 + "s");
         //Changing the Time
         //Setting a leading Zero if reamingTimeAvailable is one digit
         if (remainingTimeAvailable < 10 && remainingTimeAvailable > 0) {
@@ -138,18 +139,20 @@ public class Game{
         papierLabel = new Label();
         formatLabel = new Label();
         remainingTime = new Label();
+        locherCooldown = new Label();
+        locherCooldown.setTextFill(Color.WHITE);
         papierLabel.setTextFill(Color.WHITE);
         score.setTextFill(Color.WHITE);
         remainingTime.setTextFill(Color.WHITE);
         formatLabel.setTextFill(Color.WHITE);
-        rightVBox.getChildren().add(score);
+        rightVBox.getChildren().addAll(remainingTime, score);
         for(Farbe farbe : Farbe.values()) {
             Label label = new Label();
             label.setTextFill(farbe.getGuiFarbe());
             this.scoreLabels.put(farbe, label);
             rightVBox.getChildren().add(label);
         }
-        rightVBox.getChildren().addAll(remainingTime, formatLabel, papierLabel);
+        rightVBox.getChildren().addAll(locherCooldown, formatLabel, papierLabel);
         this.updateLabels();
 
         //Adding remainingTime and score to VBox 
