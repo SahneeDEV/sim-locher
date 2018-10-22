@@ -32,24 +32,28 @@ public class LocherPapier{
 
     private final Rectangle locherPapier;
     private final Game game;
+    private final Spieler spieler;
 
-    public LocherPapier(Game game){
+    public LocherPapier(Game game, Spieler spieler){
         //
         this.game = game;
-        //
-        this.locherPapier = new Rectangle();
-        this.locherPapier.toFront();
-        this.locherPapier.setFill(new ImagePattern(paperImage));
-        this.locherPapier.setWidth(paperImage.getWidth());
-        this.locherPapier.setHeight(paperImage.getHeight());
-        //TODO: papier genauer einpassen
-        this.locherPapier.setTranslateX(game.getArea().getWidth() * 0.339);
-        this.locherPapier.setTranslateY(game.getArea().getHeight() * 0.539);
+        this.spieler = spieler;
+        int stapelGroesse = this.spieler.getLocher().getStapel().groesse();
+
+        for(int i = 0; i <= stapelGroesse; i++){
+            this.locherPapier = new Rectangle();
+            this.locherPapier.toFront();
+            this.locherPapier.setFill(new ImagePattern(paperImage));
+            this.locherPapier.setWidth(paperImage.getWidth());
+            this.locherPapier.setHeight(paperImage.getHeight());
+            //TODO: papier genauer einpassen
+            this.locherPapier.setTranslateX(game.getArea().getWidth() * 0.339);
+            this.locherPapier.setTranslateY(game.getArea().getHeight() * 0.539);
+        }
+
 
         this.game.getArea().getChildren().add(this.locherPapier);
         
-        
-        //Translation depending on the current screen size
         
     }
 }
