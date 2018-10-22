@@ -180,7 +180,6 @@ public class Game{
         AnchorPane.setBottomAnchor(locher_new, stage.getWidth() * 0.20);
         AnchorPane.setLeftAnchor(locher_new, stage.getHeight() * 0.65);
 
-
         //Locher_new Mouse Events
         locher_new.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
@@ -286,7 +285,7 @@ public class Game{
                 abgelegt = false;
             }
             if (abgelegt) {
-                new LocherPapier(Game.this, spieler.getLocher().getStapel().groesse());
+                new LocherPapier(Game.this, spieler.getLocher().getStapel().groesse(), locher_new);
                 objekt.zerstoeren();
             }
         }

@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import javafx.scene.image.Image;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
+import javafx.geometry.Bounds;
 
 public class LocherPapier{
 
@@ -14,7 +15,7 @@ public class LocherPapier{
     private final Game game;
     private ArrayList<Rectangle> locherPapiere = new ArrayList<Rectangle>();
 
-    public LocherPapier(Game game, int stapelGroesse){
+    public LocherPapier(Game game, int stapelGroesse, Rectangle locher){
         //
         this.game = game;
 
@@ -24,8 +25,12 @@ public class LocherPapier{
         this.locherPapier.setWidth(paperImage.getWidth());
         this.locherPapier.setHeight(paperImage.getHeight());
         //TODO: papier genauer einpassen + 3D Effekt richtig einbinden
-        this.locherPapier.setTranslateX(game.getArea().getWidth() * 0.339 - (stapelGroesse * 0.15));
-        this.locherPapier.setTranslateY(game.getArea().getHeight() * 0.539 - (stapelGroesse * 0.15));
+        Bounds locherPosition = locher.localToScene(locher.getBoundsInLocal());
+        this.locherPapier.setTranslateX(locherPosition.getMinX() - 108); //rechts links
+        this.locherPapier.setTranslateY(locherPosition.getMinY() + 263); //oben unten
+
+        //this.locherPapier.setTranslateX(game.getArea().getWidth() * 0.339 - (stapelGroesse * 0.15));
+        //this.locherPapier.setTranslateY(game.getArea().getHeight() * 0.539 - (stapelGroesse * 0.15));
 
         this.game.getArea().getChildren().add(this.locherPapier);
     }
