@@ -30,7 +30,7 @@ public class LocherPapier{
 
     private static final Image paperImage = new Image("de/wolc/gui/images/paper_cutout.png");
 
-    private final Rectangle locherPapier;
+    private Rectangle locherPapier;
     private final Game game;
     private final Spieler spieler;
 
