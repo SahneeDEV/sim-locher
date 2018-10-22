@@ -211,7 +211,9 @@ public class Game{
                 remainingTimeAvailable -= elapsedSeconds;
 
                 if (timeToNextPapier <= 0) {
-                    new PapierObjekt(Game.this, new A4());
+                    Papier papier = new A4();
+                    papier.setFarbe(Farbe.zufallsfarbe());
+                    new PapierObjekt(Game.this, papier);
                     timeToNextPapier = 0.5d + (2d - 0.5d) * RANDOM.nextDouble();
                 }
 
