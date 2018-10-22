@@ -1,8 +1,10 @@
 package de.wolc.gui;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 import de.wolc.MultiUse;
+import de.wolc.gui.PapierObjekt;
 import de.wolc.spiel.Spieler;
 import de.wolc.spiel.locher.Lochprozess;
 import de.wolc.spiel.papier.A4;
@@ -33,17 +35,21 @@ public class Game{
     private Rectangle locher_new;
     private AnchorPane gameArea;
     
+    private static final Random RANDOM = new Random();
+    
     //Game Variables
-    private int remainingTimeAvailable = 30;
+    private double remainingTimeAvailable = 30d;
     private boolean hasLoched = false;
 
     //Variables for Countdown timer
-    private long lastNanoTimeTimer = 0;
+    private long firstNanoTimeTimer = 0;
     private String leadingZero;
+
+    private double timeToNextPapier = 0;
 
     public Game () {
        this.spieler = new Spieler();
-       this.lastNanoTimeTimer = System.currentTimeMillis();
+       this.firstNanoTimeTimer = 0;
        this.currentPapierFormat = A4.class;
     }
     
@@ -101,18 +107,6 @@ public class Game{
         gameArea.setMinWidth(((double)windowSize[0] * 0.8));
         gameArea.setMinHeight(((double)windowSize[1] * 0.8));
 
-        //PAPER
-        Image paperImage = new Image("de/wolc/gui/images/paper_master.png");
-        Rectangle paper_new = new Rectangle();
-        paper_new.setHeight(paperImage.getHeight());
-        paper_new.setWidth(paperImage.getWidth());
-        paper_new.setFill(new ImagePattern(paperImage));
-
-        //Setting the default Anchor points for the paper        
-        AnchorPane.setBottomAnchor(paper_new, 100.0);
-        AnchorPane.setLeftAnchor(paper_new, 100.0);
-
-
         //LOCHER
         String skin = spieler.getLocher().getSkin();
 
@@ -127,49 +121,6 @@ public class Game{
         AnchorPane.setLeftAnchor(locher_new, stage.getHeight() * 0.65);
 
 
-        //Paper_new Mouse Events
-        paper_new.setOnMouseDragged(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent e){
-                //Change the location if the cursor has moved
-                paper_new.setTranslateX(paper_new.getTranslateX() + (e.getX() - 175));
-                paper_new.setTranslateY(paper_new.getTranslateY() + (e.getY() - 110));
-
-
-                if(checkForCollision(paper_new, locher_new)){
-                    paper_new.setFill(Color.BLACK);
-                    //TODO: Hier muss noch weiteres gemacht werden
-
-                    //PapierStapel -> <Format> ablegen() aufnehmen()
-                    //Papier auf den Papierstapel legen und ein neues Objekt Papier erzeugen und anzeigen lassen
-                    if(currentPapierFormat == A4.class){
-                        A4 a4 = new A4();
-                        stapel_A4.ablegen(a4);
-                        
-                        //Wieder an Ursprungspunkt zurücksetzen
-                        
-
-
-                        e.consume();                        
-                    }
-                    else if(currentPapierFormat == A5.class){
-                        A5 a5 = new A5();
-                        stapel_A5.ablegen(a5);
-                    }
-                    else if(currentPapierFormat == A6.class){
-                        A6 a6 = new A6();
-                        stapel_A6.ablegen(a6);
-                    }
-                    
-
-                }
-                else{
-                    paper_new.setFill(new ImagePattern(paperImage));
-                }
-            }
-        });
-
-
         //Locher_new Mouse Events
         locher_new.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
@@ -181,49 +132,49 @@ public class Game{
                 }
             }
         });
-        /*locher_new.setOnMouseDragged(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent e){
-                checkForCollision(paper_new, locher_new, paperImage);
-            }
-        });*/
+
 
         //creating a new Animation Timer for refreshing the GUI
         new AnimationTimer(){
             public void handle(long currentNanoTime){
+                if (firstNanoTimeTimer == 0) {
+                    firstNanoTimeTimer = currentNanoTime;
+                }
                 //Getting new and last TimeStamp in Miliseconds and calculating 
-                long elapsedNanoSeconds = (System.currentTimeMillis() - lastNanoTimeTimer);
-                double elapsedSeconds = ((elapsedNanoSeconds / 1000d));
+                long elapsedNanoSeconds = currentNanoTime - firstNanoTimeTimer;
+                double elapsedSeconds = ((elapsedNanoSeconds / 1000000000d));
+                firstNanoTimeTimer = currentNanoTime;
 
                 //Triggering Cooldown and giving him the elapsedSeconds
                 spieler.tick(elapsedSeconds);
+
+                timeToNextPapier -= elapsedSeconds;
+                if (timeToNextPapier <= 0) {
+                    new PapierObjekt(Game.this, new A4());
+                    timeToNextPapier = 0.5d + (2d - 0.5d) * RANDOM.nextDouble();
+                }
 
                 if(hasLoched) {
                     //Setting the new Score
                     score.setText("Score: " + spieler.getKonfetti().size());
                     hasLoched = false;
                 }
-
-                if(elapsedSeconds >= 1){
-
-                    //Check for end of Time
-                    if(remainingTimeAvailable == 0){
-                        //TODO: End Game and Display Score Screen
-                    }
-
-                    //Changing the Time
-                    remainingTimeAvailable = remainingTimeAvailable - 1;
-                    //Setting a leading Zero if reamingTimeAvailable is one digit
-                    if (remainingTimeAvailable < 10) {
-                        leadingZero = "0";
-                    }
-                    else {
-                        leadingZero = "";
-                    }
-                    remainingTime.setText("Zeit: " + leadingZero + + remainingTimeAvailable + "s");
-
-                    lastNanoTimeTimer = System.currentTimeMillis();
+                //TODO: Zeit wird negativ!!!! 0-3s 💩💩💩💩
+                //Check for end of Time
+                if(remainingTimeAvailable == 0){
+                    //TODO: End Game and Display Score Screen
                 }
+
+                //Changing the Time
+                remainingTimeAvailable -= elapsedSeconds;
+                //Setting a leading Zero if reamingTimeAvailable is one digit
+                if (remainingTimeAvailable < 10) {
+                    leadingZero = "0";
+                }
+                else {
+                    leadingZero = "";
+                }
+                remainingTime.setText("Zeit: " + leadingZero + Math.round(remainingTimeAvailable) + "s");
                 /** else{
                     //Notice if Timeing is not correct
                     remainingTime.setText("Zeit Asyncron!");
@@ -236,10 +187,9 @@ public class Game{
             }
         }.start();
 
-        new PapierObjekt(this, new A4());
 
         //Add Nodes to the AnchorPane
-        gameArea.getChildren().addAll(locher_new, paper_new);
+        gameArea.getChildren().add(locher_new);
 
         //Add the elements to the Main Pane
         mainPane.setCenter(gameArea);
