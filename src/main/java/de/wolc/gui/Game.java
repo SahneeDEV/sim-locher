@@ -16,18 +16,27 @@ import de.wolc.spiel.papier.A6;
 import de.wolc.spiel.papier.Konfetti;
 import de.wolc.spiel.papier.Papier;
 import de.wolc.spiel.papier.PapierStapel;
-//TODO: '*' entfernen und nur die benutzen objekte importieren
+
 import javafx.stage.Stage;
 import javafx.scene.Scene;
-import javafx.scene.image.*;
-import javafx.scene.layout.*;
-import javafx.geometry.*;
+import javafx.scene.image.Image;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.BackgroundImage;
+import javafx.scene.layout.BackgroundRepeat;
+import javafx.scene.layout.BackgroundPosition;
+import javafx.scene.layout.BackgroundSize;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.VBox;
+import javafx.geometry.Pos;
 import javafx.scene.control.Label;
-import javafx.scene.paint.*;
+import javafx.scene.paint.Color;
 import javafx.animation.AnimationTimer;
 import javafx.event.EventHandler;
-import javafx.scene.input.*;
-import javafx.scene.shape.*;
+import javafx.scene.paint.ImagePattern;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.Shape;
 
 public class Game{
 
@@ -82,7 +91,6 @@ public class Game{
         this.score.setText("Score: " + this.spieler.getKonfetti().size());
         this.formatLabel.setText("Format: " + this.spieler.getLocher().getFormat().getSimpleName());
         this.papierLabel.setText("Stapel: " + this.spieler.getLocher().getStapel().groesse());
-        //TODO: Zeit wird negativ!!!! 0-3s 💩💩💩💩
         //Changing the Time
         //Setting a leading Zero if reamingTimeAvailable is one digit
         if (remainingTimeAvailable < 10 && remainingTimeAvailable > 0) {
@@ -275,7 +283,7 @@ public class Game{
                 abgelegt = false;
             }
             if (abgelegt) {
-                new LocherPapier(Game.this);
+                new LocherPapier(Game.this, spieler);
                 objekt.zerstoeren();
             }
         }
