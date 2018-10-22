@@ -262,7 +262,7 @@ public class Game{
                 abgelegt = false;
             }
             if (abgelegt) {
-                new LocherPapier(Game.this);
+                new LocherPapier(Game.this, spieler);
                 objekt.zerstoeren();
             }
         }
