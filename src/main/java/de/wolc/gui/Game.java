@@ -252,10 +252,12 @@ public class Game{
                             LocherPapier todeltetPapier = locherPapier.get(i);
                             if (todeltetPapier.getPapier() == removedPapier){
                                 ArrayList<Rectangle> todeletRectangle = todeltetPapier.getPapierListe();
+                                locherPapier.remove(i);
                                 for (int a = 0; a <= todeletRectangle.size(); a++) {
                                     Rectangle deletLocherPapier = todeletRectangle.get(a);
                                     gameArea.getChildren().remove(deletLocherPapier);
                                 }
+                                break;
 
                             }
 
