@@ -75,7 +75,7 @@ public class Game{
     private ToggleButton formatA4Button, formatA5Button, formatA6Button;
     private ToggleGroup formatGroup;
     private HashMap<Farbe, Label> scoreLabels = new HashMap<>();
-    private Alert speichernFehler;
+    private Alert speichernFehler, ladeFehler;
 
     private LocherPapier locherPapier;
 
@@ -83,7 +83,14 @@ public class Game{
         try {
             this.spieler = (Spieler) Gui.DB.laden("spieler");
         } catch (Exception e) {
-            // TODO: Warnung dass der Spielstand nicht geladen werden konnte
+            ladeFehler = new Alert(AlertType.INFORMATION);
+            ladeFehler.setTitle("Kein Speicherstand gefunden!");
+            ladeFehler.setHeaderText("Es wurde kein Speicherstand gefunden oder es konnte kein Speicherstand geladen werden.");
+            ladeFehler.setContentText(e.toString());
+            ladeFehler.setResult(ButtonType.OK);
+            ladeFehler.showAndWait();
+            e.printStackTrace();
+
             this.spieler = null;
         }
         if (this.spieler == null) {
