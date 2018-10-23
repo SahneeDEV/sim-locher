@@ -15,6 +15,13 @@ import javafx.geometry.Bounds;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
+import javafx.scene.effect.Blend;
+import javafx.scene.effect.BlendMode;
+import javafx.scene.effect.ColorInput;
+import javafx.scene.effect.ColorAdjust;
+import javafx.scene.paint.Color;
+import javafx.scene.effect.Light;
+import javafx.scene.effect.Lighting;
 
 public class LocherPapier{
 
@@ -29,18 +36,32 @@ public class LocherPapier{
     private ArrayList<Rectangle> locherPapiere = new ArrayList<Rectangle>();
     private Class<? extends Papier> aktuellesFormat;
     private Alert spielerAlert;
+    private Papier papier;
+    private Color currentColor;
 
-    public LocherPapier(Game game, int stapelGroesse, Rectangle locher){
+    public LocherPapier(Game game, int stapelGroesse, Rectangle locher, Papier papier){
+        //Zuweisung der Klassenvariabeln
         this.game = game;
+        this.papier = papier;
+        this.currentColor = papier.getFarbe().getGuiFarbe();
         this.spieler = game.getCurrentSpieler();
         this.aktuellesFormat = this.spieler.getLocher().getFormat();
 
         //Hole die position des lochers
         Bounds locherPosition = locher.localToScene(locher.getBoundsInLocal());
 
+        //Effekt für die Farbe des Papieres setzen
+        Lighting lighting = new Lighting();
+        lighting.setDiffuseConstant(1.0);
+        lighting.setSpecularConstant(0.0);
+        lighting.setSpecularExponent(0.0);
+        lighting.setSurfaceScale(0.0);
+        lighting.setLight(new Light.Distant(45, 45, currentColor));
+
         //Neues papier erzeugen
         this.locherPapier = new Rectangle();
         this.locherPapier.toFront();
+        this.locherPapier.setEffect(lighting);
 
         //A4 Papier
         if(this.aktuellesFormat == A4.class){

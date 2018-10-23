@@ -2,6 +2,7 @@ package de.wolc.gui;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Random;
 
@@ -46,6 +47,7 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
+import javafx.scene.Node;
 
 public class Game{
 
@@ -60,7 +62,7 @@ public class Game{
     private static final Random RANDOM = new Random();
     
     //Game Variables
-    private double remainingTimeAvailable = 30d;
+    private double remainingTimeAvailable = 1d;
 
     //Variables for Countdown timer
     private long firstNanoTimeTimer = 0;
@@ -76,6 +78,9 @@ public class Game{
     private ToggleGroup formatGroup;
     private HashMap<Farbe, Label> scoreLabels = new HashMap<>();
     private Alert speichernFehler;
+    private Papier papier;
+
+    private LocherPapier locherPapier;
 
     public Game () {
         try {
@@ -240,7 +245,12 @@ public class Game{
                     }
                     //entfernen des Eingelgeten Bilds wenn kein Papier mehr im Locher
                     if (stapel.groesse() == 0) {
-                        //gameArea.getChildren().remove(LocherPapier);
+                        for (int i = 0; i <= locherPapier.getPapierListe().size(); i++) {
+                            ArrayList<Rectangle> todelet = locherPapier.getPapierListe();
+                            Rectangle deletLocherPapier = todelet.get(i);
+                            gameArea.getChildren().remove(deletLocherPapier);
+                        }
+                        
 
                     } 
                 }
@@ -318,12 +328,11 @@ public class Game{
 
     public void spawnPapier() {
         int format = RANDOM.nextInt(3);
-        Papier papier;
-        if(format == 0) { papier = new A4(); }
-        else if(format == 1) { papier = new A5(); }
-        else { papier = new A6(); }
-        papier.setFarbe(Farbe.zufallsfarbe());
-        new PapierObjekt(Game.this, papier);
+        if(format == 0) { this.papier = new A4(); }
+        else if(format == 1) { this.papier = new A5(); }
+        else { this.papier = new A6(); }
+        this.papier.setFarbe(Farbe.zufallsfarbe());
+        new PapierObjekt(Game.this, this.papier);
     }
 
     /**
@@ -369,7 +378,7 @@ public class Game{
                 abgelegt = false;
             }
             if (abgelegt) {
-                new LocherPapier(Game.this, spieler.getLocher().getStapel().groesse(), locher_new);
+                new LocherPapier(Game.this, spieler.getLocher().getStapel().groesse(), locher_new, this.papier);
                 objekt.zerstoeren();
             }
         }
