@@ -47,12 +47,14 @@ public class PapierStapel<TPapier extends Papier> implements Serializable
     }
     
     /**
-     * Entnimmt das Papier aus dem Stapel wenn es darauf liegt.
-     * @param papier Das Papier, welches vom Stapel entnommen werden soll.
-     * @return true wenn das Papier entnommen wurde, sonst false.
+     * Entnimmt das oberste Papier aus dem Stapel wenn es darauf liegt.
+     * @return Das Papier, welches vom Stapel entnommen wurde, sonst null.
      */
-    public boolean entnehmen(TPapier papier) {
-        return papiere.remove(papier);
+    public TPapier entnehmen() {
+        if (groesse() == 0) {
+            return null;
+        }
+        return papiere.remove(groesse() - 1);
     }
     
     /**

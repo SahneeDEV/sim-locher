@@ -342,7 +342,12 @@ public class Game{
      */
     private <T extends Papier> void papierWechsel(PapierStapel<T> papierStapel, Class<T> neuesPapierformat){
         // Alten Stapel rausnehmen
-        this.spieler.getLocher().entnehmen();
+        PapierStapel<?> alterStapel = this.spieler.getLocher().entnehmen();
+        if (alterStapel != null) {
+            while(alterStapel.groesse() > 0) {
+                alterStapel.entnehmen();
+            }
+        }
         // Neue Auswahl setzen
         this.spieler.getLocher().setFormat(neuesPapierformat);
         this.spieler.getLocher().einlegen(papierStapel);
