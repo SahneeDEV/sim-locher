@@ -31,7 +31,6 @@ public class LocherPapier{
     private Alert spielerAlert;
 
     public LocherPapier(Game game, int stapelGroesse, Rectangle locher){
-        //TODO: Papier, dass eingelegt wird auch dem Format anpassen
         this.game = game;
         this.spieler = this.game.getSpieler();
         this.aktuellesFormat = this.spieler.getLocher().getFormat();
@@ -71,7 +70,6 @@ public class LocherPapier{
             this.locherPapier.setTranslateY(locherPosition.getMinY() + 309.5  - (stapelGroesse * 0.15));
         }
         else{
-            //TODO: Fehlermeldung
             this.spielerAlert = new Alert(AlertType.WARNING);
             this.spielerAlert.setTitle("Fehler beim zuweisen des Papieres in den Locher!");
             this.spielerAlert.setHeaderText("Das Papier, dass du gerade in den Locher stecken wolltest kann nicht hinzugefügt werden.");
