@@ -4,11 +4,18 @@ import de.wolc.MultiUse;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
-import javafx.scene.layout.*;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.BackgroundImage;
+import javafx.scene.layout.BackgroundRepeat;
+import javafx.scene.layout.BackgroundPosition;
+import javafx.scene.layout.BackgroundSize;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.VBox;
 import javafx.scene.control.Button;
 import javafx.geometry.Insets;
-import javafx.geometry.*;
-import javafx.event.*;
+import javafx.geometry.Pos;
+import javafx.event.EventHandler;
+import javafx.event.ActionEvent;
 
 public class MainMenu{
 
@@ -45,7 +52,7 @@ public class MainMenu{
         //Buttons
 
         //Button1
-        final Button button_playgame = new Button("Play_Game()");
+        final Button button_playgame = new Button("▶ Spiel starten ▶");
             button_playgame.setMinWidth(buttonBox.getPrefWidth());
             button_playgame.setMinHeight(buttonBox.getPrefHeight());
             
@@ -62,7 +69,7 @@ public class MainMenu{
             });
 
         //Button2
-        final Button button_settings = new Button("Settings()");
+        final Button button_settings = new Button("⚙ Einstellungen ⚙");
             button_settings.setMinWidth(buttonBox.getPrefWidth());
             button_settings.setMinHeight(buttonBox.getPrefHeight());
 
@@ -77,7 +84,7 @@ public class MainMenu{
     
             });
         //Button3
-        Button button_exit = new Button("Exit()");
+        Button button_exit = new Button("☠ Beenden ☠");
             button_exit.setMinWidth(buttonBox.getPrefWidth());
             button_exit.setMinHeight(buttonBox.getPrefHeight());
 

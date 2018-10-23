@@ -13,10 +13,20 @@ public abstract class Papier implements Serializable
     private int maximaleAnzahlLochen;
     private Farbe farbe;
     private int lochAnzahl;
+    private double groesse;
     
-    protected Papier(int maximaleAnzahlLochen) {
+    protected Papier(int maximaleAnzahlLochen, double groesse) {
         this.farbe = Farbe.WEISS;
+        this.groesse = groesse;
         this.maximaleAnzahlLochen = maximaleAnzahlLochen;
+    }
+
+    /**
+     * Wie Groß ist dieses Papierformat?
+     * @return Die Größe des Papiers im GUI als Multikator.
+     */
+    public double getGroesse() {
+        return groesse;
     }
 
     public Farbe getFarbe() {
@@ -54,7 +64,7 @@ public abstract class Papier implements Serializable
      */
     public void gelocht(Lochprozess prozess) {
         // Füge neue soviele Löcher wie möglich hinzu, und der Locher Stanzer hat.
-        int loecher = Math.max(this.moeglicheLoecher(), prozess.getLocher().getStanzer());
+        int loecher = Math.min(this.moeglicheLoecher(), prozess.getLocher().getStanzer());
         this.lochAnzahl += loecher;
         // Für jedes erstellte Loch soll ein Konfetti erstellt werden.
         for(int i = 0; i < loecher; i++) {
