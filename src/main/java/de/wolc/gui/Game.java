@@ -71,6 +71,7 @@ public class Game{
     private PapierStapel<A5> stapel_A5;
     private PapierStapel<A6> stapel_A6;
 
+    //Diverse Nodes
     private Label score, remainingTime, formatLabel, papierLabel, locherCooldown;
     private ToggleButton formatA4Button, formatA5Button, formatA6Button;
     private ToggleGroup formatGroup;
