@@ -240,7 +240,7 @@ public class Game{
                     }
                     //entfernen des Eingelgeten Bilds wenn kein Papier mehr im Locher
                     if (stapel.groesse() == 0) {
-                        gameArea.getChildren().remove(LocherPapier);
+                        //gameArea.getChildren().remove(LocherPapier);
 
                     } 
                 }
@@ -341,6 +341,10 @@ public class Game{
 
     public boolean checkForLocherCollision(Shape papier) {
         return checkForCollision(papier, locher_new);
+    }
+
+    public Spieler getCurrentSpieler(){
+        return this.spieler;
     }
 
     @SuppressWarnings("unchecked")

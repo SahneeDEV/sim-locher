@@ -32,6 +32,7 @@ public class LocherPapier{
 
     public LocherPapier(Game game, int stapelGroesse, Rectangle locher){
         this.game = game;
+        this.spieler = game.getCurrentSpieler();
         this.aktuellesFormat = this.spieler.getLocher().getFormat();
 
         //Hole die position des lochers
