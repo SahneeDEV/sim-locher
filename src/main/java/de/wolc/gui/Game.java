@@ -50,7 +50,6 @@ public class Game{
     private final String windowTitle = "World of Locher Craft";
     private final String backgroundImageLocation = "de/wolc/gui/images/Test_Bild.jpg";
     private Spieler spieler;
-    private Class<? extends Papier> currentPapierFormat;
     private Rectangle locher_new;
     private AnchorPane gameArea;   
     
@@ -87,7 +86,6 @@ public class Game{
             this.spieler = new Spieler();
         }
         this.firstNanoTimeTimer = 0;
-        this.currentPapierFormat = A4.class;
     }
 
     private void updateLabels() {
@@ -146,7 +144,7 @@ public class Game{
         stapel_A4 = new PapierStapel<>(A4.class);
         stapel_A5 = new PapierStapel<>(A5.class);
         stapel_A6 = new PapierStapel<>(A6.class);
-        this.spieler.getLocher().setFormat(this.currentPapierFormat);
+        this.spieler.getLocher().setFormat(A4.class);
         this.spieler.getLocher().einlegen(stapel_A4);
         
         //Creating the Component-nodes
@@ -261,9 +259,7 @@ public class Game{
                 remainingTimeAvailable -= elapsedSeconds;
 
                 if (timeToNextPapier <= 0) {
-                    Papier papier = new A4();
-                    papier.setFarbe(Farbe.zufallsfarbe());
-                    new PapierObjekt(Game.this, papier);
+                    spawnPapier();
                     timeToNextPapier = 0.5d + (2d - 0.5d) * RANDOM.nextDouble();
                 }
 
@@ -303,6 +299,16 @@ public class Game{
 		}
     }
 
+    public void spawnPapier() {
+        int format = RANDOM.nextInt(3);
+        Papier papier;
+        if(format == 0) { papier = new A4(); }
+        else if(format == 1) { papier = new A5(); }
+        else { papier = new A6(); }
+        papier.setFarbe(Farbe.zufallsfarbe());
+        new PapierObjekt(Game.this, papier);
+    }
+
     /**
      * Prüft, ob sich die beiden übergebenen Shapes überschneiden, wenn ja, dann wird die Anzeige angepasst
      * @return true=collision vorhanden, false= keine collision vorhanden
@@ -324,7 +330,7 @@ public class Game{
     public void papierAufLocherGezogen(PapierObjekt objekt) {
         // penis 🍆
         Class<? extends Papier> papierTyp = objekt.getPapier().getClass();
-        if (this.currentPapierFormat == papierTyp) {
+        if (this.spieler.getLocher().getFormat() == papierTyp) {
             PapierStapel<?> stapel = this.spieler.getLocher().getStapel();
             boolean abgelegt;
             if(papierTyp == A4.class){

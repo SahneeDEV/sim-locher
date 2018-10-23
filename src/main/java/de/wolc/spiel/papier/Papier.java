@@ -13,10 +13,20 @@ public abstract class Papier implements Serializable
     private int maximaleAnzahlLochen;
     private Farbe farbe;
     private int lochAnzahl;
+    private double groesse;
     
-    protected Papier(int maximaleAnzahlLochen) {
+    protected Papier(int maximaleAnzahlLochen, double groesse) {
         this.farbe = Farbe.WEISS;
+        this.groesse = groesse;
         this.maximaleAnzahlLochen = maximaleAnzahlLochen;
+    }
+
+    /**
+     * Wie Groß ist dieses Papierformat?
+     * @return Die Größe des Papiers im GUI als Multikator.
+     */
+    public double getGroesse() {
+        return groesse;
     }
 
     public Farbe getFarbe() {
