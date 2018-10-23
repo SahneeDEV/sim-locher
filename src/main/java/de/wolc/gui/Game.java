@@ -101,7 +101,11 @@ public class Game{
         }
         this.score.setText("Score: " + this.spieler.getKonfetti().size());
         this.formatLabel.setText("Format: " + this.spieler.getLocher().getFormat().getSimpleName());
-        this.papierLabel.setText("Stapel: " + this.spieler.getLocher().getStapel().groesse());
+
+        //TODO: NullPointer fix
+        if(stapel_A4 != null || stapel_A5 != null || stapel_A6 != null){
+            this.papierLabel.setText("Stapel: " + this.spieler.getLocher().getStapel().groesse());
+        }
         this.locherCooldown.setText("Cooldown: " + Math.ceil(spieler.getLocher().getCooldown() * 10) / 10 + "s");
         //Changing the Time
         //Setting a leading Zero if reamingTimeAvailable is one digit
@@ -343,12 +347,15 @@ public class Game{
     private void papierWechsel(PapierStapel<?> papierStapel, Class<? extends Papier> neuesPapierformat){
         //Benutzten Stapel leeren
         if(this.currentPapierFormat == A4.class){
+            this.spieler.getLocher().entnehmen();
             this.stapel_A4 = null;
         }
         else if(this.currentPapierFormat == A5.class){
+            this.spieler.getLocher().entnehmen();
             this.stapel_A5 = null;
         }
         else if(this.currentPapierFormat == A6.class){
+            this.spieler.getLocher().entnehmen();
             this.stapel_A6 = null;
         }
 
