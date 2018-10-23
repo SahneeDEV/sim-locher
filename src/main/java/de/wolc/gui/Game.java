@@ -333,6 +333,14 @@ public class Game{
         return checkForCollision(papier, locher_new);
     }
 
+    /**
+     * Gibt den aktuellen Spieler zurück
+     * @return Der aktuell verwendete Spieler
+     */
+    public Spieler getSpieler(){
+        return this.spieler;
+    }
+
     @SuppressWarnings("unchecked")
     public void papierAufLocherGezogen(PapierObjekt objekt) {
         // penis 🍆
