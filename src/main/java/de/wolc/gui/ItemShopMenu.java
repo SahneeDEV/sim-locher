@@ -75,23 +75,13 @@ public class ItemShopMenu {
         settingsGridPane.setMinHeight(100);
 
         // Buttons
-        Button backButton = new Button("Zur\u00fcck");
-        backButton.addEventHandler(ActionEvent.ACTION, (ActionEvent actionEvent) -> {
-            this.zurueck();
-        });
-        Button continueButton = new Button("Weiterspielen");
-        continueButton.addEventHandler(ActionEvent.ACTION, (ActionEvent actionEvent) -> {
-            this.weiterspielen();
-        });
-
-        settingsGridPane.add(backButton, 1, 0);
-        settingsGridPane.add(continueButton, 2, 0);
 
         // ===============================================
         //  SKIN SHOP
         // ===============================================
         
         // Get Scene size and create a new Instance
+        settingsPane.setTop(this.buttons());
         settingsPane.setLeft(this.scorescreen());
         settingsPane.setCenter(settingsGridPane);
         settingsPane.setBottom(this.skinshop());
@@ -104,6 +94,22 @@ public class ItemShopMenu {
         this.scoreLabelsAktualisieren();
 
         return sceneMainWindow;
+    }
+
+    private Node buttons() {
+        GridPane grid = new GridPane();
+        grid.setVgap(1);
+        Button backButton = new Button("◀ Zur\u00fcck ◀");
+        backButton.addEventHandler(ActionEvent.ACTION, (ActionEvent actionEvent) -> {
+            this.zurueck();
+        });
+        Button continueButton = new Button("▶ Weiterspielen ▶");
+        continueButton.addEventHandler(ActionEvent.ACTION, (ActionEvent actionEvent) -> {
+            this.weiterspielen();
+        });
+        grid.add(backButton, 0, 0);
+        grid.add(continueButton, 1, 0);
+        return grid;
     }
 
     private Node scorescreen() {
@@ -161,7 +167,7 @@ public class ItemShopMenu {
             Integer zahl = hash.getOrDefault(farbe, 0);
             label.setText("  " + farbe.getAnzeigeName() + ": " + zahl);
         }
-        this.scoreLabel.setText("Score: " + this.spieler.getKonfetti().size());
+        this.scoreLabel.setText("🎉 Score: " + this.spieler.getKonfetti().size() + " 🎊");
     }
 
     private void speichern() {
