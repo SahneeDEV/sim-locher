@@ -28,8 +28,12 @@ import javafx.scene.layout.BackgroundPosition;
 import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.VBox;
+import javafx.scene.layout.HBox;
 import javafx.geometry.Pos;
+import javafx.geometry.Insets;
 import javafx.scene.control.Label;
+import javafx.scene.control.ToggleButton;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.paint.Color;
 import javafx.animation.AnimationTimer;
 import javafx.event.EventHandler;
@@ -58,7 +62,14 @@ public class Game{
 
     private double timeToNextPapier = 0;
 
+    //Papierstapel erstellen
+    PapierStapel<A4> stapel_A4;
+    PapierStapel<A5> stapel_A5;
+    PapierStapel<A6> stapel_A6;
+
     private Label score, remainingTime, formatLabel, papierLabel, locherCooldown;
+    private ToggleButton formatA4Button, formatA5Button, formatA6Button;
+    private ToggleGroup formatGroup;
     private HashMap<Farbe, Label> scoreLabels = new HashMap<>();
 
     public Game () {
@@ -124,9 +135,9 @@ public class Game{
         mainPane.setBackground(new Background(backgroundImageGame));
 
         //Papierstapel creation
-        PapierStapel<A4> stapel_A4 = new PapierStapel<>(A4.class);
-        PapierStapel<A5> stapel_A5 = new PapierStapel<>(A5.class);
-        PapierStapel<A6> stapel_A6 = new PapierStapel<>(A6.class);
+        stapel_A4 = new PapierStapel<>(A4.class);
+        stapel_A5 = new PapierStapel<>(A5.class);
+        stapel_A6 = new PapierStapel<>(A6.class);
         this.spieler.getLocher().setFormat(this.currentPapierFormat);
         this.spieler.getLocher().einlegen(stapel_A4);
         
@@ -154,6 +165,37 @@ public class Game{
         }
         rightVBox.getChildren().addAll(locherCooldown, formatLabel, papierLabel);
         this.updateLabels();
+
+        //Adding the Format ToggleButtons + ToggleGroup
+        HBox formatBox = new HBox();
+        formatGroup = new ToggleGroup();
+        formatBox.setPadding(new Insets(20, 5 , 20 ,5));
+
+        formatA4Button = new ToggleButton("A4");
+        formatA4Button.setSelected(true);
+        formatA4Button.setToggleGroup(formatGroup);
+        formatA4Button.setOnMousePressed((MouseEvent e) -> {
+            papierWechsel(stapel_A4, A4.class);
+        });
+
+        formatA5Button = new ToggleButton("A5");
+        formatA5Button.setSelected(false);
+        formatA5Button.setToggleGroup(formatGroup);
+        formatA5Button.setOnMousePressed((MouseEvent e) -> {
+            papierWechsel(stapel_A5, A5.class);
+        });
+
+        formatA6Button = new ToggleButton("A6");
+        formatA6Button.setSelected(false);
+        formatA6Button.setToggleGroup(formatGroup);
+        formatA6Button.setOnMousePressed((MouseEvent e) -> {
+            papierWechsel(stapel_A6, A6.class);
+        });
+
+        formatBox.getChildren().addAll(formatA4Button, formatA5Button, formatA6Button);
+        mainPane.setLeft(formatBox);
+        BorderPane.setAlignment(formatBox, Pos.CENTER_LEFT);
+
 
         //Adding remainingTime and score to VBox 
 
@@ -291,6 +333,28 @@ public class Game{
                 objekt.zerstoeren();
             }
         }
+    }
+
+    /**
+     * Wechselt das Papier anhand des ausgewählten neuen Formats
+     * @param papierStapel - der neue Papierstapel des Formats
+     * @param neuesPapierformat - das neue Format mit <Format>.class
+     */
+    private void papierWechsel(PapierStapel<?> papierStapel, Class<? extends Papier> neuesPapierformat){
+        //Benutzten Stapel leeren
+        if(this.currentPapierFormat == A4.class){
+            this.stapel_A4 = null;
+        }
+        else if(this.currentPapierFormat == A5.class){
+            this.stapel_A5 = null;
+        }
+        else if(this.currentPapierFormat == A6.class){
+            this.stapel_A6 = null;
+        }
+
+        //Neue Auswahl setzen
+        this.spieler.getLocher().setFormat(neuesPapierformat);
+        this.spieler.getLocher().einlegen(papierStapel);
     }
 
 }
