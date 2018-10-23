@@ -34,6 +34,9 @@ import javafx.geometry.Insets;
 import javafx.scene.control.Label;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.paint.Color;
 import javafx.animation.AnimationTimer;
 import javafx.event.EventHandler;
@@ -68,6 +71,7 @@ public class Game{
     private ToggleButton formatA4Button, formatA5Button, formatA6Button;
     private ToggleGroup formatGroup;
     private HashMap<Farbe, Label> scoreLabels = new HashMap<>();
+    private Alert speichernFehler;
 
     public Game () {
         try {
@@ -271,7 +275,12 @@ public class Game{
         try {
             Gui.DB.speichern("spieler", this.spieler);
         } catch (IOException e) {
-            // TODO: Warnung dass speichern fehlgeschlagen ist
+            speichernFehler = new Alert(AlertType.WARNING);
+            speichernFehler.setTitle("Fehler beim speichern deines Spielstands!");
+            speichernFehler.setHeaderText("Beim speichern deines SPielstands ist ein Fehler aufgetreten.");
+            speichernFehler.setContentText(e.toString());
+            speichernFehler.setResult(ButtonType.OK);
+            speichernFehler.showAndWait();
             e.printStackTrace();
 		}
     }
