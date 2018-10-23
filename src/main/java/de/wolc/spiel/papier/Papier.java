@@ -54,7 +54,7 @@ public abstract class Papier implements Serializable
      */
     public void gelocht(Lochprozess prozess) {
         // Füge neue soviele Löcher wie möglich hinzu, und der Locher Stanzer hat.
-        int loecher = Math.max(this.moeglicheLoecher(), prozess.getLocher().getStanzer());
+        int loecher = Math.min(this.moeglicheLoecher(), prozess.getLocher().getStanzer());
         this.lochAnzahl += loecher;
         // Für jedes erstellte Loch soll ein Konfetti erstellt werden.
         for(int i = 0; i < loecher; i++) {
