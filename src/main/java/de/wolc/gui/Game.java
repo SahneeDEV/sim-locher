@@ -344,22 +344,10 @@ public class Game{
      * @param papierStapel - der neue Papierstapel des Formats
      * @param neuesPapierformat - das neue Format mit <Format>.class
      */
-    private void papierWechsel(PapierStapel<?> papierStapel, Class<? extends Papier> neuesPapierformat){
-        //Benutzten Stapel leeren
-        if(this.currentPapierFormat == A4.class){
-            this.spieler.getLocher().entnehmen();
-            this.stapel_A4 = null;
-        }
-        else if(this.currentPapierFormat == A5.class){
-            this.spieler.getLocher().entnehmen();
-            this.stapel_A5 = null;
-        }
-        else if(this.currentPapierFormat == A6.class){
-            this.spieler.getLocher().entnehmen();
-            this.stapel_A6 = null;
-        }
-
-        //Neue Auswahl setzen
+    private <T extends Papier> void papierWechsel(PapierStapel<T> papierStapel, Class<T> neuesPapierformat){
+        // Alten Stapel rausnehmen
+        this.spieler.getLocher().entnehmen();
+        // Neue Auswahl setzen
         this.spieler.getLocher().setFormat(neuesPapierformat);
         this.spieler.getLocher().einlegen(papierStapel);
     }
