@@ -257,9 +257,7 @@ public class Game{
                 remainingTimeAvailable -= elapsedSeconds;
 
                 if (timeToNextPapier <= 0) {
-                    Papier papier = new A4();
-                    papier.setFarbe(Farbe.zufallsfarbe());
-                    new PapierObjekt(Game.this, papier);
+                    spawnPapier();
                     timeToNextPapier = 0.5d + (2d - 0.5d) * RANDOM.nextDouble();
                 }
 
@@ -292,6 +290,16 @@ public class Game{
             // TODO: Warnung dass speichern fehlgeschlagen ist
             e.printStackTrace();
 		}
+    }
+
+    public void spawnPapier() {
+        int format = RANDOM.nextInt(3);
+        Papier papier;
+        if(format == 0) { papier = new A4(); }
+        else if(format == 1) { papier = new A5(); }
+        else { papier = new A6(); }
+        papier.setFarbe(Farbe.zufallsfarbe());
+        new PapierObjekt(Game.this, papier);
     }
 
     /**

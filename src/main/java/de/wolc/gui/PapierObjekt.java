@@ -45,6 +45,9 @@ public class PapierObjekt {
         lighting.setLight(new Light.Distant(45, 45, farbe));
 
         this.drawnPapier = new Rectangle();
+        this.drawnPapier.setScaleX(papier.getGroesse());
+        this.drawnPapier.setScaleY(papier.getGroesse());
+        this.drawnPapier.setScaleZ(papier.getGroesse());
         this.drawnPapier.setFill(new ImagePattern(IMAGE));
         this.drawnPapier.setWidth(IMAGE.getWidth());
         this.drawnPapier.setHeight(IMAGE.getHeight());
