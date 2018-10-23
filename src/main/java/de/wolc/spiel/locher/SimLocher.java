@@ -101,11 +101,17 @@ public class SimLocher implements Serializable
     }
 
     /**
-     * Setzt das aktuelle Format auf das der Locher eingestellt ist.
+     * Setzt das aktuelle Format auf das der Locher eingestellt ist. Das Format kann nicht geändert werden wenn bereits 
+     * ein Papier Stapel eingelegt ist.
      * @param format A4.class, A5.class, A6.class
+     * @return Wurde das Format umgestellt? true wenn ja, sonst false.
      */
-    public void setFormat(Class<? extends Papier> format) {
+    public boolean setFormat(Class<? extends Papier> format) {
+        if (this.stapel != null) {
+            return false;
+        }
         this.format = format;
+        return true;
     }
 
     /**
