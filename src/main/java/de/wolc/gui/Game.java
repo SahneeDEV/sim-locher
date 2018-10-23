@@ -57,14 +57,12 @@ public class Game{
 
     //Variables for Countdown timer
     private long firstNanoTimeTimer = 0;
-    private String leadingZero;
-
     private double timeToNextPapier = 0;
 
     //Papierstapel erstellen
-    PapierStapel<A4> stapel_A4;
-    PapierStapel<A5> stapel_A5;
-    PapierStapel<A6> stapel_A6;
+    private PapierStapel<A4> stapel_A4;
+    private PapierStapel<A5> stapel_A5;
+    private PapierStapel<A6> stapel_A6;
 
     private Label score, remainingTime, formatLabel, papierLabel, locherCooldown;
     private ToggleButton formatA4Button, formatA5Button, formatA6Button;
@@ -98,28 +96,16 @@ public class Game{
             label.setText("  " + farbe.getAnzeigeName() + ": " + zahl);
         }
         this.score.setText("Score: " + this.spieler.getKonfetti().size());
+        // Sonstige Stats
         this.formatLabel.setText("Format: " + this.spieler.getLocher().getFormat().getSimpleName());
-
-        //TODO: NullPointer fix
-        if(stapel_A4 != null || stapel_A5 != null || stapel_A6 != null){
-            this.papierLabel.setText("Stapel: " + this.spieler.getLocher().getStapel().groesse());
-        }
-        this.locherCooldown.setText("Cooldown: " + Math.ceil(spieler.getLocher().getCooldown() * 10) / 10 + "s");
-        //Changing the Time
-        //Setting a leading Zero if reamingTimeAvailable is one digit
-        if (remainingTimeAvailable < 10 && remainingTimeAvailable > 0) {
-            leadingZero = "0";
-        }
-        else {
-            leadingZero = "";
-        }
-        remainingTime.setText("Zeit: " + this.leadingZero + Math.round(this.remainingTimeAvailable) + "s");   
+        this.papierLabel.setText("Stapel: " + this.spieler.getLocher().getStapel().groesse());
+        this.locherCooldown.setText("Cooldown: " + Math.round(spieler.getLocher().getCooldown() * 10) / 10 + "s");
+        remainingTime.setText("Zeit: " + Math.round(this.remainingTimeAvailable * 10d) / 10d + "s");   
     }
     
     public Scene GameMainStage(Stage stage){
         //Main Orientation Node and initale settings
         BorderPane mainPane = new BorderPane();
-        //mainPane.setStyle("-fx-background-repeat: repeat"); 
 
         //Setting and creating the new Scene
         Scene gameScene = new Scene(mainPane);
