@@ -52,7 +52,7 @@ public class MainMenu{
         //Buttons
 
         //Button1
-        final Button button_playgame = new Button("Play_Game()");
+        final Button button_playgame = new Button("▶ Spiel starten ▶");
             button_playgame.setMinWidth(buttonBox.getPrefWidth());
             button_playgame.setMinHeight(buttonBox.getPrefHeight());
             
@@ -69,7 +69,7 @@ public class MainMenu{
             });
 
         //Button2
-        final Button button_settings = new Button("Settings()");
+        final Button button_settings = new Button("⚙ Einstellungen ⚙");
             button_settings.setMinWidth(buttonBox.getPrefWidth());
             button_settings.setMinHeight(buttonBox.getPrefHeight());
 
@@ -84,7 +84,7 @@ public class MainMenu{
     
             });
         //Button3
-        Button button_exit = new Button("Exit()");
+        Button button_exit = new Button("☠ Beenden ☠");
             button_exit.setMinWidth(buttonBox.getPrefWidth());
             button_exit.setMinHeight(buttonBox.getPrefHeight());
 

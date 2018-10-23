@@ -21,11 +21,29 @@ public class PapierObjekt {
     private static final Random RANDOM = new Random();
 
     public double zufallsBreite() {
-        return this.game.getArea().getWidth() * RANDOM.nextDouble();
+        double halfWidth = this.game.getArea().getWidth() / 2d;
+        if (RANDOM.nextBoolean()) {
+            // links
+            return zufall(0, halfWidth / 2);
+        } else {
+            // rechts
+            return zufall(halfWidth + halfWidth / 2, halfWidth + halfWidth);
+        }
     }
 
     public double zufallsHoehe() {
-        return this.game.getArea().getHeight() * RANDOM.nextDouble();
+        double halfHeight = this.game.getArea().getHeight() / 2d;
+        if (RANDOM.nextBoolean()) {
+            // oben
+            return zufall(0, halfHeight / 2);
+        } else {
+            // unten
+            return zufall(halfHeight + halfHeight / 2, halfHeight + halfHeight);
+        }
+    }
+
+    public double zufall(double min, double max) {
+        return min + (max - min) * RANDOM.nextDouble();
     }
 
     private final Papier papier;
