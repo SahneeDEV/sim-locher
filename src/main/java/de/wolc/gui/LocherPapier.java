@@ -106,4 +106,8 @@ public class LocherPapier{
     public ArrayList<Rectangle> getPapierListe(){
         return this.locherPapiere;
     }
+
+    public Papier getPapier () {
+        return this.papier;
+    }
 }
