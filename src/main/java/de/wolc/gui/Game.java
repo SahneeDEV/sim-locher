@@ -76,7 +76,6 @@ public class Game{
     private ToggleGroup formatGroup;
     private HashMap<Farbe, Label> scoreLabels = new HashMap<>();
     private Alert speichernFehler;
-    private Papier papier;
 
     private LocherPapier locherPapier;
 
@@ -326,11 +325,12 @@ public class Game{
 
     public void spawnPapier() {
         int format = RANDOM.nextInt(3);
-        if(format == 0) { this.papier = new A4(); }
-        else if(format == 1) { this.papier = new A5(); }
-        else { this.papier = new A6(); }
-        this.papier.setFarbe(Farbe.zufallsfarbe());
-        new PapierObjekt(Game.this, this.papier);
+        Papier papier;
+        if(format == 0) { papier = new A4(); }
+        else if(format == 1) { papier = new A5(); }
+        else { papier = new A6(); }
+        papier.setFarbe(Farbe.zufallsfarbe());
+        new PapierObjekt(Game.this, papier);
     }
 
     /**
@@ -376,7 +376,7 @@ public class Game{
                 abgelegt = false;
             }
             if (abgelegt) {
-                new LocherPapier(Game.this, spieler.getLocher().getStapel().groesse(), locher_new, this.papier);
+                new LocherPapier(Game.this, spieler.getLocher().getStapel().groesse(), locher_new, objekt.getPapier());
                 objekt.zerstoeren();
             }
         }
