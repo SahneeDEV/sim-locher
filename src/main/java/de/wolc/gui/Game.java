@@ -1,7 +1,5 @@
 package de.wolc.gui;
 
-import java.awt.Button;
-import java.awt.Event;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -18,6 +16,7 @@ import de.wolc.spiel.papier.A6;
 import de.wolc.spiel.papier.Konfetti;
 import de.wolc.spiel.papier.Papier;
 import de.wolc.spiel.papier.PapierStapel;
+import de.wolc.gui.LocherPapier;
 
 import javafx.stage.Stage;
 import javafx.scene.Scene;
@@ -234,10 +233,16 @@ public class Game{
                 //Abgleichen des gedrückten Buttons
                 if ( e.getButton() == MouseButton.SECONDARY) {
                     PapierStapel<?> stapel = spieler.getLocher().getStapel();
-                    Papier removedPapier = stapel.entnehmen();
+                    if (stapel.groesse() > 0) {
+                        Papier removedPapier = stapel.entnehmen();
+                        new PapierObjekt(Game.this, removedPapier);
                     
-                    new PapierObjekt(Game.this, removedPapier);
+                    }
+                    //entfernen des Eingelgeten Bilds wenn kein Papier mehr im Locher
+                    if (stapel.groesse() == 0) {
+                        gameArea.getChildren().remove(LocherPapier);
 
+                    } 
                 }
             }
         });
@@ -271,6 +276,11 @@ public class Game{
                 }
 
                 Game.this.updateLabels();
+
+                PapierStapel<?> stapel = spieler.getLocher().getStapel();
+                if (stapel.groesse() == 0) {
+                    
+                }
             }
         };
 
@@ -331,14 +341,6 @@ public class Game{
 
     public boolean checkForLocherCollision(Shape papier) {
         return checkForCollision(papier, locher_new);
-    }
-
-    /**
-     * Gibt den aktuellen Spieler zurück
-     * @return Der aktuell verwendete Spieler
-     */
-    public Spieler getSpieler(){
-        return this.spieler;
     }
 
     @SuppressWarnings("unchecked")
