@@ -78,7 +78,7 @@ public class Game{
     private HashMap<Farbe, Label> scoreLabels = new HashMap<>();
     private Alert speichernFehler, ladeFehler;
 
-    private LocherPapier locherPapier;
+    private ArrayList<LocherPapier> locherPapier= new ArrayList<LocherPapier>();
 
     public Game () {
         //TODO: ToggleButtons müssen angepasst werden an das letzte SaveGame falls vorhanden
@@ -244,19 +244,23 @@ public class Game{
                 //Abgleichen des gedrückten Buttons
                 if ( e.getButton() == MouseButton.SECONDARY) {
                     PapierStapel<?> stapel = spieler.getLocher().getStapel();
-                    if (stapel.groesse() > 0) {
-                        Papier removedPapier = stapel.entnehmen();
-                        new PapierObjekt(Game.this, removedPapier);
-                    
-                    }
+                    Papier removedPapier = stapel.entnehmen();
+
                     //entfernen des Eingelgeten Bilds wenn kein Papier mehr im Locher
-                    if (stapel.groesse() == 0) {
-                        for (int i = 0; i <= locherPapier.getPapierListe().size(); i++) {
-                            ArrayList<Rectangle> todelet = locherPapier.getPapierListe();
-                            Rectangle deletLocherPapier = todelet.get(i);
-                            gameArea.getChildren().remove(deletLocherPapier);
+                    if (removedPapier != null) {
+                        new PapierObjekt(Game.this, removedPapier);
+                        for (int i = 0; i <= locherPapier.size(); i++) {
+                            LocherPapier todeltetPapier = locherPapier.get(i);
+                            if (todeltetPapier.getPapier() == removedPapier){
+                                ArrayList<Rectangle> todeletRectangle = todeltetPapier.getPapierListe();
+                                for (int a = 0; a <= todeletRectangle.size(); a++) {
+                                    Rectangle deletLocherPapier = todeletRectangle.get(a);
+                                    gameArea.getChildren().remove(deletLocherPapier);
+                                }
+
+                            }
+
                         }
-                        
 
                     } 
                 }
@@ -385,7 +389,7 @@ public class Game{
                 abgelegt = false;
             }
             if (abgelegt) {
-                new LocherPapier(Game.this, spieler.getLocher().getStapel().groesse(), locher_new, objekt.getPapier());
+                locherPapier.add(new LocherPapier(Game.this, spieler.getLocher().getStapel().groesse(), locher_new, objekt.getPapier()));
                 objekt.zerstoeren();
             }
         }

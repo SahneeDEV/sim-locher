@@ -15,6 +15,7 @@ import javafx.geometry.*;
 
 import java.util.HashMap;
 
+import de.wolc.MultiUse;
 import de.wolc.spiel.Farbe;
 import de.wolc.spiel.Spieler;
 import de.wolc.spiel.papier.Konfetti;
@@ -86,7 +87,9 @@ public class ItemShopMenu {
         settingsPane.setCenter(settingsGridPane);
         settingsPane.setBottom(this.skinshop());
 
-        Scene sceneMainWindow = new Scene(settingsPane, 500, 250);
+        MultiUse mu = new MultiUse();
+        int[] windowSize = mu.GetScreenSize();
+        Scene sceneMainWindow = new Scene(settingsPane, windowSize[0] / 2d, windowSize[1] / 2d);
 
         // Updating the Title
         stage.setTitle(TITLE);
