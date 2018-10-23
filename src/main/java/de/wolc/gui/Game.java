@@ -61,7 +61,7 @@ public class Game{
     private static final Random RANDOM = new Random();
     
     //Game Variables
-    private double remainingTimeAvailable = 30d;
+    private double remainingTimeAvailable = 1d;
 
     //Variables for Countdown timer
     private long firstNanoTimeTimer = 0;
