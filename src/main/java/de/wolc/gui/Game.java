@@ -1,5 +1,7 @@
 package de.wolc.gui;
 
+import java.awt.Button;
+import java.awt.Event;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -41,6 +43,7 @@ import javafx.scene.paint.Color;
 import javafx.animation.AnimationTimer;
 import javafx.event.EventHandler;
 import javafx.scene.paint.ImagePattern;
+import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
@@ -222,10 +225,19 @@ public class Game{
         locher_new.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent e) {
-                if (spieler.getLocher().getCooldown() == 0) {
+                //Abgleichen des gedrückten Buttons und des Cooldowns
+                if (e.getButton() == MouseButton.PRIMARY && spieler.getLocher().getCooldown() == 0) {
                     Lochprozess prozess = spieler.getLocher().lochen();
                     ArrayList<Konfetti> spielerKonfetti = spieler.getKonfetti();
                     spielerKonfetti.addAll(prozess.getKonfetti());
+                }
+                //Abgleichen des gedrückten Buttons
+                if ( e.getButton() == MouseButton.SECONDARY) {
+                    PapierStapel<?> stapel = spieler.getLocher().getStapel();
+                    Papier removedPapier = stapel.entnehmen();
+                    
+                    new PapierObjekt(Game.this, removedPapier);
+
                 }
             }
         });

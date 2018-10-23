@@ -26,8 +26,8 @@ public class LocherPapier{
         this.locherPapier.setHeight(paperImage.getHeight());
         //TODO: papier genauer einpassen + 3D Effekt richtig einbinden
         Bounds locherPosition = locher.localToScene(locher.getBoundsInLocal());
-        this.locherPapier.setTranslateX(locherPosition.getMinX() - 108  - (stapelGroesse * 0.15));
-        this.locherPapier.setTranslateY(locherPosition.getMinY() + 263 - (stapelGroesse * 0.15));
+        this.locherPapier.setTranslateX(locherPosition.getMinX() - 199  - (stapelGroesse * 0.15));
+        this.locherPapier.setTranslateY(locherPosition.getMinY() + 249  - (stapelGroesse * 0.15));
 
         this.game.getArea().getChildren().add(this.locherPapier);
     }
