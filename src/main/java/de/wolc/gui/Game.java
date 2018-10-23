@@ -2,6 +2,7 @@ package de.wolc.gui;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Random;
 
@@ -46,6 +47,7 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
+import javafx.scene.Node;
 
 public class Game{
 
@@ -60,7 +62,7 @@ public class Game{
     private static final Random RANDOM = new Random();
     
     //Game Variables
-    private double remainingTimeAvailable = 30d;
+    private double remainingTimeAvailable = 1d;
 
     //Variables for Countdown timer
     private long firstNanoTimeTimer = 0;
@@ -76,6 +78,8 @@ public class Game{
     private ToggleGroup formatGroup;
     private HashMap<Farbe, Label> scoreLabels = new HashMap<>();
     private Alert speichernFehler;
+
+    private LocherPapier locherPapier;
 
     public Game () {
         try {
@@ -240,7 +244,12 @@ public class Game{
                     }
                     //entfernen des Eingelgeten Bilds wenn kein Papier mehr im Locher
                     if (stapel.groesse() == 0) {
-                        gameArea.getChildren().remove(LocherPapier);
+                        for (int i = 0; i <= locherPapier.getPapierListe().size(); i++) {
+                            ArrayList<Rectangle> todelet = locherPapier.getPapierListe();
+                            Rectangle deletLocherPapier = todelet.get(i);
+                            gameArea.getChildren().remove(deletLocherPapier);
+                        }
+                        
 
                     } 
                 }
@@ -343,6 +352,10 @@ public class Game{
         return checkForCollision(papier, locher_new);
     }
 
+    public Spieler getCurrentSpieler(){
+        return this.spieler;
+    }
+
     @SuppressWarnings("unchecked")
     public void papierAufLocherGezogen(PapierObjekt objekt) {
         // penis 🍆
@@ -365,7 +378,7 @@ public class Game{
                 abgelegt = false;
             }
             if (abgelegt) {
-                new LocherPapier(Game.this, spieler.getLocher().getStapel().groesse(), locher_new);
+                locherPapier = new LocherPapier(Game.this, spieler.getLocher().getStapel().groesse(), locher_new);
                 objekt.zerstoeren();
             }
         }
