@@ -36,6 +36,9 @@ import javafx.geometry.Insets;
 import javafx.scene.control.Label;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.paint.Color;
 import javafx.animation.AnimationTimer;
 import javafx.event.EventHandler;
@@ -50,7 +53,6 @@ public class Game{
     private final String windowTitle = "World of Locher Craft";
     private final String backgroundImageLocation = "de/wolc/gui/images/Test_Bild.jpg";
     private Spieler spieler;
-    private Class<? extends Papier> currentPapierFormat;
     private Rectangle locher_new;
     private AnchorPane gameArea;   
     
@@ -61,19 +63,18 @@ public class Game{
 
     //Variables for Countdown timer
     private long firstNanoTimeTimer = 0;
-    private String leadingZero;
-
     private double timeToNextPapier = 0;
 
     //Papierstapel erstellen
-    PapierStapel<A4> stapel_A4;
-    PapierStapel<A5> stapel_A5;
-    PapierStapel<A6> stapel_A6;
+    private PapierStapel<A4> stapel_A4;
+    private PapierStapel<A5> stapel_A5;
+    private PapierStapel<A6> stapel_A6;
 
     private Label score, remainingTime, formatLabel, papierLabel, locherCooldown;
     private ToggleButton formatA4Button, formatA5Button, formatA6Button;
     private ToggleGroup formatGroup;
     private HashMap<Farbe, Label> scoreLabels = new HashMap<>();
+    private Alert speichernFehler;
 
     public Game () {
         try {
@@ -86,7 +87,6 @@ public class Game{
             this.spieler = new Spieler();
         }
         this.firstNanoTimeTimer = 0;
-        this.currentPapierFormat = A4.class;
     }
 
     private void updateLabels() {
@@ -103,28 +103,16 @@ public class Game{
             label.setText("  " + farbe.getAnzeigeName() + ": " + zahl);
         }
         this.score.setText("Score: " + this.spieler.getKonfetti().size());
+        // Sonstige Stats
         this.formatLabel.setText("Format: " + this.spieler.getLocher().getFormat().getSimpleName());
-
-        //TODO: NullPointer fix
-        if(stapel_A4 != null || stapel_A5 != null || stapel_A6 != null){
-            this.papierLabel.setText("Stapel: " + this.spieler.getLocher().getStapel().groesse());
-        }
-        this.locherCooldown.setText("Cooldown: " + Math.ceil(spieler.getLocher().getCooldown() * 10) / 10 + "s");
-        //Changing the Time
-        //Setting a leading Zero if reamingTimeAvailable is one digit
-        if (remainingTimeAvailable < 10 && remainingTimeAvailable > 0) {
-            leadingZero = "0";
-        }
-        else {
-            leadingZero = "";
-        }
-        remainingTime.setText("Zeit: " + this.leadingZero + Math.round(this.remainingTimeAvailable) + "s");   
+        this.papierLabel.setText("Stapel: " + this.spieler.getLocher().getStapel().groesse());
+        this.locherCooldown.setText("Cooldown: " + Math.round(spieler.getLocher().getCooldown() * 10) / 10 + "s");
+        remainingTime.setText("Zeit: " + Math.round(this.remainingTimeAvailable * 10d) / 10d + "s");   
     }
     
     public Scene GameMainStage(Stage stage){
         //Main Orientation Node and initale settings
         BorderPane mainPane = new BorderPane();
-        //mainPane.setStyle("-fx-background-repeat: repeat"); 
 
         //Setting and creating the new Scene
         Scene gameScene = new Scene(mainPane);
@@ -145,7 +133,7 @@ public class Game{
         stapel_A4 = new PapierStapel<>(A4.class);
         stapel_A5 = new PapierStapel<>(A5.class);
         stapel_A6 = new PapierStapel<>(A6.class);
-        this.spieler.getLocher().setFormat(this.currentPapierFormat);
+        this.spieler.getLocher().setFormat(A4.class);
         this.spieler.getLocher().einlegen(stapel_A4);
         
         //Creating the Component-nodes
@@ -269,9 +257,7 @@ public class Game{
                 remainingTimeAvailable -= elapsedSeconds;
 
                 if (timeToNextPapier <= 0) {
-                    Papier papier = new A4();
-                    papier.setFarbe(Farbe.zufallsfarbe());
-                    new PapierObjekt(Game.this, papier);
+                    spawnPapier();
                     timeToNextPapier = 0.5d + (2d - 0.5d) * RANDOM.nextDouble();
                 }
 
@@ -301,9 +287,24 @@ public class Game{
         try {
             Gui.DB.speichern("spieler", this.spieler);
         } catch (IOException e) {
-            // TODO: Warnung dass speichern fehlgeschlagen ist
+            speichernFehler = new Alert(AlertType.WARNING);
+            speichernFehler.setTitle("Fehler beim speichern deines Spielstands!");
+            speichernFehler.setHeaderText("Beim speichern deines SPielstands ist ein Fehler aufgetreten.");
+            speichernFehler.setContentText(e.toString());
+            speichernFehler.setResult(ButtonType.OK);
+            speichernFehler.showAndWait();
             e.printStackTrace();
 		}
+    }
+
+    public void spawnPapier() {
+        int format = RANDOM.nextInt(3);
+        Papier papier;
+        if(format == 0) { papier = new A4(); }
+        else if(format == 1) { papier = new A5(); }
+        else { papier = new A6(); }
+        papier.setFarbe(Farbe.zufallsfarbe());
+        new PapierObjekt(Game.this, papier);
     }
 
     /**
@@ -327,7 +328,7 @@ public class Game{
     public void papierAufLocherGezogen(PapierObjekt objekt) {
         // penis 🍆
         Class<? extends Papier> papierTyp = objekt.getPapier().getClass();
-        if (this.currentPapierFormat == papierTyp) {
+        if (this.spieler.getLocher().getFormat() == papierTyp) {
             PapierStapel<?> stapel = this.spieler.getLocher().getStapel();
             boolean abgelegt;
             if(papierTyp == A4.class){
