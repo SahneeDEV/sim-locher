@@ -52,6 +52,8 @@ public class Game{
     private Spieler spieler;
     private Rectangle locher_new;
     private AnchorPane gameArea;   
+    private Stage stage;
+    private AnimationTimer timer;
     
     private static final Random RANDOM = new Random();
     
@@ -108,6 +110,8 @@ public class Game{
     }
     
     public Scene GameMainStage(Stage stage){
+        this.stage = stage;
+
         //Main Orientation Node and initale settings
         BorderPane mainPane = new BorderPane();
 
@@ -228,7 +232,7 @@ public class Game{
 
 
         //creating a new Animation Timer for refreshing the GUI
-        new AnimationTimer(){
+        this.timer = new AnimationTimer(){
             public void handle(long currentNanoTime){
                 if (firstNanoTimeTimer == 0) {
                     firstNanoTimeTimer = currentNanoTime;
@@ -256,7 +260,7 @@ public class Game{
 
                 Game.this.updateLabels();
             }
-        }.start();
+        };
 
 
         //Add Nodes to the AnchorPane
@@ -267,22 +271,27 @@ public class Game{
 
         //Set Window Titel
         stage.setTitle(windowTitle);
+
+        this.timer.start();
+
         return gameScene;
     }
 
     public void spielEnde() {
-        // TODO: End Game and Display Score Screen
+        this.timer.stop();
         try {
             Gui.DB.speichern("spieler", this.spieler);
         } catch (IOException e) {
             speichernFehler = new Alert(AlertType.WARNING);
-            speichernFehler.setTitle("Fehler beim speichern deines Spielstands!");
-            speichernFehler.setHeaderText("Beim speichern deines SPielstands ist ein Fehler aufgetreten.");
+            speichernFehler.setTitle("Fehler beim Speichern deines Spielstands!");
+            speichernFehler.setHeaderText("Beim Speichern deines Spielstands ist ein Fehler aufgetreten.");
             speichernFehler.setContentText(e.toString());
             speichernFehler.setResult(ButtonType.OK);
             speichernFehler.showAndWait();
             e.printStackTrace();
 		}
+        ItemShopMenu menu = new ItemShopMenu();
+        stage.setScene(menu.ItemShopStage(this.stage));
     }
 
     public void spawnPapier() {
