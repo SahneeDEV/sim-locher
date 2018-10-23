@@ -81,6 +81,7 @@ public class Game{
     private ArrayList<LocherPapier> locherPapier= new ArrayList<LocherPapier>();
 
     public Game () {
+        //TODO: ToggleButtons müssen angepasst werden an das letzte SaveGame falls vorhanden
         try {
             this.spieler = (Spieler) Gui.DB.laden("spieler");
         } catch (Exception e) {
