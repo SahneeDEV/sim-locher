@@ -75,8 +75,8 @@ public class PapierObjekt {
         this.drawnPapier.setOnMouseDragged((MouseEvent e) -> {
             //Change the location if the cursor has moved
             this.drawnPapier.toFront();
-            this.drawnPapier.setTranslateX(this.drawnPapier.getTranslateX() + (e.getX() - (this.drawnPapier.getWidth() * 0.4)));
-            this.drawnPapier.setTranslateY(this.drawnPapier.getTranslateY() + (e.getY() - (this.drawnPapier.getHeight() * 0.4)));
+            this.drawnPapier.setTranslateX(this.drawnPapier.getTranslateX() + (e.getX() - (this.drawnPapier.getWidth() * 0.35)));
+            this.drawnPapier.setTranslateY(this.drawnPapier.getTranslateY() + (e.getY() - (this.drawnPapier.getHeight() * 0.35)));
             if (this.game.checkForLocherCollision(this.drawnPapier)){
                 this.game.papierAufLocherGezogen(this);
                 e.consume();
