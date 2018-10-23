@@ -47,7 +47,6 @@ public class Game{
     private final String windowTitle = "World of Locher Craft";
     private final String backgroundImageLocation = "de/wolc/gui/images/Test_Bild.jpg";
     private Spieler spieler;
-    private Class<? extends Papier> currentPapierFormat;
     private Rectangle locher_new;
     private AnchorPane gameArea;   
     
@@ -83,7 +82,6 @@ public class Game{
             this.spieler = new Spieler();
         }
         this.firstNanoTimeTimer = 0;
-        this.currentPapierFormat = A4.class;
     }
 
     private void updateLabels() {
@@ -142,7 +140,7 @@ public class Game{
         stapel_A4 = new PapierStapel<>(A4.class);
         stapel_A5 = new PapierStapel<>(A5.class);
         stapel_A6 = new PapierStapel<>(A6.class);
-        this.spieler.getLocher().setFormat(this.currentPapierFormat);
+        this.spieler.getLocher().setFormat(A4.class);
         this.spieler.getLocher().einlegen(stapel_A4);
         
         //Creating the Component-nodes
@@ -323,7 +321,7 @@ public class Game{
     public void papierAufLocherGezogen(PapierObjekt objekt) {
         // penis 🍆
         Class<? extends Papier> papierTyp = objekt.getPapier().getClass();
-        if (this.currentPapierFormat == papierTyp) {
+        if (this.spieler.getLocher().getFormat() == papierTyp) {
             PapierStapel<?> stapel = this.spieler.getLocher().getStapel();
             boolean abgelegt;
             if(papierTyp == A4.class){
