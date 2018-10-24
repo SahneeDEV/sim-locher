@@ -461,15 +461,16 @@ public class Game{
      */
     private void locherPapierEntfernen(){
         //Entfernen aller Papiere im Locher
-        for(int i = 0; i <= locherPapier.size(); i++){
+        for(int i = 0; i < locherPapier.size(); i++){
             LocherPapier papierEntfernen = locherPapier.get(i);
             ArrayList<Rectangle> papiereInDerListe = papierEntfernen.getPapierListe();
-            for(int g = 0; g <= papiereInDerListe.size(); g++){
+            for(int g = 0; g < papiereInDerListe.size(); g++){
                 Rectangle zuEntfernendesPapier = papiereInDerListe.get(g);
                 this.gameArea.getChildren().remove(zuEntfernendesPapier);
             }
+            papiereInDerListe.clear();
         }
-
+        locherPapier.clear();
     }
 
 }
