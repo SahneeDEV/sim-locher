@@ -12,6 +12,7 @@ import javafx.scene.image.Image;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.paint.ImagePattern;
 import javafx.geometry.*;
+import javafx.event.*;
 
 import java.util.HashMap;
 
@@ -19,7 +20,6 @@ import de.wolc.MultiUse;
 import de.wolc.spiel.Farbe;
 import de.wolc.spiel.Spieler;
 import de.wolc.spiel.papier.Konfetti;
-import javafx.event.*;
 
 public class ItemShopMenu {
     private static final String TITLE = "World of Locher Craft - 💲 Pay2Win 💲";
@@ -53,6 +53,7 @@ public class ItemShopMenu {
     private Stage stage;
 
     private HashMap<Farbe, Label> scoreLabels = new HashMap<>();
+    private Rectangle locherVorschau;
     private Label scoreLabel;
 
     public Scene ItemShopStage(Stage stage) {
@@ -82,10 +83,11 @@ public class ItemShopMenu {
         // ===============================================
         
         // Get Scene size and create a new Instance
-        settingsPane.setTop(this.buttons());
-        settingsPane.setLeft(this.scorescreen());
-        settingsPane.setCenter(settingsGridPane);
-        settingsPane.setBottom(this.skinshop());
+        settingsPane.setTop(this.guiButtons());
+        settingsPane.setLeft(this.guiScoreScreen());
+        settingsPane.setRight(settingsGridPane);
+        settingsPane.setCenter(this.guiLocherVorschau());
+        settingsPane.setBottom(this.guiSkinShop());
 
         MultiUse mu = new MultiUse();
         int[] windowSize = mu.GetScreenSize();
@@ -95,11 +97,17 @@ public class ItemShopMenu {
         stage.setTitle(TITLE);
 
         this.scoreLabelsAktualisieren();
+        this.locherVorschauAktualisieren();
 
         return sceneMainWindow;
     }
 
-    private Node buttons() {
+    private Node guiLocherVorschau() {
+        this.locherVorschau = new Rectangle();
+        return this.locherVorschau;
+    }
+
+    private Node guiButtons() {
         GridPane grid = new GridPane();
         grid.setVgap(1);
         Button backButton = new Button("◀ Zur\u00fcck ◀");
@@ -115,7 +123,7 @@ public class ItemShopMenu {
         return grid;
     }
 
-    private Node scorescreen() {
+    private Node guiScoreScreen() {
         GridPane grid = new GridPane();
         grid.setHgap(1);
         ScrollPane scroll = new ScrollPane();
@@ -134,7 +142,7 @@ public class ItemShopMenu {
         return scroll;
     }
 
-    private Node skinshop() {
+    private Node guiSkinShop() {
         GridPane grid = new GridPane();
         grid.setVgap(1);
         grid.setAlignment(Pos.CENTER);
@@ -145,16 +153,28 @@ public class ItemShopMenu {
             String skin = SKINS[i];
             Image locher_skin = new Image("de/wolc/gui/images/" + skin + ".png");
             Rectangle locher_new = new Rectangle();
-            locher_new.setOnMouseClicked((MouseEvent e) -> {
-                this.spieler.getLocher().setSkin(skin);
-                System.out.println("Neuer Skin gekauft: " + skin);
-            });
+            locher_new.setOnMouseClicked(e -> this.skinKaufen(skin));
             locher_new.setHeight(80d);
             locher_new.setWidth(locher_skin.getWidth() / (locher_skin.getHeight() / 80d));
             locher_new.setFill(new ImagePattern(locher_skin));
             grid.add(locher_new, i, 0);
         }
         return scroll;
+    }
+
+    private boolean skinKaufen(String skin) {
+        // TODO: Skin soll etwas kosten
+        this.spieler.getLocher().setSkin(skin);
+        System.out.println("Neuer Skin gekauft: " + skin);
+        this.locherVorschauAktualisieren();
+        return true;
+    }
+
+    private void locherVorschauAktualisieren() {
+        Image locher_skin = new Image("de/wolc/gui/images/" + this.spieler.getLocher().getSkin() + ".png");
+        locherVorschau.setHeight(locher_skin.getHeight());
+        locherVorschau.setWidth(locher_skin.getWidth());
+        this.locherVorschau.setFill(new ImagePattern(locher_skin));
     }
 
     private void scoreLabelsAktualisieren() {
