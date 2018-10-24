@@ -78,12 +78,15 @@ public class Game{
     private HashMap<Farbe, Label> scoreLabels = new HashMap<>();
     private Alert speichernFehler, ladeFehler;
 
+    //SaveGame Toggle Buttons
+    private Boolean loadedSaveGame = false;
+
     private ArrayList<LocherPapier> locherPapier= new ArrayList<LocherPapier>();
 
     public Game () {
-        //TODO: ToggleButtons müssen angepasst werden an das letzte SaveGame falls vorhanden
         try {
             this.spieler = (Spieler) Gui.DB.laden("spieler");
+            loadedSaveGame = true;
         } catch (Exception e) {
             ladeFehler = new Alert(AlertType.INFORMATION);
             ladeFehler.setTitle("Kein Speicherstand gefunden!");
@@ -143,8 +146,23 @@ public class Game{
         stapel_A4 = new PapierStapel<>(A4.class);
         stapel_A5 = new PapierStapel<>(A5.class);
         stapel_A6 = new PapierStapel<>(A6.class);
-        this.spieler.getLocher().setFormat(A4.class);
-        this.spieler.getLocher().einlegen(stapel_A4);
+        if(this.spieler.getLocher().getFormat() == null){
+            this.spieler.getLocher().setFormat(A4.class);
+            this.spieler.getLocher().einlegen(stapel_A4);
+        }
+        else{
+            this.spieler.getLocher().setFormat(this.spieler.getLocher().getFormat());
+            if(this.spieler.getLocher().getFormat() == A4.class){
+                this.spieler.getLocher().einlegen(stapel_A4);
+            }
+            else if(this.spieler.getLocher().getFormat() == A5.class){
+                this.spieler.getLocher().einlegen(stapel_A5);
+            }
+            else if(this.spieler.getLocher().getFormat() == A6.class){
+                this.spieler.getLocher().einlegen(stapel_A6);
+            }
+        }
+        
         
         //Creating the Component-nodes
         //Creating the VBox for the right Output
@@ -171,7 +189,7 @@ public class Game{
         rightVBox.getChildren().addAll(locherCooldown, formatLabel, papierLabel);
         this.updateLabels();
 
-        //Adding the Format ToggleButtons + ToggleGroup
+        //Adding the Format ToggleButtons + ToggleGroup + default ToggleButton configuration
         HBox formatBox = new HBox();
         formatGroup = new ToggleGroup();
         formatBox.setPadding(new Insets(20, 5 , 20 ,5));
@@ -201,6 +219,27 @@ public class Game{
         mainPane.setLeft(formatBox);
         BorderPane.setAlignment(formatBox, Pos.CENTER_LEFT);
 
+        //If a SaveGame has been loaded the ToggleButtons get adjusted here
+        if(loadedSaveGame){
+            //A4
+            if(this.spieler.getLocher().getFormat() == A4.class){
+                this.formatA4Button.setSelected(true);
+                this.formatA5Button.setSelected(false);
+                this.formatA6Button.setSelected(false);
+            }
+            //A5
+            else if(this.spieler.getLocher().getFormat() == A5.class){
+                this.formatA4Button.setSelected(false);
+                this.formatA5Button.setSelected(true);
+                this.formatA6Button.setSelected(false);
+            }
+            //A6
+            else if(this.spieler.getLocher().getFormat() == A6.class){
+                this.formatA4Button.setSelected(false);
+                this.formatA5Button.setSelected(false);
+                this.formatA6Button.setSelected(true);
+            }
+        }
 
         //Adding remainingTime and score to VBox 
 
@@ -255,11 +294,8 @@ public class Game{
                                     gameArea.getChildren().remove(deletLocherPapier);
                                 }
                                 break;
-
                             }
-
                         }
-
                     } 
                 }
             }
