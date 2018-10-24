@@ -60,7 +60,7 @@ public class Game{
     private static final Random RANDOM = new Random();
     
     //Game Variables
-    private double remainingTimeAvailable = 1d;
+    private double remainingTimeAvailable = 30d;
 
     //Variables for Countdown timer
     private long firstNanoTimeTimer = 0;
@@ -203,6 +203,7 @@ public class Game{
         formatA4Button.setToggleGroup(formatGroup);
         formatA4Button.setOnMousePressed((MouseEvent e) -> {
             papierWechsel(stapel_A4, A4.class);
+            locherPapierEntfernen();
         });
 
         formatA5Button = new ToggleButton("A5");
@@ -210,6 +211,7 @@ public class Game{
         formatA5Button.setToggleGroup(formatGroup);
         formatA5Button.setOnMousePressed((MouseEvent e) -> {
             papierWechsel(stapel_A5, A5.class);
+            locherPapierEntfernen();
         });
 
         formatA6Button = new ToggleButton("A6");
@@ -217,6 +219,7 @@ public class Game{
         formatA6Button.setToggleGroup(formatGroup);
         formatA6Button.setOnMousePressed((MouseEvent e) -> {
             papierWechsel(stapel_A6, A6.class);
+            locherPapierEntfernen();
         });
 
         formatBox.getChildren().addAll(formatA4Button, formatA5Button, formatA6Button);
@@ -393,6 +396,10 @@ public class Game{
         return !ueberschneidung.getBoundsInLocal().isEmpty();
     }
 
+    /**
+     * Gibt das aktuell instalzierte AnchorPane zurück
+     * @return Das aktuelle 'gameArea' AnchorPane
+     */
     public AnchorPane getArea() {
         return this.gameArea;
     }
@@ -449,6 +456,22 @@ public class Game{
         // Neue Auswahl setzen
         this.spieler.getLocher().setFormat(neuesPapierformat);
         this.spieler.getLocher().einlegen(papierStapel);
+    }
+
+    /**
+     * Entfernt das aktuell in den Locher eingelegte Papier
+     */
+    private void locherPapierEntfernen(){
+        //Entfernen aller Papiere im Locher
+        for(int i = 0; i <= locherPapier.size(); i++){
+            LocherPapier papierEntfernen = locherPapier.get(i);
+            ArrayList<Rectangle> papiereInDerListe = papierEntfernen.getPapierListe();
+            for(int g = 0; g <= papiereInDerListe.size(); g++){
+                Rectangle zuEntfernendesPapier = papiereInDerListe.get(g);
+                this.gameArea.getChildren().remove(zuEntfernendesPapier);
+            }
+        }
+
     }
 
 }
