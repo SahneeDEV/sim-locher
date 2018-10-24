@@ -2,6 +2,7 @@ package de.wolc.spiel;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import de.wolc.spiel.locher.SimLocher;
 import de.wolc.spiel.papier.Konfetti;
@@ -37,6 +38,24 @@ public class Spieler implements Serializable {
      */
     public ArrayList<Konfetti> getKonfetti() {
         return this.konfetti;
+    }
+
+    /**
+     * Gibt eine HashMap mit allen Konfetti Arten sortiert zurück.
+     * @return The HashMap.
+     */
+    public HashMap<Farbe, ArrayList<Konfetti>> getKonfettiSortiert() {   
+        HashMap<Farbe, ArrayList<Konfetti>> hash = new HashMap<>();
+        for(Konfetti konfetti : this.getKonfetti()) {
+            Farbe farbe = konfetti.getFarbe();
+            ArrayList<Konfetti> zahl = hash.get(farbe);
+            if (zahl == null) {
+                zahl = new ArrayList<>();
+                hash.put(farbe, zahl);
+            }
+            zahl.add(konfetti);
+        }
+        return hash;
     }
 
     /**

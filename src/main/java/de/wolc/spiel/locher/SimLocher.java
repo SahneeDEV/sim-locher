@@ -22,14 +22,14 @@ public class SimLocher implements Serializable
     private static final int STANDARD_STANZER = 2;
 
     private PapierStapel<?> stapel;
-    private String skin;
+    private LocherSkin skin;
     private Class<? extends Papier> format;
     private double cooldown;
     private ArrayList<LocherUpgrade> upgrades;
     
     public SimLocher() {
         this.upgrades = new ArrayList<LocherUpgrade>();
-        this.skin = "locher_base";
+        this.skin = LocherSkin.LOCHER_BASE;
         this.format = A4.class;
         this.cooldown = 0;
     }
@@ -75,20 +75,20 @@ public class SimLocher implements Serializable
     }
 
     /**
-     * Gibt den Namen des aktuellen Locher-Skins zurück.
+     * Gibt den aktuellen Locher-Skin zurück.
      * Der Skin existiert unter `src/main/java/de/wolc/gui/images/{skin-name-hier}.png`
-     * @return Der Skin name.
+     * @return Der Skin.
      */
-    public String getSkin() {
+    public LocherSkin getSkin() {
         return this.skin;
     }
 
     /**
-     * Setzt den Namen des aktuellen Locher-Skins.
+     * Setzt den aktuelle Locher-Skin.
      * Der Skin existiert unter `src/main/java/de/wolc/gui/images/{skin-name-hier}.png`
-     * @param skin Der Skin name.
+     * @param skin Der Skin.
      */
-    public void setSkin(String skin) {
+    public void setSkin(LocherSkin skin) {
         this.skin = skin;
     }
 
