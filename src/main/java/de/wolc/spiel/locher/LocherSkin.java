@@ -6,7 +6,7 @@ import java.util.Map;
 import de.wolc.spiel.Farbe;
 
 public enum LocherSkin {
-    LOCHER_ANIMATED("locher_animated.gif", "All Hail The RGB Locher", kostenVon(Farbe.ROT, 100, Farbe.GRUEN, 100, Farbe.BLAU, 100)),
+    LOCHER_ANIMATED("locher_rgb.gif", "All Hail The RGB Locher", kostenVon(Farbe.ROT, 100, Farbe.GRUEN, 100, Farbe.BLAU, 100)),
     LOCHER_BASE("locher_base.png", "0815 Locher", new HashMap<>()),
     LOCHER_BAUMBLAETTER("locher_baumblaetter.png", "Öko-Locher", kostenVon(Farbe.GRUEN, 20, Farbe.WEISS, 5)),
     LOCHER_BEACH("locher_beach.png", "Locher on the Beach", kostenVon(Farbe.ROT, 15, Farbe.GRUEN, 15)),
