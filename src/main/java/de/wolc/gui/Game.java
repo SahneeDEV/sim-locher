@@ -256,7 +256,7 @@ public class Game{
         //LOCHER
         String skin = spieler.getLocher().getSkin().getGuiBild();
 
-        Image locher_skin = new Image("de/wolc/gui/images/" + skin + ".png");
+        Image locher_skin = new Image("de/wolc/gui/images/" + skin);
         locher_new = new Rectangle();
         locher_new.setHeight(locher_skin.getHeight());
         locher_new.setWidth(locher_skin.getWidth());
