@@ -12,42 +12,24 @@ import javafx.scene.image.Image;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.paint.ImagePattern;
 import javafx.geometry.*;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.event.*;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
 
 import de.wolc.MultiUse;
 import de.wolc.spiel.Farbe;
 import de.wolc.spiel.Spieler;
+import de.wolc.spiel.locher.LocherSkin;
 import de.wolc.spiel.papier.Konfetti;
 
 public class ItemShopMenu {
     private static final String TITLE = "World of Locher Craft - 💲 Pay2Win 💲";
-    private static final String[] SKINS = {
-        "locher_base",
-        "locher_baumblaetter",
-        "locher_beach",
-        "locher_blue",
-        "locher_coallblue",
-        "locher_copper",
-        "locher_deutschland",
-        "locher_gold",
-        "locher_green",
-        "locher_grey",
-        "locher_hflagge",
-        "locher_kleeblatt",
-        "locher_lightpurple",
-        "locher_lila",
-        "locher_love",
-        "locher_matrix",
-        "locher_microsoft",
-        "locher_mylittlepony",
-        "locher_pirate",
-        "locher_spooky",
-        "locher_storm",
-        "locher_tank",
-        "locher_unicorn"
-    };
 
     private Spieler spieler;
     private Stage stage;
@@ -149,9 +131,10 @@ public class ItemShopMenu {
         ScrollPane scroll = new ScrollPane();
         scroll.setContent(grid);
         scroll.setPrefHeight(100d);
-        for(int i = 0; i< SKINS.length; i++) {
-            String skin = SKINS[i];
-            Image locher_skin = new Image("de/wolc/gui/images/" + skin + ".png");
+        LocherSkin[] skins = LocherSkin.values();
+        for(int i = 0; i< skins.length; i++) {
+            LocherSkin skin = skins[i];
+            Image locher_skin = new Image("de/wolc/gui/images/" + skin.getGuiBild() + ".png");
             Rectangle locher_new = new Rectangle();
             locher_new.setOnMouseClicked(e -> this.skinKaufen(skin));
             locher_new.setHeight(80d);
@@ -162,8 +145,11 @@ public class ItemShopMenu {
         return scroll;
     }
 
-    private boolean skinKaufen(String skin) {
-        // TODO: Skin soll etwas kosten
+    private boolean skinKaufen(LocherSkin skin) {
+        if (!this.kaufErbitten(skin.getGuiName(), skin.getKosten())) {
+            System.out.println("Neuer Skin Kauf abgelehnt: " + skin);
+            return false;
+        }
         this.spieler.getLocher().setSkin(skin);
         System.out.println("Neuer Skin gekauft: " + skin);
         this.locherVorschauAktualisieren();
@@ -171,7 +157,7 @@ public class ItemShopMenu {
     }
 
     private void locherVorschauAktualisieren() {
-        Image locher_skin = new Image("de/wolc/gui/images/" + this.spieler.getLocher().getSkin() + ".png");
+        Image locher_skin = new Image("de/wolc/gui/images/" + this.spieler.getLocher().getSkin().getGuiBild() + ".png");
         locherVorschau.setHeight(locher_skin.getHeight());
         locherVorschau.setWidth(locher_skin.getWidth());
         this.locherVorschau.setFill(new ImagePattern(locher_skin));
@@ -201,6 +187,48 @@ public class ItemShopMenu {
             // TODO: Fehlermeldung ausgeben dass der Spieler nicht gespeichert werden konnte
             e.printStackTrace();
         }
+    }
+
+    private boolean kannLeisten(Map<Farbe, Integer> kosten) {
+        HashMap<Farbe, ArrayList<Konfetti>> hash = this.spieler.getKonfettiSortiert();
+        for(Farbe farbe: kosten.keySet()) {
+            ArrayList<Konfetti> liste = hash.get(farbe);
+            if (liste == null || liste.size() < kosten.get(farbe)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private boolean kaufErbitten(String item, Map<Farbe, Integer> kosten) {
+        if (!this.kannLeisten(kosten)) {
+            Alert zuteuer = new Alert(AlertType.INFORMATION);
+            zuteuer.setTitle("💲 Kauf fehlgeschlagen: " + item);
+            zuteuer.setHeaderText("Du hast nicht genug Konfetti gesammelt um Dir \"" + item + "\" kaufen zu können." );
+            zuteuer.setContentText("💵💴💶💷");
+            zuteuer.setResult(ButtonType.OK);
+            zuteuer.showAndWait();
+            // todo: Anzeigen wieviel es kostet und wieviel man hat
+            return false;
+        }
+        Alert frage = new Alert(AlertType.CONFIRMATION);
+        frage.setTitle("💲 Kaufbestätigung: " + item);
+        frage.setHeaderText("Möchtest Du \"" + item + "\" wirklich kaufen?");
+        String kostenString = "";
+        for(Farbe farbe: kosten.keySet()) {
+            Integer zahl = kosten.get(farbe);
+            kostenString += farbe.getAnzeigeName() + ": " + zahl + "\n";
+        }
+        frage.setContentText(kostenString.equals("") ? "🤑 Kostenlos! 🤑" : kostenString);
+        frage.getButtonTypes().clear();
+        frage.getButtonTypes().add(ButtonType.YES);
+        frage.getButtonTypes().add(ButtonType.NO);
+        Optional<ButtonType> ergebnis = frage.showAndWait();
+        if (!ergebnis.isPresent() || ergebnis.get() != ButtonType.YES) {
+            return false;
+        }
+        // TODO: Konfetti abziehen
+        return true;
     }
 
     private void weiterspielen() {

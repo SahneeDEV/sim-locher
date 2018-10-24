@@ -103,15 +103,11 @@ public class Game{
 
     private void updateLabels() {
         // Score einteilen nach Farbe
-        HashMap<Farbe, Integer> hash = new HashMap<>();
-        for(Konfetti konfetti : this.spieler.getKonfetti()) {
-            Farbe farbe = konfetti.getFarbe();
-            Integer zahl = hash.getOrDefault(farbe, 0) + 1;
-            hash.put(farbe, zahl);
-        }
+        HashMap<Farbe, ArrayList<Konfetti>> hash = this.spieler.getKonfettiSortiert();
         for(Farbe farbe : Farbe.values()) {
             Label label = this.scoreLabels.get(farbe);
-            Integer zahl = hash.getOrDefault(farbe, 0);
+            ArrayList<Konfetti> liste = hash.get(farbe);
+            int zahl = liste != null ? liste.size() : 0;
             label.setText("  " + farbe.getAnzeigeName() + ": " + zahl);
         }
         this.score.setText("Score: " + this.spieler.getKonfetti().size());
@@ -219,7 +215,7 @@ public class Game{
         gameArea.setMinHeight(((double)windowSize[1] * 0.8));
 
         //LOCHER
-        String skin = spieler.getLocher().getSkin();
+        String skin = spieler.getLocher().getSkin().getGuiBild();
 
         Image locher_skin = new Image("de/wolc/gui/images/" + skin + ".png");
         locher_new = new Rectangle();
