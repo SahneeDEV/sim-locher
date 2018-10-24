@@ -40,7 +40,6 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.paint.Color;
 import javafx.animation.AnimationTimer;
-import javafx.event.EventHandler;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
@@ -50,7 +49,7 @@ import javafx.scene.shape.Shape;
 public class Game{
 
     private final String windowTitle = "World of Locher Craft";
-    private final String backgroundImageLocation = "de/wolc/gui/images/Test_Bild.jpg";
+    private final String backgroundImageLocation = "de/wolc/gui/images/bg_base.jpg";
     private Spieler spieler;
     private Rectangle locher_new;
     private AnchorPane gameArea;   
