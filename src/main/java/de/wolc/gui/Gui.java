@@ -23,31 +23,6 @@ public class Gui {
      * Main Methode
      */
     public static void main(String[] args) {
-        dbTest();
         Application.launch(Stages.class);
-    }
-
-    private static void dbTest() {
-        Spieler spieler = new Spieler();
-        spieler.getKonfetti().add(new Konfetti(Farbe.BLAU));
-        spieler.getLocher().setFormat(A5.class);
-        PapierStapel<A5> stapel = new PapierStapel<>(A5.class);
-        stapel.ablegen(new A5());
-        stapel.ablegen(new A5());
-        spieler.getLocher().einlegen(stapel);
-
-        Datenbank db = new Datenbank();
-        try {
-            db.speichern("test", spieler);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        try {
-            Spieler load = (Spieler) db.laden("test");
-            System.out.println("DB Test fertig ... " + load);
-        } catch (ClassNotFoundException | IOException e) {
-            e.printStackTrace();
-        }
     }
 }
