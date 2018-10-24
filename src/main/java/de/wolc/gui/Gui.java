@@ -1,13 +1,6 @@
 package de.wolc.gui;
 
-import java.io.IOException;
-
 import de.wolc.db.Datenbank;
-import de.wolc.spiel.Farbe;
-import de.wolc.spiel.Spieler;
-import de.wolc.spiel.papier.A5;
-import de.wolc.spiel.papier.Konfetti;
-import de.wolc.spiel.papier.PapierStapel;
 import javafx.application.Application;
 
 /**
