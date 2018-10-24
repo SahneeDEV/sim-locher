@@ -235,6 +235,7 @@ public class ItemShopMenu {
             return false;
         }
         this.konfettiAbziehen(kosten);
+        this.scoreLabelsAktualisieren();
         return true;
     }
 

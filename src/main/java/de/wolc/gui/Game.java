@@ -60,7 +60,7 @@ public class Game{
     private static final Random RANDOM = new Random();
     
     //Game Variables
-    private double remainingTimeAvailable = 1d;
+    private double remainingTimeAvailable = 30d;
 
     //Variables for Countdown timer
     private long firstNanoTimeTimer = 0;
@@ -117,7 +117,7 @@ public class Game{
         // Sonstige Stats
         this.formatLabel.setText("Format: " + this.spieler.getLocher().getFormat().getSimpleName());
         this.papierLabel.setText("Stapel: " + this.spieler.getLocher().getStapel().groesse());
-        this.locherCooldown.setText("Cooldown: " + Math.round(spieler.getLocher().getCooldown() * 10) / 10 + "s");
+        this.locherCooldown.setText("Cooldown: " + Math.round(spieler.getLocher().getCooldown() * 10d) / 10d + "s");
         remainingTime.setText("Zeit: " + Math.round(this.remainingTimeAvailable * 10d) / 10d + "s");   
     }
     
@@ -267,36 +267,38 @@ public class Game{
         AnchorPane.setLeftAnchor(locher_new, stage.getHeight() * 0.65);
 
         //Locher_new Mouse Events
-        locher_new.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent e) {
-                //Abgleichen des gedrückten Buttons und des Cooldowns
-                if (e.getButton() == MouseButton.PRIMARY && spieler.getLocher().getCooldown() == 0) {
-                    Lochprozess prozess = spieler.getLocher().lochen();
-                    ArrayList<Konfetti> spielerKonfetti = spieler.getKonfetti();
-                    spielerKonfetti.addAll(prozess.getKonfetti());
-                }
-                //Abgleichen des gedrückten Buttons
-                if ( e.getButton() == MouseButton.SECONDARY) {
-                    PapierStapel<?> stapel = spieler.getLocher().getStapel();
-                    Papier removedPapier = stapel.entnehmen();
+        locher_new.setOnMouseClicked(e -> {
+            //Abgleichen des gedrückten Buttons und des Cooldowns
+            if (e.getButton() == MouseButton.PRIMARY && spieler.getLocher().getCooldown() == 0) {
+                Lochprozess prozess = spieler.getLocher().lochen();
+                ArrayList<Konfetti> spielerKonfetti = spieler.getKonfetti();
+                spielerKonfetti.addAll(prozess.getKonfetti());
+            }
+            //Abgleichen des gedrückten Buttons
+            if ( e.getButton() == MouseButton.SECONDARY) {
+                PapierStapel<?> stapel = spieler.getLocher().getStapel();
+                Papier removedPapier = stapel.entnehmen();
 
-                    //entfernen des Eingelgeten Bilds wenn kein Papier mehr im Locher
-                    if (removedPapier != null) {
-                        new PapierObjekt(Game.this, removedPapier);
-                        for (int i = 0; i <= locherPapier.size(); i++) {
-                            LocherPapier todeltetPapier = locherPapier.get(i);
-                            if (todeltetPapier.getPapier() == removedPapier){
-                                ArrayList<Rectangle> todeletRectangle = todeltetPapier.getPapierListe();
-                                locherPapier.remove(i);
-                                for (int a = 0; a <= todeletRectangle.size(); a++) {
-                                    Rectangle deletLocherPapier = todeletRectangle.get(a);
-                                    gameArea.getChildren().remove(deletLocherPapier);
-                                }
-                                break;
+                //entfernen des Eingelgeten Bilds wenn kein Papier mehr im Locher
+                if (removedPapier != null) {
+                    new PapierObjekt(Game.this, removedPapier);
+                    for (int i = 0; i <= locherPapier.size(); i++) {
+                        LocherPapier todeltetPapier = locherPapier.get(i);
+                        if (todeltetPapier.getPapier() == removedPapier){
+                            ArrayList<Rectangle> todeletRectangle = todeltetPapier.getPapierListe();
+                            locherPapier.remove(i);
+                            for (int a = 0; a <= todeletRectangle.size(); a++) {
+                                Rectangle deletLocherPapier = todeletRectangle.get(a);
+                                gameArea.getChildren().remove(deletLocherPapier);
                             }
+                            break;
                         }
-                    } 
+                    }
+                } 
+            } else if(e.getButton() == MouseButton.MIDDLE && e.isShiftDown()) {
+                // Shift & Middle mouse button --> Konfetti cheat
+                for(int i = 0; i < RANDOM.nextInt(100); i++) {
+                    this.spieler.getKonfetti().add(new Konfetti(Farbe.zufallsfarbe()));
                 }
             }
         });
