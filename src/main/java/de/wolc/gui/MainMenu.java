@@ -14,7 +14,6 @@ import javafx.scene.layout.VBox;
 import javafx.scene.control.Button;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.event.EventHandler;
 import javafx.event.ActionEvent;
 
 public class MainMenu{
@@ -53,52 +52,41 @@ public class MainMenu{
 
         //Button1
         final Button button_playgame = new Button("▶ Spiel starten ▶");
-            button_playgame.setMinWidth(buttonBox.getPrefWidth());
-            button_playgame.setMinHeight(buttonBox.getPrefHeight());
-            
-
-            //Set a event for the Button
-            button_playgame.addEventHandler(ActionEvent.ACTION, new EventHandler<ActionEvent>() {
-                @Override
-                public void handle(ActionEvent actionEvent){
-                    Game g = new Game();               
-                    stage.setScene(g.GameMainStage(stage));
-                    stage.setFullScreen(true);
-                }   
-    
-            });
-
+        button_playgame.setMinWidth(buttonBox.getPrefWidth());
+        button_playgame.setMinHeight(buttonBox.getPrefHeight());
+        button_playgame.addEventHandler(ActionEvent.ACTION, actionEvent -> {
+            Game g = new Game();               
+            stage.setScene(g.GameMainStage(stage));
+            stage.setFullScreen(true);
+        });
         //Button2
         final Button button_settings = new Button("⚙ Einstellungen ⚙");
-            button_settings.setMinWidth(buttonBox.getPrefWidth());
-            button_settings.setMinHeight(buttonBox.getPrefHeight());
-
-            //Set a event for the Button
-            button_settings.addEventHandler(ActionEvent.ACTION, new EventHandler<ActionEvent>() {
-                @Override
-                public void handle(ActionEvent actionEvent){
-                    SettingsMenu sm = new SettingsMenu();
-                    stage.setScene(sm.SettingsScene(stage));
-                    stage.centerOnScreen();
-                }
-    
-            });
-        //Button3
+        button_settings.setMinWidth(buttonBox.getPrefWidth());
+        button_settings.setMinHeight(buttonBox.getPrefHeight());
+        button_settings.addEventHandler(ActionEvent.ACTION, actionEvent -> {
+            SettingsMenu sm = new SettingsMenu();
+            stage.setScene(sm.SettingsScene(stage));
+            stage.centerOnScreen();
+        });
+        // Tutorial
+        Button button_dummy = new Button("⁉ Spielanleitung ⁉");
+        button_dummy.setMinWidth(buttonBox.getPrefWidth());
+        button_dummy.setMinHeight(buttonBox.getPrefHeight());
+        button_dummy.addEventHandler(ActionEvent.ACTION, actionEvent ->  {
+            Stage stageTutorial = new Stage();
+            TutorialMenu sm = new TutorialMenu();
+            stageTutorial.setScene(sm.TutorialScene(stageTutorial));
+            stageTutorial.centerOnScreen();
+            stageTutorial.show();
+        });
+        // Beenden
         Button button_exit = new Button("☠ Beenden ☠");
-            button_exit.setMinWidth(buttonBox.getPrefWidth());
-            button_exit.setMinHeight(buttonBox.getPrefHeight());
-
-            //Set a event for the Button
-            button_exit.addEventHandler(ActionEvent.ACTION, new EventHandler<ActionEvent>() {
-                @Override
-                public void handle(ActionEvent actionEvent){
-                    stage.close();
-                }
-    
-            });
+        button_exit.setMinWidth(buttonBox.getPrefWidth());
+        button_exit.setMinHeight(buttonBox.getPrefHeight());
+        button_exit.addEventHandler(ActionEvent.ACTION, actionEvent ->  stage.close());
 
         //Adding the Buttons to the VBox and the VBox to the BorderPane
-        buttonBox.getChildren().addAll(button_playgame, button_settings, button_exit);
+        buttonBox.getChildren().addAll(button_playgame, button_settings, button_dummy, button_exit);
         mainPane.setCenter(buttonBox);
 
 

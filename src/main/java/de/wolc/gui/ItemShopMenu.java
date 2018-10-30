@@ -3,19 +3,19 @@ package de.wolc.gui;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
 import javafx.scene.Node;
-import javafx.scene.layout.*;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.control.Label;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.paint.ImagePattern;
-import javafx.geometry.*;
+import javafx.geometry.Pos;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
-import javafx.event.*;
+import javafx.event.ActionEvent;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -38,13 +38,20 @@ public class ItemShopMenu {
     private Rectangle locherVorschau;
     private Label scoreLabel;
 
+    private Alert speichernFehler, ladeFehler;
+
     public Scene ItemShopStage(Stage stage) {
         this.stage = stage;
         try {
             this.spieler = (Spieler) Gui.DB.laden("spieler");
         } catch (Exception e) {
             this.spieler = new Spieler();
-            // TODO: Fehlermeldung ausgeben dass der Spieler nicht geladen werden konnte
+            ladeFehler = new Alert(AlertType.INFORMATION);
+            ladeFehler.setTitle("Kein Speicherstand gefunden!");
+            ladeFehler.setHeaderText("Es wurde kein Speicherstand gefunden oder es konnte kein Speicherstand geladen werden.");
+            ladeFehler.setContentText(e.toString());
+            ladeFehler.setResult(ButtonType.OK);
+            ladeFehler.showAndWait();
             e.printStackTrace();
         }
 
@@ -195,7 +202,12 @@ public class ItemShopMenu {
             Gui.DB.speichern("spieler", this.spieler);
         } catch (Exception e) {
             this.spieler = new Spieler();
-            // TODO: Fehlermeldung ausgeben dass der Spieler nicht gespeichert werden konnte
+            speichernFehler = new Alert(AlertType.WARNING);
+            speichernFehler.setTitle("Fehler beim Speichern deines Spielstands!");
+            speichernFehler.setHeaderText("Beim Speichern deines Spielstands ist ein Fehler aufgetreten.");
+            speichernFehler.setContentText(e.toString());
+            speichernFehler.setResult(ButtonType.OK);
+            speichernFehler.showAndWait();
             e.printStackTrace();
         }
     }
