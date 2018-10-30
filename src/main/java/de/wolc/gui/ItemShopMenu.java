@@ -38,13 +38,20 @@ public class ItemShopMenu {
     private Rectangle locherVorschau;
     private Label scoreLabel;
 
+    private Alert speichernFehler, ladeFehler;
+
     public Scene ItemShopStage(Stage stage) {
         this.stage = stage;
         try {
             this.spieler = (Spieler) Gui.DB.laden("spieler");
         } catch (Exception e) {
             this.spieler = new Spieler();
-            // TODO: Fehlermeldung ausgeben dass der Spieler nicht geladen werden konnte
+            ladeFehler = new Alert(AlertType.INFORMATION);
+            ladeFehler.setTitle("Kein Speicherstand gefunden!");
+            ladeFehler.setHeaderText("Es wurde kein Speicherstand gefunden oder es konnte kein Speicherstand geladen werden.");
+            ladeFehler.setContentText(e.toString());
+            ladeFehler.setResult(ButtonType.OK);
+            ladeFehler.showAndWait();
             e.printStackTrace();
         }
 
@@ -195,7 +202,12 @@ public class ItemShopMenu {
             Gui.DB.speichern("spieler", this.spieler);
         } catch (Exception e) {
             this.spieler = new Spieler();
-            // TODO: Fehlermeldung ausgeben dass der Spieler nicht gespeichert werden konnte
+            speichernFehler = new Alert(AlertType.WARNING);
+            speichernFehler.setTitle("Fehler beim Speichern deines Spielstands!");
+            speichernFehler.setHeaderText("Beim Speichern deines Spielstands ist ein Fehler aufgetreten.");
+            speichernFehler.setContentText(e.toString());
+            speichernFehler.setResult(ButtonType.OK);
+            speichernFehler.showAndWait();
             e.printStackTrace();
         }
     }

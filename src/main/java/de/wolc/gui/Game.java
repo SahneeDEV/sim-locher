@@ -411,7 +411,7 @@ public class Game{
 
     @SuppressWarnings("unchecked")
     public void papierAufLocherGezogen(PapierObjekt objekt) {
-        // penis 🍆
+        // penis 🍆 jh:😑
         Class<? extends Papier> papierTyp = objekt.getPapier().getClass();
         if (this.spieler.getLocher().getFormat() == papierTyp) {
             PapierStapel<?> stapel = this.spieler.getLocher().getStapel();
