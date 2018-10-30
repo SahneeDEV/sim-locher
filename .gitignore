@@ -2,6 +2,8 @@
 *.class
 # Komische BlueJ meta file
 *.ctxt
+#Photoshop originaldateien
+*.psd
 # JavaDoc
 doc/
 # Compiler meta
