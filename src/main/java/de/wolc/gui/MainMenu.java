@@ -14,7 +14,6 @@ import javafx.scene.layout.VBox;
 import javafx.scene.control.Button;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.event.EventHandler;
 import javafx.event.ActionEvent;
 
 public class MainMenu{
