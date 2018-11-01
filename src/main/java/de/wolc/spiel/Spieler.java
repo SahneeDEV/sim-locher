@@ -13,14 +13,30 @@ import de.wolc.spiel.papier.Konfetti;
  */
 public class Spieler implements Serializable {
     /** MUSS um 1 erhöht werden, wenn sich die Eigenschaften der Klasse ändern. */ 
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 2L;
     
     private SimLocher locher;
+    private SchreibtischSkin schreibtischSkin;
     private ArrayList<Konfetti> konfetti;
 
     public Spieler() {
         this.locher = new SimLocher();
+        this.schreibtischSkin = SchreibtischSkin.BACKGROUND_BASE;
         this.konfetti = new ArrayList<Konfetti>();
+    }
+
+    /**
+     * @return the schreibtischSkin
+     */
+    public SchreibtischSkin getSchreibtischSkin() {
+        return this.schreibtischSkin;
+    }
+
+    /**
+     * @param schreibtischSkin the schreibtischSkin to set
+     */
+    public void setSchreibtischSkin(SchreibtischSkin schreibtischSkin) {
+        this.schreibtischSkin = schreibtischSkin;
     }
 
     /**

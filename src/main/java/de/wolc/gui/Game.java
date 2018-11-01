@@ -49,7 +49,6 @@ import javafx.scene.shape.Shape;
 public class Game{
 
     private final String windowTitle = "World of Locher Craft";
-    private final String backgroundImageLocation = "de/wolc/gui/images/bg_base.jpg";
     private Spieler spieler;
     private Rectangle locher_new;
     private AnchorPane gameArea;   
@@ -59,7 +58,7 @@ public class Game{
     private static final Random RANDOM = new Random();
     
     //Game Variables
-    private double remainingTimeAvailable = 30d;
+    private double remainingTimeAvailable = 2d;
 
     //Variables for Countdown timer
     private long firstNanoTimeTimer = 0;
@@ -136,7 +135,7 @@ public class Game{
         //Setting Background and width and height to screen
         MultiUse mu = new MultiUse();
         int[] windowSize = mu.GetScreenSize();
-        Image backgroundImage = new Image(backgroundImageLocation, (double)windowSize[0], (double)windowSize[1], false, false);
+        Image backgroundImage = new Image("de/wolc/gui/images/" + this.spieler.getSchreibtischSkin().getGuiBild(), (double)windowSize[0], (double)windowSize[1], false, false);
 
         BackgroundImage backgroundImageGame = new BackgroundImage(backgroundImage, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,BackgroundSize.DEFAULT);
         mainPane.setBackground(new Background(backgroundImageGame));

@@ -3,6 +3,11 @@ package de.wolc.gui;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
 import javafx.scene.Node;
+import javafx.scene.layout.BackgroundImage;
+import javafx.scene.layout.BackgroundRepeat;
+import javafx.scene.layout.BackgroundPosition;
+import javafx.scene.layout.BackgroundSize;
+import javafx.scene.layout.Background;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.control.Label;
@@ -27,6 +32,7 @@ import java.util.Random;
 import de.wolc.MultiUse;
 import de.wolc.spiel.Farbe;
 import de.wolc.spiel.Preis;
+import de.wolc.spiel.SchreibtischSkin;
 import de.wolc.spiel.Spieler;
 import de.wolc.spiel.locher.LocherSkin;
 import de.wolc.spiel.locher.upgrades.LocherUpgrade;
@@ -45,6 +51,7 @@ public class ItemShopMenu {
     private HashMap<Farbe, Label> scoreLabels = new HashMap<>();
     private Rectangle locherVorschau;
     private Label scoreLabel;
+    private BorderPane pane;
 
     private Alert speichernFehler, ladeFehler;
 
@@ -63,18 +70,17 @@ public class ItemShopMenu {
             e.printStackTrace();
         }
 
-        BorderPane pane = new BorderPane();
-        pane.setMinHeight(100);
+        this.pane = new BorderPane();
+        this.pane.setMinHeight(100);
 
         // ===============================================
         //  SKIN SHOP
         // ===============================================
-        pane.setTop(this.guiButtons());
-        pane.setLeft(this.guiScoreScreen());
-        pane.setRight(this.guiUpgradeShop());
-        pane.setCenter(this.guiLocherVorschau());
-        pane.setBottom(this.guiSkinShop());
-
+        this.pane.setCenter(this.guiLocherVorschau());
+        this.pane.setTop(this.guiButtons());
+        this.pane.setLeft(this.guiScoreScreen());
+        this.pane.setRight(this.guiUpgradeShop());
+        this.pane.setBottom(this.guiSkinShop());
         MultiUse mu = new MultiUse();
         int[] windowSize = mu.GetScreenSize();
         Scene sceneMainWindow = new Scene(pane, windowSize[0] / 2d, windowSize[1] / 2d);
@@ -216,17 +222,28 @@ public class ItemShopMenu {
         grid.setAlignment(Pos.CENTER);
         ScrollPane scroll = new ScrollPane();
         scroll.setContent(grid);
-        scroll.setPrefHeight(100d);
-        LocherSkin[] skins = LocherSkin.values();
-        for(int i = 0; i< skins.length; i++) {
-            LocherSkin skin = skins[i];
-            Image locher_skin = new Image("de/wolc/gui/images/" + skin.getGuiBild());
-            Rectangle locher_new = new Rectangle();
-            locher_new.setOnMouseClicked(e -> this.skinKaufen(skin));
-            locher_new.setHeight(80d);
-            locher_new.setWidth(locher_skin.getWidth() / (locher_skin.getHeight() / 80d));
-            locher_new.setFill(new ImagePattern(locher_skin));
-            grid.add(locher_new, i, 0);
+        scroll.setPrefHeight(200d);
+        LocherSkin[] locherSkins = LocherSkin.values();
+        for(int i = 0; i< locherSkins.length; i++) {
+            LocherSkin skin = locherSkins[i];
+            Image img = new Image("de/wolc/gui/images/" + skin.getGuiBild());
+            Rectangle rect = new Rectangle();
+            rect.setOnMouseClicked(e -> this.skinKaufen(skin));
+            rect.setHeight(80d);
+            rect.setWidth(img.getWidth() / (img.getHeight() / 80d));
+            rect.setFill(new ImagePattern(img));
+            grid.add(rect, i, 0);
+        }
+        SchreibtischSkin[] schreibtischSkins = SchreibtischSkin.values();
+        for(int i = 0; i< schreibtischSkins.length; i++) {
+            SchreibtischSkin skin = schreibtischSkins[i];
+            Image img = new Image("de/wolc/gui/images/" + skin.getGuiBild());
+            Rectangle rect = new Rectangle();
+            rect.setOnMouseClicked(e -> this.schreibtischKaufen(skin));
+            rect.setHeight(80d);
+            rect.setWidth(img.getWidth() / (img.getHeight() / 80d));
+            rect.setFill(new ImagePattern(img));
+            grid.add(rect, i, 1);
         }
         return scroll;
     }
@@ -249,6 +266,17 @@ public class ItemShopMenu {
         info.showAndWait();
     }
 
+    private boolean schreibtischKaufen(SchreibtischSkin skin) {
+        if (!this.kaufErbitten(skin.getGuiName(), skin.getPreis())) {
+            System.out.println("Neuer Schreibtisch Skin Kauf abgelehnt: " + skin);
+            return false;
+        }
+        this.spieler.setSchreibtischSkin(skin);
+        System.out.println("Neuer Schreibtisch Skin gekauft: " + skin);
+        this.locherVorschauAktualisieren();
+        return true;
+    }
+
     private boolean skinKaufen(LocherSkin skin) {
         if (!this.kaufErbitten(skin.getGuiName(), skin.getPreis())) {
             System.out.println("Neuer Skin Kauf abgelehnt: " + skin);
@@ -264,6 +292,15 @@ public class ItemShopMenu {
         Image locher_skin = new Image("de/wolc/gui/images/" + this.spieler.getLocher().getSkin().getGuiBild());
         locherVorschau.setHeight(locher_skin.getHeight());
         locherVorschau.setWidth(locher_skin.getWidth());
+        
+        Image schreibtischSkin = new Image("de/wolc/gui/images/" + this.spieler.getSchreibtischSkin().getGuiBild());
+        BackgroundImage schreibtischSkinImg = new BackgroundImage(schreibtischSkin, 
+            BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, 
+            BackgroundPosition.CENTER, 
+            new BackgroundSize(BackgroundSize.AUTO, BackgroundSize.AUTO, true, true, false, true)
+        );
+        this.pane.setBackground(new Background(schreibtischSkinImg));
+
         this.locherVorschau.setFill(new ImagePattern(locher_skin));
     }
 
