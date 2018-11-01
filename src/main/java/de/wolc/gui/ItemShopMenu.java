@@ -19,17 +19,25 @@ import javafx.event.ActionEvent;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Random;
 
 import de.wolc.MultiUse;
 import de.wolc.spiel.Farbe;
+import de.wolc.spiel.Preis;
 import de.wolc.spiel.Spieler;
 import de.wolc.spiel.locher.LocherSkin;
+import de.wolc.spiel.locher.upgrades.LocherUpgrade;
+import de.wolc.spiel.locher.upgrades.UpgradeLocherAufSpeed;
+import de.wolc.spiel.locher.upgrades.UpgradePanzerStanzer;
+import de.wolc.spiel.locher.upgrades.UpgradeWeissesLoch;
 import de.wolc.spiel.papier.Konfetti;
 
 public class ItemShopMenu {
     private static final String TITLE = "World of Locher Craft - 💲 Pay2Win 💲";
+    private static final Random ZUFALL = new Random();
 
     private Spieler spieler;
     private Stage stage;
@@ -55,32 +63,21 @@ public class ItemShopMenu {
             e.printStackTrace();
         }
 
-        // BorderPane
-        BorderPane settingsPane = new BorderPane();
-        settingsPane.setMinHeight(100);
-
-        // GridPane
-        GridPane settingsGridPane = new GridPane();
-        settingsGridPane.setHgap(1);
-        settingsGridPane.setVgap(1);
-        settingsGridPane.setMinHeight(100);
-
-        // Buttons
+        BorderPane pane = new BorderPane();
+        pane.setMinHeight(100);
 
         // ===============================================
         //  SKIN SHOP
         // ===============================================
-        
-        // Get Scene size and create a new Instance
-        settingsPane.setTop(this.guiButtons());
-        settingsPane.setLeft(this.guiScoreScreen());
-        settingsPane.setRight(settingsGridPane);
-        settingsPane.setCenter(this.guiLocherVorschau());
-        settingsPane.setBottom(this.guiSkinShop());
+        pane.setTop(this.guiButtons());
+        pane.setLeft(this.guiScoreScreen());
+        pane.setRight(this.guiUpgradeShop());
+        pane.setCenter(this.guiLocherVorschau());
+        pane.setBottom(this.guiSkinShop());
 
         MultiUse mu = new MultiUse();
         int[] windowSize = mu.GetScreenSize();
-        Scene sceneMainWindow = new Scene(settingsPane, windowSize[0] / 2d, windowSize[1] / 2d);
+        Scene sceneMainWindow = new Scene(pane, windowSize[0] / 2d, windowSize[1] / 2d);
 
         // Updating the Title
         stage.setTitle(TITLE);
@@ -109,6 +106,88 @@ public class ItemShopMenu {
         });
         grid.add(backButton, 0, 0);
         grid.add(continueButton, 1, 0);
+        return grid;
+    }
+
+    private Node guiUpgradeShop() {
+        GridPane grid = new GridPane();
+        grid.setHgap(1);
+        grid.setVgap(2);
+        { // Alle Upgrades
+            Label label = new Label();
+            label.setText("⚒ Upgrades 🔨");
+            Button ansehen = new Button();
+            ansehen.setText("Ansehen");
+            grid.add(label, 0, 0);
+            grid.add(ansehen, 2, 0);
+            ansehen.setOnMouseClicked(e -> {
+                this.upgradesZeigen("Alle Upgrades", this.spieler.getLocher().getUpgrades());
+            });
+        }
+        { // PANZER STANZER
+            UpgradePanzerStanzer upgrade = new UpgradePanzerStanzer(ZUFALL.nextInt(10));
+            Label label = new Label();
+            label.setText("Panzer Stanzer");
+            Button kaufen = new Button();
+            kaufen.setText("Kaufen");
+            Button ansehen = new Button();
+            ansehen.setText("Ansehen");
+            grid.add(label, 0, 1);
+            grid.add(kaufen, 1, 1);
+            grid.add(ansehen, 2, 1);
+            ansehen.setOnMouseClicked(e -> {
+                this.upgradesZeigen(label.getText(), updatesVonTyp(UpgradePanzerStanzer.class));
+            });
+            kaufen.setOnMouseClicked(e -> {
+                if (this.kaufErbitten(upgrade.toString(), upgrade.getPreis())) {
+                    this.spieler.getLocher().getUpgrades().add(upgrade);
+                }
+            });
+        }
+        { // LOCHER AUF SPEED
+            double min = Math.round(ZUFALL.nextDouble() * 10d) / 10d;
+            double max = min + Math.round(ZUFALL.nextDouble() * 10d) / 10d;
+            UpgradeLocherAufSpeed upgrade = new UpgradeLocherAufSpeed(min, max);
+            Label label = new Label();
+            label.setText("Locher auf Speed");
+            Button kaufen = new Button();
+            kaufen.setText("Kaufen");
+            Button ansehen = new Button();
+            ansehen.setText("Ansehen");
+            grid.add(label, 0, 2);
+            grid.add(kaufen, 1, 2);
+            grid.add(ansehen, 2, 2);
+            ansehen.setOnMouseClicked(e -> {
+                this.upgradesZeigen(label.getText(), updatesVonTyp(UpgradeLocherAufSpeed.class));
+            });
+            kaufen.setOnMouseClicked(e -> {
+                if (this.kaufErbitten(upgrade.toString(), upgrade.getPreis())) {
+                    this.spieler.getLocher().getUpgrades().add(upgrade);
+                }
+            });
+        }
+        { // WEISSES LOCH
+            int min = ZUFALL.nextInt(5);
+            int max = min + ZUFALL.nextInt(5);
+            UpgradeWeissesLoch upgrade = new UpgradeWeissesLoch(min, max);
+            Label label = new Label();
+            label.setText("Weißes Loch");
+            Button kaufen = new Button();
+            kaufen.setText("Kaufen");
+            Button ansehen = new Button();
+            ansehen.setText("Ansehen");
+            grid.add(label, 0, 3);
+            grid.add(kaufen, 1, 3);
+            grid.add(ansehen, 2, 3);
+            ansehen.setOnMouseClicked(e -> {
+                this.upgradesZeigen(label.getText(), updatesVonTyp(UpgradeWeissesLoch.class));
+            });
+            kaufen.setOnMouseClicked(e -> {
+                if (this.kaufErbitten(upgrade.toString(), upgrade.getPreis())) {
+                    this.spieler.getLocher().getUpgrades().add(upgrade);
+                }
+            });
+        }
         return grid;
     }
 
@@ -152,8 +231,26 @@ public class ItemShopMenu {
         return scroll;
     }
 
+    private <T extends LocherUpgrade> void upgradesZeigen(String name, List<T> list) {
+        String upgrades;
+        if (list.size() != 0) {
+            upgrades = "";
+            for(LocherUpgrade upgrade: list) {
+                upgrades += upgrade.toString() + "\n";
+            }
+        } else {
+            upgrades = "Keine Upgrades!";
+        }
+        Alert info = new Alert(AlertType.INFORMATION);
+        info.setTitle(name);
+        info.setHeaderText("Upgrades die in diesem Spiel gekaufen wurden werden hier angezeigt.");
+        info.setContentText(upgrades);
+        info.setResult(ButtonType.OK);
+        info.showAndWait();
+    }
+
     private boolean skinKaufen(LocherSkin skin) {
-        if (!this.kaufErbitten(skin.getGuiName(), skin.getKosten())) {
+        if (!this.kaufErbitten(skin.getGuiName(), skin.getPreis())) {
             System.out.println("Neuer Skin Kauf abgelehnt: " + skin);
             return false;
         }
@@ -170,8 +267,9 @@ public class ItemShopMenu {
         this.locherVorschau.setFill(new ImagePattern(locher_skin));
     }
 
-    private void konfettiAbziehen(Map<Farbe, Integer> kosten) {
+    private void konfettiAbziehen(Preis preis) {
         HashMap<Farbe, ArrayList<Konfetti>> hash = this.spieler.getKonfettiSortiert();
+        Map<Farbe, Integer> kosten = preis.getKosten();
         for(Farbe farbe: kosten.keySet()) {
             ArrayList<Konfetti> liste = hash.get(farbe);
             for(int i = kosten.getOrDefault(farbe, 0); i > 0; i--) {
@@ -212,8 +310,13 @@ public class ItemShopMenu {
         }
     }
 
-    private boolean kannLeisten(Map<Farbe, Integer> kosten) {
+    /**
+     * Überprüft ob sich der Spieler etwas für diesen Preis leisten kann.
+     * @param preis Der Preis.
+     */
+    private boolean kannLeisten(Preis preis) {
         HashMap<Farbe, ArrayList<Konfetti>> hash = this.spieler.getKonfettiSortiert();
+        Map<Farbe, Integer> kosten = preis.getKosten();
         for(Farbe farbe: kosten.keySet()) {
             ArrayList<Konfetti> liste = hash.get(farbe);
             if (liste == null || liste.size() < kosten.get(farbe)) {
@@ -223,12 +326,12 @@ public class ItemShopMenu {
         return true;
     }
 
-    private boolean kaufErbitten(String item, Map<Farbe, Integer> kosten) {
+    private boolean kaufErbitten(String item, Preis kosten) {
         if (!this.kannLeisten(kosten)) {
             Alert zuteuer = new Alert(AlertType.INFORMATION);
             zuteuer.setTitle("💲 Kauf fehlgeschlagen: " + item);
             zuteuer.setHeaderText("Du hast nicht genug Konfetti gesammelt um Dir \"" + item + "\" kaufen zu können." );
-            zuteuer.setContentText("Kosten:\n" + kostenToString(kosten));
+            zuteuer.setContentText("Kosten:\n" + kosten.toString());
             zuteuer.setResult(ButtonType.OK);
             zuteuer.showAndWait();
             // todo: Anzeigen wieviel es kostet und wieviel man hat
@@ -237,8 +340,7 @@ public class ItemShopMenu {
         Alert frage = new Alert(AlertType.CONFIRMATION);
         frage.setTitle("💲 Kaufbestätigung: " + item);
         frage.setHeaderText("Möchtest Du \"" + item + "\" wirklich kaufen?");
-        String kostenString = kostenToString(kosten);
-        frage.setContentText(kostenString.equals("") ? "🤑 Kostenlos! 🤑" : kostenString);
+        frage.setContentText(kosten.toString());
         frage.getButtonTypes().clear();
         frage.getButtonTypes().add(ButtonType.YES);
         frage.getButtonTypes().add(ButtonType.NO);
@@ -251,13 +353,19 @@ public class ItemShopMenu {
         return true;
     }
 
-    private String kostenToString(Map<Farbe, Integer> kosten) {
-        String kostenString = "";
-        for(Farbe farbe: kosten.keySet()) {
-            Integer zahl = kosten.get(farbe);
-            kostenString += farbe.getAnzeigeName() + ": " + zahl + "\n";
+    /**
+     * Gibt alle Upgrades dieses Upgrade Types zurück.
+     * @param typ Der Upgrade Typ (z.B. PanzerAufSpeed.class)
+     * @return Eine Liste mit allen Upgrades.
+     */
+    private <T extends LocherUpgrade> List<T> updatesVonTyp(Class<T> typ) {
+        ArrayList<T> list = new ArrayList<T>();
+        for(LocherUpgrade upgrade: this.spieler.getLocher().getUpgrades()) {
+            if (typ.isInstance(upgrade)) {
+                list.add(typ.cast(upgrade));
+            }
         }
-        return kostenString;
+        return list;
     }
 
     private void weiterspielen() {

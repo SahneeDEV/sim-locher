@@ -3,6 +3,7 @@ package de.wolc.spiel.locher.upgrades;
 import java.util.Random;
 
 import de.wolc.spiel.Farbe;
+import de.wolc.spiel.Preis;
 import de.wolc.spiel.locher.Lochprozess;
 import de.wolc.spiel.locher.SimLocher;
 import de.wolc.spiel.papier.Konfetti;
@@ -14,12 +15,14 @@ import de.wolc.spiel.papier.Konfetti;
 public class UpgradeWeissesLoch extends LocherUpgrade {
     /** MUSS um 1 erhöht werden, wenn sich die Eigenschaften der Klasse ändern. */ 
     private static final long serialVersionUID = 1L;
+    private static final Preis PREIS = new Preis(Farbe.WEISS, 20, Farbe.GRUEN, 15, Farbe.PINK, 10, Farbe.BLAU, 5);
     
     private static final Random ZUFALL = new Random();
 
     private int min, max;
 
     public UpgradeWeissesLoch(int min, int max) {
+        super("Weißes Loch", PREIS);
         this.min = min;
         this.max = max;
     }
@@ -53,5 +56,10 @@ public class UpgradeWeissesLoch extends LocherUpgrade {
             Konfetti konfetti = new Konfetti(Farbe.zufallsfarbe());
             prozess.getKonfetti().add(konfetti);
         }
+    }
+
+    @Override
+    public String toString() {
+        return this.getGuiName() + ": " + min + " - " + max + " zusätzliche Konfetti bei Lochen";
     }
 }

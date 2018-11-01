@@ -1,5 +1,7 @@
 package de.wolc.spiel.locher.upgrades;
 
+import de.wolc.spiel.Farbe;
+import de.wolc.spiel.Preis;
 import de.wolc.spiel.locher.SimLocher;
 
 /**
@@ -8,10 +10,12 @@ import de.wolc.spiel.locher.SimLocher;
 public class UpgradePanzerStanzer extends LocherUpgrade {
     /** MUSS um 1 erhöht werden, wenn sich die Eigenschaften der Klasse ändern. */ 
     private static final long serialVersionUID = 1L;
+    private static final Preis PREIS = new Preis(Farbe.GRUEN, 20, Farbe.ROT, 10);
     
     private int staerke;
 
     public UpgradePanzerStanzer(int staerke) {
+        super("Panzer Stanzer", PREIS);
         this.staerke = staerke;
     }
 
@@ -26,5 +30,10 @@ public class UpgradePanzerStanzer extends LocherUpgrade {
     @Override
     public int upgradeStaerke(SimLocher locher, int staerke) {
         return staerke + this.staerke;
+    }
+
+    @Override
+    public String toString() {
+        return this.getGuiName() + ": +" + staerke + " maximale Papierstapelgröße";
     }
 }

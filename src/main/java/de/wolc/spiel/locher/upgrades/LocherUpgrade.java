@@ -2,6 +2,7 @@ package de.wolc.spiel.locher.upgrades;
 
 import java.io.Serializable;
 
+import de.wolc.spiel.Preis;
 import de.wolc.spiel.locher.Lochprozess;
 import de.wolc.spiel.locher.SimLocher;
 
@@ -11,7 +12,30 @@ import de.wolc.spiel.locher.SimLocher;
  */
 public abstract class LocherUpgrade implements Serializable {
     /** MUSS um 1 erhöht werden, wenn sich die Eigenschaften der Klasse ändern. */ 
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 2L;
+
+    private Preis preis;
+    private String name;
+
+    protected LocherUpgrade(String name, Preis preis) {
+        this.name = name;
+        this.preis = preis;
+    }
+
+    /**
+     * @return the name
+     */
+    public String getGuiName() {
+        return name;
+    }
+
+    /**
+     * Gibt die Kosten dieses Upgrades zurück.
+     * @return Die Kosten.
+     */
+    public Preis getPreis() {
+        return this.preis;
+    }
 
     /**
      * Modifiziert die Stanzer des Lochers.
@@ -42,4 +66,6 @@ public abstract class LocherUpgrade implements Serializable {
     public void upgradeLochprozess(SimLocher locher, Lochprozess prozess) {
         
     }
+
+    public abstract String toString();
 }
