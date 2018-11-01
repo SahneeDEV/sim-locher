@@ -4,19 +4,23 @@ import javafx.stage.Stage;
 import javafx.scene.Scene;
 import javafx.scene.Node;
 import javafx.scene.layout.BackgroundImage;
+import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BackgroundPosition;
 import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.CornerRadii;
 import javafx.scene.control.Label;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.geometry.Pos;
+import javafx.geometry.Insets;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
@@ -29,7 +33,6 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Random;
 
-import de.wolc.MultiUse;
 import de.wolc.spiel.Farbe;
 import de.wolc.spiel.Preis;
 import de.wolc.spiel.SchreibtischSkin;
@@ -57,6 +60,7 @@ public class ItemShopMenu {
 
     public Scene ItemShopStage(Stage stage) {
         this.stage = stage;
+
         try {
             this.spieler = (Spieler) Gui.DB.laden("spieler");
         } catch (Exception e) {
@@ -78,12 +82,13 @@ public class ItemShopMenu {
         // ===============================================
         this.pane.setCenter(this.guiLocherVorschau());
         this.pane.setTop(this.guiButtons());
-        this.pane.setLeft(this.guiScoreScreen());
-        this.pane.setRight(this.guiUpgradeShop());
+        this.pane.setLeft(this.guiUpgradeShop());
+        this.pane.setRight(this.guiScoreScreen());
         this.pane.setBottom(this.guiSkinShop());
-        MultiUse mu = new MultiUse();
-        int[] windowSize = mu.GetScreenSize();
-        Scene sceneMainWindow = new Scene(pane, windowSize[0] / 2d, windowSize[1] / 2d);
+        //MultiUse mu = new MultiUse();
+        //int[] windowSize = mu.GetScreenSize();
+        //Scene sceneMainWindow = new Scene(pane, windowSize[0] / 2d, windowSize[1] / 2d);
+        Scene sceneMainWindow = new Scene(pane);
 
         // Updating the Title
         stage.setTitle(TITLE);
@@ -101,6 +106,7 @@ public class ItemShopMenu {
 
     private Node guiButtons() {
         GridPane grid = new GridPane();
+        grid.setBackground(new Background(new BackgroundFill(Color.DARKGRAY, CornerRadii.EMPTY, Insets.EMPTY)));
         grid.setVgap(1);
         Button backButton = new Button("◀ Zur\u00fcck ◀");
         backButton.addEventHandler(ActionEvent.ACTION, (ActionEvent actionEvent) -> {
@@ -194,15 +200,17 @@ public class ItemShopMenu {
                 }
             });
         }
-        return grid;
+        ScrollPane scroll = new ScrollPane();
+        scroll.setContent(grid);
+        return scroll;
     }
 
     private Node guiScoreScreen() {
         GridPane grid = new GridPane();
         grid.setHgap(1);
-        ScrollPane scroll = new ScrollPane();
-        scroll.setContent(grid);
-        scroll.setPrefWidth(100d);
+        //ScrollPane scroll = new ScrollPane();
+        //scroll.setContent(grid);
+        //scroll.setPrefWidth(100d);
         Farbe[] farben = Farbe.values();
         this.scoreLabel = new Label();
         for(int i = 0; i < farben.length; i++) {
@@ -213,7 +221,7 @@ public class ItemShopMenu {
             grid.add(label, 0, i + 1);
         }
         grid.add(this.scoreLabel, 0, 0);
-        return scroll;
+        return grid;
     }
 
     private Node guiSkinShop() {

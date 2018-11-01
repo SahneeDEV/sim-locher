@@ -130,7 +130,8 @@ public class Game{
 
         //Set Fullscreen
         //TODO: wenn man den Fullscreen verlässt skalieren die Nodes nicht mehr nach bzw. ändern Ihre Position nicht erneut
-        stage.setFullScreen(true);
+        this.stage.setFullScreen(true);
+        this.stage.setFullScreenExitHint("");
 
         //Setting Background and width and height to screen
         MultiUse mu = new MultiUse();
@@ -370,7 +371,8 @@ public class Game{
             e.printStackTrace();
 		}
         ItemShopMenu menu = new ItemShopMenu();
-        stage.setScene(menu.ItemShopStage(this.stage));
+        this.stage.setScene(menu.ItemShopStage(this.stage));
+        this.stage.setFullScreen(true);
     }
 
     public void spawnPapier() {
