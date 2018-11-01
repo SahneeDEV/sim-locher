@@ -30,6 +30,15 @@ public class PapierStapel<TPapier extends Papier> implements Serializable
     }
 
     /**
+     * Überprüft ob das gegegene Papier in diesem Papier Staple abgelegt worden ist und immnernoch darin vorhanden ist.
+     * @param papier Der Papier.
+     * @return true wenn vorhanden, sonst false.
+     */
+    public boolean istVorhanden(TPapier papier) {
+        return this.papiere.contains(papier);
+    }
+
+    /**
      * Legt ein Blatt Papier auf dem Stapel ab. Wenn das Papier breits auf dem Stapel ist, wird es nicht abgelegt.
      * @exception IllegalArgumentException Kann keine nicht existierenden Papiere auf den Stapel legen.
      * @param papier Das Papier, welches auf dem Stapel abgelegt werden soll.
