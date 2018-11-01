@@ -38,7 +38,6 @@ import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
-import javafx.scene.control.ContentDisplay;
 import javafx.scene.paint.Color;
 import javafx.animation.AnimationTimer;
 import javafx.scene.paint.ImagePattern;
@@ -47,7 +46,6 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 import javafx.scene.text.Font;
-import javafx.scene.text.TextAlignment;
 
 public class Game{
 
@@ -289,6 +287,9 @@ public class Game{
                     Lochprozess prozess = spieler.getLocher().lochen();
                     ArrayList<Konfetti> spielerKonfetti = spieler.getKonfetti();
                     spielerKonfetti.addAll(prozess.getKonfetti());
+                    if(prozess.getWarZuGross()) {
+                        this.benachrichtigungZeigen("Es sind zu viele Papiere eingelegt - [RECHTSKLICK] auf Locher zum entfernen!");
+                    }
                 } else {
                     this.benachrichtigungZeigen("Noch " + (Math.round(cooldown * 10d) / 10d) + "s auf Cooldown!");
                 }
@@ -348,7 +349,7 @@ public class Game{
 
                 if (timeToNextPapier <= 0) {
                     spawnPapier();
-                    timeToNextPapier = 0.75d + (3d - 0.75d) * RANDOM.nextDouble();
+                    timeToNextPapier = 0.5d + 2.5d * RANDOM.nextDouble();
                 }
 
                 //Check for end of Time
