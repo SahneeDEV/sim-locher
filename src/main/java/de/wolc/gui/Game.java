@@ -293,7 +293,7 @@ public class Game{
                         LocherPapierObjekt toCheckPapiere = locherPapier.get(i);
                         Papier toCheckPapier = toCheckPapiere.getPapier();
     
-                        PapierStapel currentStapel = spieler.getLocher().getStapel();
+                        PapierStapel<?> currentStapel = spieler.getLocher().getStapel();
                         if (!currentStapel.istVorhanden(toCheckPapier)) {
                             toCheckPapiere.zerstoeren();
                             locherPapier.remove(i);

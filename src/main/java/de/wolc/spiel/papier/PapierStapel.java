@@ -34,7 +34,7 @@ public class PapierStapel<TPapier extends Papier> implements Serializable
      * @param papier Der Papier.
      * @return true wenn vorhanden, sonst false.
      */
-    public boolean istVorhanden(TPapier papier) {
+    public boolean istVorhanden(Papier papier) {
         return this.papiere.contains(papier);
     }
 

@@ -1,6 +1,5 @@
 package de.wolc.gui;
 
-import de.wolc.spiel.Spieler;
 import de.wolc.spiel.papier.A4;
 import de.wolc.spiel.papier.A5;
 import de.wolc.spiel.papier.A6;
