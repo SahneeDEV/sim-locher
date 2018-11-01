@@ -281,35 +281,30 @@ public class Game{
         //Locher_new Mouse Events
         locher_new.setOnMouseClicked(e -> {
             //Abgleichen des gedrückten Buttons und des Cooldowns
-            if (e.getButton() == MouseButton.PRIMARY && spieler.getLocher().getCooldown() == 0) {
-                Lochprozess prozess = spieler.getLocher().lochen();
-                ArrayList<Konfetti> spielerKonfetti = spieler.getKonfetti();
-                spielerKonfetti.addAll(prozess.getKonfetti());
-                
-                int locherPapierSize = locherPapier.size() - 1;
-                for (int i = 0; i <= locherPapierSize; i++) {
-                    LocherPapier toCheckPapiere = locherPapier.get(i);
-                    Papier toCheckPapier = toCheckPapiere.getPapier();
-
-                    PapierStapel currentStapel = spieler.getLocher().getStapel();
-                    if (!currentStapel.istVorhanden(toCheckPapier)) {
-                        ArrayList<Rectangle> todeletRectangle = toCheckPapiere.getPapierListe();
-                        locherPapier.remove(i);
-                        for (int a = 0; a <= todeletRectangle.size(); a++) {
-                            Rectangle deletLocherPapier = todeletRectangle.get(a);
-                            gameArea.getChildren().remove(deletLocherPapier);
-                        }
-                        locherPapierSize--;
-                    }
-                }
-            }
-
             if (e.getButton() == MouseButton.PRIMARY) {
                 double cooldown = spieler.getLocher().getCooldown();
                 if (cooldown == 0) {
                     Lochprozess prozess = spieler.getLocher().lochen();
                     ArrayList<Konfetti> spielerKonfetti = spieler.getKonfetti();
                     spielerKonfetti.addAll(prozess.getKonfetti());
+                    
+                    int locherPapierSize = locherPapier.size() - 1;
+                    for (int i = 0; i <= locherPapierSize; i++) {
+                        LocherPapier toCheckPapiere = locherPapier.get(i);
+                        Papier toCheckPapier = toCheckPapiere.getPapier();
+    
+                        PapierStapel currentStapel = spieler.getLocher().getStapel();
+                        if (!currentStapel.istVorhanden(toCheckPapier)) {
+                            ArrayList<Rectangle> todeletRectangle = toCheckPapiere.getPapierListe();
+                            locherPapier.remove(i);
+                            for (int a = 0; a <= todeletRectangle.size(); a++) {
+                                Rectangle deletLocherPapier = todeletRectangle.get(a);
+                                gameArea.getChildren().remove(deletLocherPapier);
+                            }
+                            locherPapierSize--;
+                        }
+                    }
+
                     if(prozess.getWarZuGross()) {
                         this.benachrichtigungZeigen("Es sind zu viele Papiere eingelegt - [RECHTSKLICK] auf Locher zum entfernen!");
                     }
