@@ -295,12 +295,9 @@ public class Game{
     
                         PapierStapel currentStapel = spieler.getLocher().getStapel();
                         if (!currentStapel.istVorhanden(toCheckPapier)) {
-                            ArrayList<Rectangle> todeletRectangle = toCheckPapiere.getPapierListe();
+                            Rectangle todeletRectangle = toCheckPapiere.getPapierListe();
+                            gameArea.getChildren().remove(todeletRectangle);
                             locherPapier.remove(i);
-                            for (int a = 0; a <= todeletRectangle.size(); a++) {
-                                Rectangle deletLocherPapier = todeletRectangle.get(a);
-                                gameArea.getChildren().remove(deletLocherPapier);
-                            }
                             locherPapierSize--;
                         }
                     }
@@ -323,12 +320,9 @@ public class Game{
                     for (int i = 0; i <= locherPapier.size(); i++) {
                         LocherPapier todeltetPapier = locherPapier.get(i);
                         if (todeltetPapier.getPapier() == removedPapier){
-                            ArrayList<Rectangle> todeletRectangle = todeltetPapier.getPapierListe();
+                            Rectangle todeletRectangle = todeltetPapier.getPapierListe();
                             locherPapier.remove(i);
-                            for (int a = 0; a <= todeletRectangle.size(); a++) {
-                                Rectangle deletLocherPapier = todeletRectangle.get(a);
-                                gameArea.getChildren().remove(deletLocherPapier);
-                            }
+                            gameArea.getChildren().remove(todeletRectangle);
                             break;
                         }
                     }
@@ -511,16 +505,12 @@ public class Game{
     /**
      * Entfernt das aktuell in den Locher eingelegte Papier
      */
-    private void locherPapierEntfernen(){
+    private void locherPapierEntfernen() {
         //Entfernen aller Papiere im Locher
         for(int i = 0; i < locherPapier.size(); i++){
             LocherPapier papierEntfernen = locherPapier.get(i);
-            ArrayList<Rectangle> papiereInDerListe = papierEntfernen.getPapierListe();
-            for(int g = 0; g < papiereInDerListe.size(); g++){
-                Rectangle zuEntfernendesPapier = papiereInDerListe.get(g);
-                this.gameArea.getChildren().remove(zuEntfernendesPapier);
-            }
-            papiereInDerListe.clear();
+            Rectangle papiereInDerListe = papierEntfernen.getPapierListe();
+            this.gameArea.getChildren().remove(papiereInDerListe);
         }
         locherPapier.clear();
     }

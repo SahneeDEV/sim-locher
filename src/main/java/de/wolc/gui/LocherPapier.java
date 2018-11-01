@@ -29,7 +29,6 @@ public class LocherPapier{
     private Rectangle locherPapier;
     private final Game game;
     private Spieler spieler;
-    private ArrayList<Rectangle> locherPapiere = new ArrayList<Rectangle>();
     private Class<? extends Papier> aktuellesFormat;
     private Alert spielerAlert;
     private Papier papier;
@@ -89,22 +88,21 @@ public class LocherPapier{
         else{
             this.spielerAlert = new Alert(AlertType.WARNING);
             this.spielerAlert.setTitle("Fehler beim zuweisen des Papieres in den Locher!");
-            this.spielerAlert.setHeaderText("Das Papier, dass du gerade in den Locher stecken wolltest kann nicht hinzugefügt werden.");
+            this.spielerAlert.setHeaderText("Das Papier, das du gerade in den Locher stecken wolltest kann nicht hinzugefügt werden.");
             this.spielerAlert.setResult(ButtonType.OK);
             this.spielerAlert.showAndWait();
         }
 
         //Das eben erzeugte Blatt dem 'game' hinzufügen
         this.game.getArea().getChildren().add(this.locherPapier);
-        this.locherPapiere.add(this.locherPapier);
     }
 
     /**
      * Gibt das Array mit den Papieren zurück
      * @return Die ArrayList<Rectangle>
      */
-    public ArrayList<Rectangle> getPapierListe(){
-        return this.locherPapiere;
+    public Rectangle getPapierListe(){
+        return this.locherPapier;
     }
 
     public Papier getPapier () {
