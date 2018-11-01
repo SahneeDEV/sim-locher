@@ -10,11 +10,10 @@ import javafx.scene.image.Image;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
 import javafx.geometry.Bounds;
-import javafx.scene.paint.Color;
 import javafx.scene.effect.Light;
 import javafx.scene.effect.Lighting;
 
-public class LocherPapierObjekt{
+public class LocherPapierObjekt {
 
     private static final Image BILD_A4 = new Image("de/wolc/gui/images/paper_cutout_a4.png");
     private static final Image BILD_A5 = new Image("de/wolc/gui/images/paper_cutout_a5.png");
@@ -23,21 +22,35 @@ public class LocherPapierObjekt{
     //Klassenvariablen
     private Rectangle locherPapier;
     private final Game game;
-    private Spieler spieler;
-    private Class<? extends Papier> aktuellesFormat;
     private Papier papier;
-    private Color currentColor;
 
-    public LocherPapierObjekt(Game game, int stapelGroesse, Rectangle locher, Papier papier){
+    public LocherPapierObjekt(Game game, int stapelGroesse, Rectangle locher, Papier papier) {
         //Zuweisung der Klassenvariabeln
         this.game = game;
         this.papier = papier;
-        this.currentColor = papier.getFarbe().getGuiFarbe();
-        this.spieler = game.getCurrentSpieler();
-        this.aktuellesFormat = this.spieler.getLocher().getFormat();
 
         //Hole die position des lochers
         Bounds locherPosition = locher.localToScene(locher.getBoundsInLocal());
+
+        // Werte für aktuelles Format bestimmen (Fehler werfen wenn ungültig)
+        Image bild;
+        double x, y;
+        Class<? extends Papier> aktuellesFormat = papier.getClass();
+        if (aktuellesFormat == A4.class) {
+            bild = BILD_A4;
+            x = locherPosition.getMinX() - 199  - (stapelGroesse * 0.15);
+            y = locherPosition.getMinY() + 249  - (stapelGroesse * 0.15);
+        } else if (aktuellesFormat == A5.class) {
+            bild = BILD_A5;
+            x = locherPosition.getMinX() - 100  - (stapelGroesse * 0.15);
+            y = locherPosition.getMinY() + 290  - (stapelGroesse * 0.15);
+        } else if (aktuellesFormat == A6.class) {
+            bild = BILD_A6;
+            x = locherPosition.getMinX() - 23.5  - (stapelGroesse * 0.15);
+            y = locherPosition.getMinY() + 309.5  - (stapelGroesse * 0.15);
+        } else {
+            throw new IllegalStateException("Ungültiges Papierformat: " + aktuellesFormat);
+        }
 
         //Effekt für die Farbe des Papieres setzen
         Lighting lighting = new Lighting();
@@ -45,51 +58,24 @@ public class LocherPapierObjekt{
         lighting.setSpecularConstant(0.0);
         lighting.setSpecularExponent(0.0);
         lighting.setSurfaceScale(0.0);
-        lighting.setLight(new Light.Distant(45, 45, currentColor));
+        lighting.setLight(new Light.Distant(45, 45, papier.getFarbe().getGuiFarbe()));
 
         //Neues papier erzeugen
         this.locherPapier = new Rectangle();
         this.locherPapier.toFront();
         this.locherPapier.setEffect(lighting);
-
-        //A4 Papier
-        if(this.aktuellesFormat == A4.class){
-            //Neues A4 Blatt erzeugen
-            this.locherPapier.setFill(new ImagePattern(BILD_A4));
-            this.locherPapier.setWidth(BILD_A4.getWidth());
-            this.locherPapier.setHeight(BILD_A4.getHeight());
-            this.locherPapier.setTranslateX(locherPosition.getMinX() - 199  - (stapelGroesse * 0.15));
-            this.locherPapier.setTranslateY(locherPosition.getMinY() + 249  - (stapelGroesse * 0.15));
-        }
-        //A5 Papier
-        else if(this.aktuellesFormat == A5.class){
-            //Neues A5 Blatt erzeugen
-            this.locherPapier.setFill(new ImagePattern(BILD_A5));
-            this.locherPapier.setWidth(BILD_A5.getWidth());
-            this.locherPapier.setHeight(BILD_A5.getHeight());
-            this.locherPapier.setTranslateX(locherPosition.getMinX() - 100  - (stapelGroesse * 0.15));
-            this.locherPapier.setTranslateY(locherPosition.getMinY() + 290  - (stapelGroesse * 0.15));
-        }
-        //A6 Papier
-        else if(this.aktuellesFormat == A6.class){
-            //Neues A6 Blatt erzeugen
-            this.locherPapier.setFill(new ImagePattern(BILD_A6));
-            this.locherPapier.setWidth(BILD_A6.getWidth());
-            this.locherPapier.setHeight(BILD_A6.getHeight());
-            this.locherPapier.setTranslateX(locherPosition.getMinX() - 23.5  - (stapelGroesse * 0.15));
-            this.locherPapier.setTranslateY(locherPosition.getMinY() + 309.5  - (stapelGroesse * 0.15));
-        }
+        this.locherPapier.setFill(new ImagePattern(bild));
+        this.locherPapier.setWidth(bild.getWidth());
+        this.locherPapier.setHeight(bild.getHeight());
+        this.locherPapier.setTranslateX(x);
+        this.locherPapier.setTranslateY(y);
 
         //Das eben erzeugte Blatt dem 'game' hinzufügen
         this.game.getArea().getChildren().add(this.locherPapier);
     }
 
-    /**
-     * Gibt das Array mit den Papieren zurück
-     * @return Die ArrayList<Rectangle>
-     */
-    public Rectangle getPapierListe(){
-        return this.locherPapier;
+    public void zerstoeren() {
+        this.game.getArea().getChildren().remove(this.locherPapier);
     }
 
     public Papier getPapier () {
