@@ -87,6 +87,7 @@ public class PapierStapel<TPapier extends Papier> implements Serializable
             // wird es aus dem Stapel entnommen.
             if (!papier.existiert()) {
                 this.papiere.remove(papier);
+                i--;
             }
         }
     }
