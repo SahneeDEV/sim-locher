@@ -15,6 +15,7 @@ public class Lochprozess
     private final SimLocher locher;
     private final ArrayList<Konfetti> konfetti;
     private double cooldown;
+    private boolean warZuGross;
 
     public Lochprozess(SimLocher locher) {
         this.konfetti = new ArrayList<Konfetti>();
@@ -47,10 +48,26 @@ public class Lochprozess
     }
 
     /**
+     * Gibt zurück, ob der Stapel zu groß war um gelocht zu werden.
+     * @return true wenn der Stapel zu groß, sonst false.
+     */
+    public boolean getWarZuGross() {
+        return this.warZuGross;
+    }
+
+    /**
      * Setzt den Cooldown des Lochers nach dem Lochvorgang. Werte unter 0 werden durch 0 ausgetauscht.
      * @param cooldown Der Cooldown in Sekunden.
      */
     public void setCooldown(double cooldown) {
         this.cooldown = Math.max(cooldown, 0);
+    }
+
+    /**
+     * Setzt ob der Stapel zu groß war um gelocht zu werden.
+     * @param warZuGross true wenn der Stapel zu groß, sonst false.
+     */
+    public void setWarZuGross(boolean warZuGross) {
+        this.warZuGross = warZuGross;
     }
 }

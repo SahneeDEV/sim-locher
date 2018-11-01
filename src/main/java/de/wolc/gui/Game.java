@@ -45,6 +45,7 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
+import javafx.scene.text.Font;
 
 public class Game{
 
@@ -56,9 +57,11 @@ public class Game{
     private AnimationTimer timer;
     
     private static final Random RANDOM = new Random();
+    private static final double BENACHRICHTUNG_ANZEIGEZEIT = 3.5d;
     
     //Game Variables
     private double remainingTimeAvailable = 30d;
+    private double benachrichtigungenZeit = 0d;
 
     //Variables for Countdown timer
     private long firstNanoTimeTimer = 0;
@@ -70,7 +73,7 @@ public class Game{
     private PapierStapel<A6> stapel_A6;
 
     //Diverse Nodes
-    private Label score, remainingTime, formatLabel, papierLabel, locherCooldown;
+    private Label score, remainingTime, formatLabel, papierLabel, locherCooldown, benachrichtigungen;
     private ToggleButton formatA4Button, formatA5Button, formatA6Button;
     private ToggleGroup formatGroup;
     private HashMap<Farbe, Label> scoreLabels = new HashMap<>();
@@ -264,9 +267,16 @@ public class Game{
         locher_new.setWidth(locher_skin.getWidth());
         locher_new.setFill(new ImagePattern(locher_skin));
 
-        //Setting the default Anchor points for the paper
         AnchorPane.setBottomAnchor(locher_new, stage.getWidth() * 0.20);
         AnchorPane.setLeftAnchor(locher_new, stage.getHeight() * 0.65);
+
+        // Benachrichtigungen
+        benachrichtigungen = new Label();
+        benachrichtigungen.setTextFill(Color.RED);
+        benachrichtigungen.setFont(new Font(20));
+
+        AnchorPane.setLeftAnchor(benachrichtigungen, stage.getWidth() * 0.50);
+        AnchorPane.setBottomAnchor(benachrichtigungen, stage.getHeight() * 0.25);
 
         //Locher_new Mouse Events
         locher_new.setOnMouseClicked(e -> {
@@ -275,6 +285,37 @@ public class Game{
                 Lochprozess prozess = spieler.getLocher().lochen();
                 ArrayList<Konfetti> spielerKonfetti = spieler.getKonfetti();
                 spielerKonfetti.addAll(prozess.getKonfetti());
+                
+                int locherPapierSize = locherPapier.size() - 1;
+                for (int i = 0; i <= locherPapierSize; i++) {
+                    LocherPapier toCheckPapiere = locherPapier.get(i);
+                    Papier toCheckPapier = toCheckPapiere.getPapier();
+
+                    PapierStapel currentStapel = spieler.getLocher().getStapel();
+                    if (!currentStapel.istVorhanden(toCheckPapier)) {
+                        ArrayList<Rectangle> todeletRectangle = toCheckPapiere.getPapierListe();
+                        locherPapier.remove(i);
+                        for (int a = 0; a <= todeletRectangle.size(); a++) {
+                            Rectangle deletLocherPapier = todeletRectangle.get(a);
+                            gameArea.getChildren().remove(deletLocherPapier);
+                        }
+                        locherPapierSize--;
+                    }
+                }
+            }
+
+            if (e.getButton() == MouseButton.PRIMARY) {
+                double cooldown = spieler.getLocher().getCooldown();
+                if (cooldown == 0) {
+                    Lochprozess prozess = spieler.getLocher().lochen();
+                    ArrayList<Konfetti> spielerKonfetti = spieler.getKonfetti();
+                    spielerKonfetti.addAll(prozess.getKonfetti());
+                    if(prozess.getWarZuGross()) {
+                        this.benachrichtigungZeigen("Es sind zu viele Papiere eingelegt - [RECHTSKLICK] auf Locher zum entfernen!");
+                    }
+                } else {
+                    this.benachrichtigungZeigen("Noch " + (Math.round(cooldown * 10d) / 10d) + "s auf Cooldown!");
+                }
             }
             //Abgleichen des gedrückten Buttons
             if ( e.getButton() == MouseButton.SECONDARY) {
@@ -296,7 +337,7 @@ public class Game{
                             break;
                         }
                     }
-                } 
+                }
             } else if(e.getButton() == MouseButton.MIDDLE && e.isShiftDown()) {
                 // Shift & Middle mouse button --> Konfetti cheat
                 for(int i = 0; i < RANDOM.nextInt(100); i++) {
@@ -322,10 +363,16 @@ public class Game{
 
                 timeToNextPapier -= elapsedSeconds;
                 remainingTimeAvailable -= elapsedSeconds;
+                benachrichtigungenZeit -= elapsedSeconds;
+
+                if (benachrichtigungenZeit <= 0) {
+                    Game.this.benachrichtigungen.setText("");
+                    benachrichtigungenZeit = 0;
+                }
 
                 if (timeToNextPapier <= 0) {
                     spawnPapier();
-                    timeToNextPapier = 0.5d + (2d - 0.5d) * RANDOM.nextDouble();
+                    timeToNextPapier = 0.5d + 2.5d * RANDOM.nextDouble();
                 }
 
                 //Check for end of Time
@@ -344,7 +391,7 @@ public class Game{
 
 
         //Add Nodes to the AnchorPane
-        gameArea.getChildren().add(locher_new);
+        gameArea.getChildren().addAll(locher_new, benachrichtigungen);
 
         //Add the elements to the Main Pane
         mainPane.setCenter(gameArea);
@@ -383,6 +430,16 @@ public class Game{
         else { papier = new A6(); }
         papier.setFarbe(Farbe.zufallsfarbe());
         new PapierObjekt(Game.this, papier);
+    }
+
+    /**
+     * Zeigt die gegebene Benachrichtung an. Dabei wird die vorherige Benachrichtigung überschrieben falls noch eine 
+     * andere aktiv ist.
+     * @param benachrichtigung Die Benachrichtigung welche anzeigt werden soll.
+     */
+    private void benachrichtigungZeigen(String benachrichtigung) {
+        this.benachrichtigungenZeit = BENACHRICHTUNG_ANZEIGEZEIT;
+        this.benachrichtigungen.setText(benachrichtigung);
     }
 
     /**

@@ -156,8 +156,11 @@ public class SimLocher implements Serializable
         }
         Lochprozess vorgang = new Lochprozess(this);
         // Kann nur lochen wenn wir einen Stapel haben und der Locher stark genug für diesen ist.
-        if(this.stapel != null && this.stapel.groesse() <= this.getStaerke()) {
-            this.stapel.gelocht(vorgang);
+        if(this.stapel != null) {
+            vorgang.setWarZuGross(this.stapel.groesse() > this.getStaerke());
+            if(!vorgang.getWarZuGross()) {
+                this.stapel.gelocht(vorgang);
+            }
         }
         for (LocherUpgrade upgrade : this.upgrades) {
             upgrade.upgradeLochprozess(this, vorgang);

@@ -47,7 +47,7 @@ public abstract class Papier implements Serializable
      * @return true wenn das Papier existiert, sonst false.
      */
     public boolean existiert() {
-        return this.lochAnzahl <= this.getMaximaleLochAnzahl();
+        return this.lochAnzahl < this.getMaximaleLochAnzahl();
     }
 
     /**
