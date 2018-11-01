@@ -1,7 +1,5 @@
 package de.wolc.gui;
 
-import java.util.ArrayList;
-
 import de.wolc.spiel.Spieler;
 import de.wolc.spiel.papier.A4;
 import de.wolc.spiel.papier.A5;
@@ -12,29 +10,25 @@ import javafx.scene.image.Image;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
 import javafx.geometry.Bounds;
-import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
 import javafx.scene.paint.Color;
 import javafx.scene.effect.Light;
 import javafx.scene.effect.Lighting;
 
-public class LocherPapier{
+public class LocherPapierObjekt{
 
-    private static final Image paperImageA4 = new Image("de/wolc/gui/images/paper_cutout.png");
-    private static final Image paperImageA5 = new Image("de/wolc/gui/images/paper_cutout_a5.png");
-    private static final Image paperImageA6 = new Image("de/wolc/gui/images/paper_cutout_a6.png");
+    private static final Image BILD_A4 = new Image("de/wolc/gui/images/paper_cutout_a4.png");
+    private static final Image BILD_A5 = new Image("de/wolc/gui/images/paper_cutout_a5.png");
+    private static final Image BILD_A6 = new Image("de/wolc/gui/images/paper_cutout_a6.png");
 
     //Klassenvariablen
     private Rectangle locherPapier;
     private final Game game;
     private Spieler spieler;
     private Class<? extends Papier> aktuellesFormat;
-    private Alert spielerAlert;
     private Papier papier;
     private Color currentColor;
 
-    public LocherPapier(Game game, int stapelGroesse, Rectangle locher, Papier papier){
+    public LocherPapierObjekt(Game game, int stapelGroesse, Rectangle locher, Papier papier){
         //Zuweisung der Klassenvariabeln
         this.game = game;
         this.papier = papier;
@@ -61,36 +55,29 @@ public class LocherPapier{
         //A4 Papier
         if(this.aktuellesFormat == A4.class){
             //Neues A4 Blatt erzeugen
-            this.locherPapier.setFill(new ImagePattern(paperImageA4));
-            this.locherPapier.setWidth(paperImageA4.getWidth());
-            this.locherPapier.setHeight(paperImageA4.getHeight());
+            this.locherPapier.setFill(new ImagePattern(BILD_A4));
+            this.locherPapier.setWidth(BILD_A4.getWidth());
+            this.locherPapier.setHeight(BILD_A4.getHeight());
             this.locherPapier.setTranslateX(locherPosition.getMinX() - 199  - (stapelGroesse * 0.15));
             this.locherPapier.setTranslateY(locherPosition.getMinY() + 249  - (stapelGroesse * 0.15));
         }
         //A5 Papier
         else if(this.aktuellesFormat == A5.class){
             //Neues A5 Blatt erzeugen
-            this.locherPapier.setFill(new ImagePattern(paperImageA5));
-            this.locherPapier.setWidth(paperImageA5.getWidth());
-            this.locherPapier.setHeight(paperImageA5.getHeight());
+            this.locherPapier.setFill(new ImagePattern(BILD_A5));
+            this.locherPapier.setWidth(BILD_A5.getWidth());
+            this.locherPapier.setHeight(BILD_A5.getHeight());
             this.locherPapier.setTranslateX(locherPosition.getMinX() - 100  - (stapelGroesse * 0.15));
             this.locherPapier.setTranslateY(locherPosition.getMinY() + 290  - (stapelGroesse * 0.15));
         }
         //A6 Papier
         else if(this.aktuellesFormat == A6.class){
             //Neues A6 Blatt erzeugen
-            this.locherPapier.setFill(new ImagePattern(paperImageA6));
-            this.locherPapier.setWidth(paperImageA6.getWidth());
-            this.locherPapier.setHeight(paperImageA6.getHeight());
+            this.locherPapier.setFill(new ImagePattern(BILD_A6));
+            this.locherPapier.setWidth(BILD_A6.getWidth());
+            this.locherPapier.setHeight(BILD_A6.getHeight());
             this.locherPapier.setTranslateX(locherPosition.getMinX() - 23.5  - (stapelGroesse * 0.15));
             this.locherPapier.setTranslateY(locherPosition.getMinY() + 309.5  - (stapelGroesse * 0.15));
-        }
-        else{
-            this.spielerAlert = new Alert(AlertType.WARNING);
-            this.spielerAlert.setTitle("Fehler beim zuweisen des Papieres in den Locher!");
-            this.spielerAlert.setHeaderText("Das Papier, das du gerade in den Locher stecken wolltest kann nicht hinzugefügt werden.");
-            this.spielerAlert.setResult(ButtonType.OK);
-            this.spielerAlert.showAndWait();
         }
 
         //Das eben erzeugte Blatt dem 'game' hinzufügen
