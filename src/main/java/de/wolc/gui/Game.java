@@ -46,8 +46,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 import javafx.scene.text.Font;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
+import javafx.scene.media.AudioClip;
 
 public class Game{
 
@@ -60,9 +59,6 @@ public class Game{
     
     private static final Random RANDOM = new Random();
     private static final double BENACHRICHTUNG_ANZEIGEZEIT = 3.5d;
-
-    private static final Media MEDIA_PUNCH_1 = new Media("de/wolc/gui/sounds/punch_1.ogg");
-    private static final Media MEDIA_PUNCH_ERROR = new Media("de/wolc/gui/sounds/punch_error.ogg");
     
     //Game Variables
     private double remainingTimeAvailable = 30d;
@@ -308,11 +304,11 @@ public class Game{
 
                     if(prozess.getWarZuGross()) {
                         this.benachrichtigungZeigen("Es sind zu viele Papiere eingelegt - [RECHTSKLICK] auf Locher zum entfernen!");
-                        MediaPlayer player = new MediaPlayer(MEDIA_PUNCH_ERROR);
-                        player.play();
+                        AudioClip clip = new AudioClip(MultiUse.url("de/wolc/gui/sounds/punch_error.ogg"));
+                        clip.play(100);
                     } else {
-                        MediaPlayer player = new MediaPlayer(MEDIA_PUNCH_1);
-                        player.play();
+                        AudioClip clip = new AudioClip(MultiUse.url("de/wolc/gui/sounds/punch_1.ogg"));
+                        clip.play(100);
                     }
                 } else {
                     this.benachrichtigungZeigen("Noch " + (Math.round(cooldown * 10d) / 10d) + "s auf Cooldown!");
