@@ -74,6 +74,10 @@ public class PapierStapel<TPapier extends Papier> implements Serializable
         return papiere.size();
     }
 
+    public TPapier get(int i) {
+        return this.papiere.get(i);
+    }
+
     /**
      * Wird aufgerufen wenn alle Papiere auf diesem Stapel gelocht worden sind. 
      * Benachrichtig alle Papiere dass diese gelocht worden sind.

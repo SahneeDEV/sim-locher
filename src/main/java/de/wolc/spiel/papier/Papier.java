@@ -81,4 +81,9 @@ public abstract class Papier implements Serializable
         int lochZahl = this.maximaleAnzahlLochen - this.lochAnzahl;
         return Math.max(lochZahl, 0);
     }
+
+    @Override
+    public String toString() {
+        return this.getClass().getSimpleName() + "(" + this.getFarbe().getAnzeigeName() + "), " + this.getLochAnzahl() + "/" + this.getMaximaleLochAnzahl() + " Löcher";
+    }
 }

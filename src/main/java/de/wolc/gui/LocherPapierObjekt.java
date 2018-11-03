@@ -51,6 +51,8 @@ public class LocherPapierObjekt {
             throw new IllegalStateException("Ungültiges Papierformat: " + aktuellesFormat);
         }
 
+        System.out.println("Neues LocherPapierObjekt (papier=" + papier + ", locherPosition=" + locherPosition + ", x=" + x + ", y=" + y + ")");
+
         //Effekt für die Farbe des Papieres setzen
         Lighting lighting = new Lighting();
         lighting.setDiffuseConstant(1.0);

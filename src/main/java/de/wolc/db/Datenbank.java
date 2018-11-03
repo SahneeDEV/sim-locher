@@ -28,7 +28,7 @@ public class Datenbank {
             if (!directory.exists()) {
                 directory.mkdir();
             }
-            System.out.println(file.getAbsolutePath());
+            System.out.println("Datenbank hat gespeichert: " + file.getAbsolutePath());
             stream = new ObjectOutputStream(new FileOutputStream(file));
             stream.writeObject(objekt);
         } finally {
@@ -51,6 +51,7 @@ public class Datenbank {
         if (file.exists()) {
             ObjectInputStream stream = null;
             try {
+                System.out.println("Datenbank hat geladen: " + file.getAbsolutePath());
                 stream = new ObjectInputStream(new FileInputStream(file));
                 objekt = (Serializable) stream.readObject();
             } finally {

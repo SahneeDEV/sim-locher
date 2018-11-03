@@ -18,6 +18,7 @@ import de.wolc.spiel.papier.Papier;
 import de.wolc.spiel.papier.PapierStapel;
 import de.wolc.gui.LocherPapierObjekt;
 
+import javafx.application.Platform;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
@@ -337,7 +338,7 @@ public class Game extends AnimationTimer {
         //Set Window Titel
         stage.setTitle(windowTitle);
 
-        this.start();
+        Platform.runLater(() -> this.start());
 
         return gameScene;
     }
@@ -483,44 +484,45 @@ public class Game extends AnimationTimer {
         this.locherPapier.clear();
     }
 
+    /**
+     * Wird jeden Tick aufgerufen.
+     * @param jetztNanoZeit Die aktuelle Nano Zeit. Die vorherige für deltas findet sich in "letzteNanoZeit".
+     */
     @Override
     public void handle(long jetztNanoZeit) {
-        if (letzteNanoZeit == 0) {
-            letzteNanoZeit = jetztNanoZeit;
+        if (this.letzteNanoZeit == 0) {
+            this.letzteNanoZeit = jetztNanoZeit;
+            this.spielStart();
         }
         //Getting new and last TimeStamp in Miliseconds and calculating 
-        long elapsedNanoSeconds = jetztNanoZeit - letzteNanoZeit;
+        long elapsedNanoSeconds = jetztNanoZeit - this.letzteNanoZeit;
         double elapsedSeconds = ((elapsedNanoSeconds / 1000000000d));
-        letzteNanoZeit = jetztNanoZeit;
+        this.letzteNanoZeit = jetztNanoZeit;
 
         //Triggering Cooldown and giving him the elapsedSeconds
         spieler.tick(elapsedSeconds);
 
-        timeToNextPapier -= elapsedSeconds;
-        remainingTimeAvailable -= elapsedSeconds;
-        benachrichtigungenZeit -= elapsedSeconds;
+        this.timeToNextPapier -= elapsedSeconds;
+        this.remainingTimeAvailable -= elapsedSeconds;
+        this.benachrichtigungenZeit -= elapsedSeconds;
 
-        if (benachrichtigungenZeit <= 0) {
+        if (this.benachrichtigungenZeit <= 0) {
             Game.this.benachrichtigungen.setText("");
-            benachrichtigungenZeit = 0;
+            this.benachrichtigungenZeit = 0;
         }
 
-        if (timeToNextPapier <= 0) {
+        if (this.timeToNextPapier <= 0) {
             spawnPapier();
-            timeToNextPapier = 0.5d + 2.5d * RANDOM.nextDouble();
+            this.timeToNextPapier = 0.5d + 2.5d * RANDOM.nextDouble();
         }
 
         //Check for end of Time
-        if(remainingTimeAvailable <= 0) {
-            Game.this.spielEnde();
+        if(this.remainingTimeAvailable <= 0) {
+            this.stop();
+            this.spielEnde();
         }
 
-        Game.this.updateLabels();
-
-        PapierStapel<?> stapel = spieler.getLocher().getStapel();
-        if (stapel.groesse() == 0) {
-            
-        }
+        this.updateLabels();
     }
 
 }
