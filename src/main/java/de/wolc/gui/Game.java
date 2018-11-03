@@ -304,14 +304,16 @@ public class Game{
 
                     if(prozess.getWarZuGross()) {
                         this.benachrichtigungZeigen("Es sind zu viele Papiere eingelegt - [RECHTSKLICK] auf Locher zum entfernen!");
-                        AudioClip clip = new AudioClip(MultiUse.url("de/wolc/gui/sounds/punch_error.ogg"));
+                        AudioClip clip = new AudioClip(MultiUse.url("de/wolc/gui/sounds/punch_error.wav"));
                         clip.play(100);
                     } else {
-                        AudioClip clip = new AudioClip(MultiUse.url("de/wolc/gui/sounds/punch_1.ogg"));
+                        AudioClip clip = new AudioClip(MultiUse.url("de/wolc/gui/sounds/punch_1.wav"));
                         clip.play(100);
                     }
                 } else {
                     this.benachrichtigungZeigen("Noch " + (Math.round(cooldown * 10d) / 10d) + "s auf Cooldown!");
+                    AudioClip clip = new AudioClip(MultiUse.url("de/wolc/gui/sounds/punch_error.wav"));
+                    clip.play(100);
                 }
             }
             //Abgleichen des gedrückten Buttons
