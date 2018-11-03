@@ -52,16 +52,8 @@ public class Gui {
      * ACHTUNG! Selbe Warnung wie bei "setEinstellungen" gilt auch hier!
      * @param herausforderungen Die neuen Herausforderungen.
      */
-    public static void setHerausforderungen(ArrayList<Herausforderung> herausforderungen) {
+    static void setHerausforderungen(ArrayList<Herausforderung> herausforderungen) {
         Gui.herausforderungen = herausforderungen;
-    }
-
-    /**
-     * Wird aufgerufen sobald eine Herausforderung erreicht wurde.
-     * @param herausforderung Die Herausforderung.
-     */
-    public static void herausforderungErreicht(Herausforderung herausforderung) {
-        // TODO: Belohnung an Spieler vergeben, ...
     }
 
     /**

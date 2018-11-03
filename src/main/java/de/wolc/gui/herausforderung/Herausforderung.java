@@ -3,7 +3,6 @@ package de.wolc.gui.herausforderung;
 import java.io.Serializable;
 
 import de.wolc.gui.Game;
-import de.wolc.gui.Gui;
 import de.wolc.spiel.Preis;
 import de.wolc.spiel.locher.Lochprozess;
 
@@ -20,9 +19,10 @@ import de.wolc.spiel.locher.Lochprozess;
  */
 public abstract class Herausforderung implements Serializable {
     /** MUSS um 1 erhöht werden, wenn sich die Eigenschaften der Klasse ändern. */ 
-    private static final long serialVersionUID = 1L;
-    
+    private static final long serialVersionUID = 2L;
+
     private boolean erreicht;
+    private boolean belohnungErhalten;
     private Preis belohnung;
 
     protected Herausforderung(Preis belohnung) {
@@ -46,14 +46,29 @@ public abstract class Herausforderung implements Serializable {
     }
 
     /**
+     * Das der Spieler bereits die Belohnung für diese Herausforderung erhalten?
+     * @return true wenn ja, sonst false.
+     */
+    public boolean hatBelohnungErhalten() {
+        return belohnungErhalten;
+    }
+
+    /**
+     * Setzt dass der Spieler bereits die Belohnung für diese Herausforderung erhalten hat.
+     */
+    public void setBelohnungErhalten() {
+        this.belohnungErhalten = true;
+    }
+
+    /**
      * Diese Methode MUSS aufgerufen werden sobald die Herausforderung erreicht wurde.
      */
     protected void erreicht() {
         if (this.erreicht) {
             throw new IllegalStateException("Diese Herausforderung wurde bereits erreicht!");
         }
+        System.out.println("Herausforderung erreicht: " + this);
         this.erreicht = true;
-        Gui.herausforderungErreicht(this);
     }
 
     /**

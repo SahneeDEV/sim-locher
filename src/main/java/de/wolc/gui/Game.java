@@ -10,6 +10,7 @@ import de.wolc.gui.PapierObjekt;
 import de.wolc.gui.herausforderung.Herausforderung;
 import de.wolc.gui.herausforderung.HerausforderungZeitOhneZeit;
 import de.wolc.spiel.Farbe;
+import de.wolc.spiel.Preis;
 import de.wolc.spiel.Spieler;
 import de.wolc.spiel.locher.Lochprozess;
 import de.wolc.spiel.papier.A4;
@@ -53,35 +54,31 @@ import javafx.scene.media.AudioClip;
 
 public class Game extends AnimationTimer {
 
-    private final String windowTitle = "World of Locher Craft";
+    private static final Random RANDOM = new Random();
+    private static final double BENACHRICHTUNG_ANZEIGEZEIT = 3.5d;
+    private static final String TITEL = "World of Locher Craft";
+
     private Spieler spieler;
     private Rectangle locher_new;
     private AnchorPane gameArea;   
-    private Stage stage;
+    private Stage stage;  
     
-    private static final Random RANDOM = new Random();
-    private static final double BENACHRICHTUNG_ANZEIGEZEIT = 3.5d;
-    
-    //Game Variables
+    // Variables for Countdown timer
     private double remainingTimeAvailable = 30d;
     private double benachrichtigungenZeit = 0d;
-
-    //Variables for Countdown timer
     private long letzteNanoZeit = 0;
     private double timeToNextPapier = 0;
 
-    //Papierstapel erstellen
+    // Papierstapel erstellen
     private PapierStapel<A4> stapel_A4;
     private PapierStapel<A5> stapel_A5;
     private PapierStapel<A6> stapel_A6;
 
-    //Diverse Nodes
-    private Label score, remainingTime, formatLabel, papierLabel, locherCooldown, benachrichtigungen, 
-        herausforderungenLabel;
-    private ToggleButton formatA4Button, formatA5Button, formatA6Button;
+    // Diverse Nodes
+    private Label scoreLabel, remainingTimeLabel, formatLabel, papierLabel, locherCooldownLabel, 
+        benachrichtigungenLabel, herausforderungenLabel;
     private HashMap<Farbe, Label> scoreLabels = new HashMap<>();
-
-    private ArrayList<LocherPapierObjekt> locherPapier= new ArrayList<LocherPapierObjekt>();
+    private ArrayList<LocherPapierObjekt> locherPapierObjekte = new ArrayList<LocherPapierObjekt>();
 
     public Game () {
         Gui.getHerausforderungen().add(new HerausforderungZeitOhneZeit(10d));
@@ -115,19 +112,20 @@ public class Game extends AnimationTimer {
             int zahl = liste != null ? liste.size() : 0;
             label.setText("  " + farbe.getAnzeigeName() + ": " + zahl);
         }
-        this.score.setText("Score: " + this.spieler.getKonfetti().size());
+        this.scoreLabel.setText("Score: " + this.spieler.getKonfetti().size());
         // Sonstige Stats
         this.formatLabel.setText("Format: " + this.spieler.getLocher().getFormat().getSimpleName());
         this.papierLabel.setText("Stapel: " + this.spieler.getLocher().getStapel().groesse());
-        this.locherCooldown.setText("Cooldown: " + MultiUse.sekundenRunden(this.spieler.getLocher().getCooldown())+ "s");
-        this.remainingTime.setText("Zeit: " + MultiUse.sekundenRunden(this.remainingTimeAvailable) + "s"); 
+        this.locherCooldownLabel.setText("Cooldown: " + MultiUse.sekundenRunden(this.spieler.getLocher().getCooldown())+ "s");
+        this.remainingTimeLabel.setText("Zeit: " + MultiUse.sekundenRunden(this.remainingTimeAvailable) + "s"); 
         String herausforderungenString = "";
         for(Herausforderung herausforderung: Gui.getHerausforderungen()) {
             if (!herausforderung.isErreicht()) {
                 herausforderungenString += "  " + herausforderung.toString() + "\n";
             }
         }
-        this.herausforderungenLabel.setText("Herausforderungen:\n" + herausforderungenString);
+        this.herausforderungenLabel.setText(herausforderungenString.length() == 0 
+            ? "" : "Herausforderungen:\n" + herausforderungenString);
     }
     
     public Scene GameMainStage(Stage stage){
@@ -153,9 +151,9 @@ public class Game extends AnimationTimer {
         mainPane.setBackground(new Background(backgroundImageGame));
 
         //Papierstapel creation
-        stapel_A4 = new PapierStapel<>(A4.class);
-        stapel_A5 = new PapierStapel<>(A5.class);
-        stapel_A6 = new PapierStapel<>(A6.class);
+        this.stapel_A4 = new PapierStapel<>(A4.class);
+        this.stapel_A5 = new PapierStapel<>(A5.class);
+        this.stapel_A6 = new PapierStapel<>(A6.class);
         if(this.spieler.getLocher().getFormat() == null){
             this.spieler.getLocher().setFormat(A4.class);
             this.spieler.getLocher().einlegen(stapel_A4);
@@ -166,26 +164,26 @@ public class Game extends AnimationTimer {
         VBox rightVBox = new VBox();
 
         // Labels erstellen
-        this.score = new Label();
+        this.scoreLabel = new Label();
         this.papierLabel = new Label();
         this.formatLabel = new Label();
-        this.remainingTime = new Label();
-        this.locherCooldown = new Label();
+        this.remainingTimeLabel = new Label();
+        this.locherCooldownLabel = new Label();
         this.herausforderungenLabel = new Label();
-        locherCooldown.setTextFill(Color.WHITE);
+        locherCooldownLabel.setTextFill(Color.WHITE);
         papierLabel.setTextFill(Color.WHITE);
-        score.setTextFill(Color.WHITE);
-        remainingTime.setTextFill(Color.WHITE);
+        scoreLabel.setTextFill(Color.WHITE);
+        remainingTimeLabel.setTextFill(Color.WHITE);
         formatLabel.setTextFill(Color.WHITE);
         this.herausforderungenLabel.setTextFill(Color.WHITE);
-        rightVBox.getChildren().addAll(remainingTime, score);
+        rightVBox.getChildren().addAll(remainingTimeLabel, scoreLabel);
         for(Farbe farbe : Farbe.values()) {
             Label label = new Label();
             label.setTextFill(farbe.getGuiFarbe());
             this.scoreLabels.put(farbe, label);
             rightVBox.getChildren().add(label);
         }
-        rightVBox.getChildren().addAll(locherCooldown, formatLabel, papierLabel, this.herausforderungenLabel);
+        rightVBox.getChildren().addAll(locherCooldownLabel, formatLabel, papierLabel, this.herausforderungenLabel);
         this.updateLabels();
 
         //Adding the Format ToggleButtons + ToggleGroup + default ToggleButton configuration
@@ -193,7 +191,7 @@ public class Game extends AnimationTimer {
         ToggleGroup formatGroup = new ToggleGroup();
         formatBox.setPadding(new Insets(20, 5 , 20 ,5));
 
-        formatA4Button = new ToggleButton("A4");
+        ToggleButton formatA4Button = new ToggleButton("A4");
         formatA4Button.setSelected(true);
         formatA4Button.setToggleGroup(formatGroup);
         formatA4Button.setOnMousePressed((MouseEvent e) -> {
@@ -201,7 +199,7 @@ public class Game extends AnimationTimer {
             locherPapierEntfernen();
         });
 
-        formatA5Button = new ToggleButton("A5");
+        ToggleButton formatA5Button = new ToggleButton("A5");
         formatA5Button.setSelected(false);
         formatA5Button.setToggleGroup(formatGroup);
         formatA5Button.setOnMousePressed((MouseEvent e) -> {
@@ -209,7 +207,7 @@ public class Game extends AnimationTimer {
             locherPapierEntfernen();
         });
 
-        formatA6Button = new ToggleButton("A6");
+        ToggleButton formatA6Button = new ToggleButton("A6");
         formatA6Button.setSelected(false);
         formatA6Button.setToggleGroup(formatGroup);
         formatA6Button.setOnMousePressed((MouseEvent e) -> {
@@ -222,9 +220,9 @@ public class Game extends AnimationTimer {
         BorderPane.setAlignment(formatBox, Pos.CENTER_LEFT);
 
         //If a SaveGame has been loaded the ToggleButtons get adjusted here
-        this.formatA4Button.setSelected(this.spieler.getLocher().getFormat() == A4.class);
-        this.formatA5Button.setSelected(this.spieler.getLocher().getFormat() == A5.class);
-        this.formatA6Button.setSelected(this.spieler.getLocher().getFormat() == A6.class);
+        formatA4Button.setSelected(this.spieler.getLocher().getFormat() == A4.class);
+        formatA5Button.setSelected(this.spieler.getLocher().getFormat() == A5.class);
+        formatA6Button.setSelected(this.spieler.getLocher().getFormat() == A6.class);
 
         //Adding remainingTime and score to VBox 
 
@@ -251,12 +249,12 @@ public class Game extends AnimationTimer {
         AnchorPane.setLeftAnchor(locher_new, stage.getHeight() * 0.65);
 
         // Benachrichtigungen
-        benachrichtigungen = new Label();
-        benachrichtigungen.setTextFill(Color.RED);
-        benachrichtigungen.setFont(new Font(20));
+        benachrichtigungenLabel = new Label();
+        benachrichtigungenLabel.setTextFill(Color.RED);
+        benachrichtigungenLabel.setFont(new Font(20));
 
-        AnchorPane.setLeftAnchor(benachrichtigungen, stage.getWidth() * 0.50);
-        AnchorPane.setBottomAnchor(benachrichtigungen, stage.getHeight() * 0.25);
+        AnchorPane.setLeftAnchor(benachrichtigungenLabel, stage.getWidth() * 0.50);
+        AnchorPane.setBottomAnchor(benachrichtigungenLabel, stage.getHeight() * 0.25);
 
         //Locher_new Mouse Events
         locher_new.setOnMouseClicked(e -> {
@@ -276,15 +274,15 @@ public class Game extends AnimationTimer {
                     ArrayList<Konfetti> spielerKonfetti = spieler.getKonfetti();
                     spielerKonfetti.addAll(prozess.getKonfetti());
                     // Lochprozess in GUI verarbeiten...
-                    int locherPapierSize = locherPapier.size() - 1;
+                    int locherPapierSize = locherPapierObjekte.size() - 1;
                     for (int i = 0; i <= locherPapierSize; i++) {
-                        LocherPapierObjekt toCheckPapiere = locherPapier.get(i);
+                        LocherPapierObjekt toCheckPapiere = locherPapierObjekte.get(i);
                         Papier toCheckPapier = toCheckPapiere.getPapier();
     
                         PapierStapel<?> currentStapel = spieler.getLocher().getStapel();
                         if (!currentStapel.istVorhanden(toCheckPapier)) {
                             toCheckPapiere.zerstoeren();
-                            locherPapier.remove(i);
+                            locherPapierObjekte.remove(i);
                             locherPapierSize--;
                         }
                     }
@@ -311,11 +309,11 @@ public class Game extends AnimationTimer {
                 //entfernen des Eingelgeten Bilds wenn kein Papier mehr im Locher
                 if (removedPapier != null) {
                     new PapierObjekt(Game.this, removedPapier);
-                    for (int i = 0; i <= locherPapier.size(); i++) {
-                        LocherPapierObjekt todeltetPapier = locherPapier.get(i);
+                    for (int i = 0; i <= locherPapierObjekte.size(); i++) {
+                        LocherPapierObjekt todeltetPapier = locherPapierObjekte.get(i);
                         if (todeltetPapier.getPapier() == removedPapier){
                             todeltetPapier.zerstoeren();
-                            locherPapier.remove(i);
+                            locherPapierObjekte.remove(i);
                             break;
                         }
                     }
@@ -330,13 +328,13 @@ public class Game extends AnimationTimer {
 
 
         //Add Nodes to the AnchorPane
-        gameArea.getChildren().addAll(locher_new, benachrichtigungen);
+        gameArea.getChildren().addAll(locher_new, benachrichtigungenLabel);
 
         //Add the elements to the Main Pane
         mainPane.setCenter(gameArea);
 
         //Set Window Titel
-        stage.setTitle(windowTitle);
+        stage.setTitle(TITEL);
 
         Platform.runLater(() -> this.start());
 
@@ -407,7 +405,7 @@ public class Game extends AnimationTimer {
      */
     private void benachrichtigungZeigen(String benachrichtigung) {
         this.benachrichtigungenZeit = BENACHRICHTUNG_ANZEIGEZEIT;
-        this.benachrichtigungen.setText(benachrichtigung);
+        this.benachrichtigungenLabel.setText(benachrichtigung);
     }
 
     /**
@@ -468,7 +466,7 @@ public class Game extends AnimationTimer {
      * @param papier Das Papier für das das in den Locher eingelegte Locher Papierobjekt erstellt werden soll.
      */
     private void spawnLocherPapierObjekt(Papier papier) {
-        this.locherPapier.add(new LocherPapierObjekt(this, this.spieler.getLocher().getStapel().groesse(), this.locher_new, papier));
+        this.locherPapierObjekte.add(new LocherPapierObjekt(this, this.spieler.getLocher().getStapel().groesse(), this.locher_new, papier));
     }
 
     /**
@@ -493,11 +491,19 @@ public class Game extends AnimationTimer {
      * Entfernt alle aktuell in den Locher eingelegte Papiere.
      */
     private void locherPapierEntfernen() {
-        for(int i = 0; i < this.locherPapier.size(); i++){
-            LocherPapierObjekt papierObjekt = locherPapier.get(i);
+        for(int i = 0; i < this.locherPapierObjekte.size(); i++){
+            LocherPapierObjekt papierObjekt = locherPapierObjekte.get(i);
             papierObjekt.zerstoeren();
         }
-        this.locherPapier.clear();
+        this.locherPapierObjekte.clear();
+    }
+
+    /**
+     * Verteilt die Belohnung einer Herausforderung.
+     * @param belohnung Die Belohnung für die Herausforderung.
+     */
+    private void belohnungVerteilen(Preis belohnung) {
+        // TODO: Dem Spieler gutschreiben!
     }
 
     /**
@@ -523,7 +529,7 @@ public class Game extends AnimationTimer {
         this.benachrichtigungenZeit -= elapsedSeconds;
 
         if (this.benachrichtigungenZeit <= 0) {
-            Game.this.benachrichtigungen.setText("");
+            Game.this.benachrichtigungenLabel.setText("");
             this.benachrichtigungenZeit = 0;
         }
 
@@ -542,10 +548,19 @@ public class Game extends AnimationTimer {
 
         // Herausforderungen aktualisieren
         for(Herausforderung herausforderung: Gui.getHerausforderungen()) {
+            // Tick der Herausforderung ausführen.
             if (!herausforderung.isErreicht()) {
                 herausforderung.herausforderungTick(this, elapsedSeconds);
             }
+            // Wenn sie erreicht ist und der Spieler noch keine Belohnung erhalten hat -> Belohnung verteilen
+            // (Es wird erneut auf "isErreicht" gecheckt, da sie im Tick möglicherweise erreicht wurde)
+            if (herausforderung.isErreicht() && !herausforderung.hatBelohnungErhalten()) {
+                this.belohnungVerteilen(herausforderung.getBelohnung());
+                herausforderung.setBelohnungErhalten();
+            }
         }
+
+        // Belohnungen für erreichte Herausforderungen verteilen
     }
 
 }
