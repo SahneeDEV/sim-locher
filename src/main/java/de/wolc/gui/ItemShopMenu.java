@@ -33,6 +33,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Random;
 
+import de.wolc.gui.herausforderung.Herausforderung;
 import de.wolc.spiel.Farbe;
 import de.wolc.spiel.Preis;
 import de.wolc.spiel.SchreibtischSkin;
@@ -108,7 +109,7 @@ public class ItemShopMenu {
         GridPane grid = new GridPane();
         grid.setBackground(new Background(new BackgroundFill(Color.DARKGRAY, CornerRadii.EMPTY, Insets.EMPTY)));
         grid.setVgap(1);
-        Button backButton = new Button("◀ Zur\u00fcck ◀");
+        Button backButton = new Button("◀ Zur\u00fcck zum Hauptmenü ◀");
         backButton.addEventHandler(ActionEvent.ACTION, (ActionEvent actionEvent) -> {
             this.zurueck();
         });
@@ -116,8 +117,13 @@ public class ItemShopMenu {
         continueButton.addEventHandler(ActionEvent.ACTION, (ActionEvent actionEvent) -> {
             this.weiterspielen();
         });
+        Button herausforderungenButton = new Button("🏆 Herausforderungen 🏆");
+        herausforderungenButton.addEventHandler(ActionEvent.ACTION, (ActionEvent actionEvent) -> {
+            this.herausforderungenZeigen();
+        });
         grid.add(backButton, 0, 0);
         grid.add(continueButton, 1, 0);
+        grid.add(herausforderungenButton, 3, 0);
         return grid;
     }
 
@@ -270,6 +276,28 @@ public class ItemShopMenu {
         info.setTitle(name);
         info.setHeaderText("Upgrades die in diesem Spiel gekaufen wurden werden hier angezeigt.");
         info.setContentText(upgrades);
+        info.setResult(ButtonType.OK);
+        info.showAndWait();
+    }
+
+    private void herausforderungenZeigen() {
+        String erreicht = "";
+        String nichtErreicht = "";
+        for(Herausforderung herausforderung: Gui.getHerausforderungen()) {
+            if (herausforderung.isErreicht()) {
+                erreicht += "  " + herausforderung.toString() + "\n";
+            } else {
+                nichtErreicht += "  " + herausforderung.toString() + "\n";
+            }
+        }
+        Alert info = new Alert(AlertType.INFORMATION);
+        info.setTitle("🏆 Herausforderungen 🏆");
+        info.setHeaderText("Hier werden alle aktiven und bereits erreichten Herausforderungen angezeigt.");
+        info.setContentText(
+            "⏱ Aktive Herausforderungen: ⏱\n" + 
+            (nichtErreicht.length() == 0 ? "Keine!\n" : nichtErreicht) +
+            "\n🏆 Erreichte Herausforderungen: 🏆\n"+ 
+            (erreicht.length() == 0 ? "Keine!\n" : erreicht) );
         info.setResult(ButtonType.OK);
         info.showAndWait();
     }
