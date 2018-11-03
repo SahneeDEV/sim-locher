@@ -9,7 +9,6 @@ Je mehr Konfetti man erzeugt desto bessere Upgrades können für den eigenen Loc
 ## Credits
 
 * Locher Sound: https://freesound.org/people/Australopithecusman/sounds/388946/
-* todo: Bildquellen
 
 ## Entwicklerhinweise
 
