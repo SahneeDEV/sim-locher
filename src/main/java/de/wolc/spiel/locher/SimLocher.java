@@ -7,6 +7,8 @@ import de.wolc.spiel.papier.PapierStapel;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+import de.wolc.spiel.Spieler;
+import de.wolc.spiel.herausforderung.Herausforderung;
 import de.wolc.spiel.locher.Lochprozess;
 import de.wolc.spiel.locher.upgrades.LocherUpgrade;
 
@@ -26,12 +28,22 @@ public class SimLocher implements Serializable
     private Class<? extends Papier> format;
     private double cooldown;
     private ArrayList<LocherUpgrade> upgrades;
-    
-    public SimLocher() {
+    private Spieler besitzer;
+
+    public SimLocher(Spieler besitzer) {
         this.upgrades = new ArrayList<LocherUpgrade>();
         this.skin = LocherSkin.LOCHER_BASE;
         this.format = A4.class;
         this.cooldown = 0;
+        this.besitzer = besitzer;
+    }
+
+    /**
+     * Gibt den Besitzer des Lochers zurück.
+     * @return Der Spieler der den Locher besitzt.
+     */
+    public Spieler getBesitzer() {
+        return besitzer;
     }
 
     /**
@@ -164,6 +176,9 @@ public class SimLocher implements Serializable
         }
         for (LocherUpgrade upgrade : this.upgrades) {
             upgrade.upgradeLochprozess(this, vorgang);
+        }
+        for (Herausforderung herausforderung : this.besitzer.getHerausforderungen()) {
+            herausforderung.herausforderungLochprozess(vorgang);
         }
         this.cooldown = vorgang.getCooldown();
         return vorgang;

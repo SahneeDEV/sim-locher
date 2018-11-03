@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import de.wolc.spiel.herausforderung.Herausforderung;
 import de.wolc.spiel.locher.SimLocher;
 import de.wolc.spiel.papier.Konfetti;
 
@@ -13,16 +14,18 @@ import de.wolc.spiel.papier.Konfetti;
  */
 public class Spieler implements Serializable {
     /** MUSS um 1 erhöht werden, wenn sich die Eigenschaften der Klasse ändern. */ 
-    private static final long serialVersionUID = 2L;
+    private static final long serialVersionUID = 3L;
     
     private SimLocher locher;
     private SchreibtischSkin schreibtischSkin;
     private ArrayList<Konfetti> konfetti;
+    private ArrayList<Herausforderung> herausforderungen;
 
     public Spieler() {
-        this.locher = new SimLocher();
+        this.locher = new SimLocher(this);
         this.schreibtischSkin = SchreibtischSkin.BACKGROUND_BASE;
         this.konfetti = new ArrayList<Konfetti>();
+        this.herausforderungen = new ArrayList<Herausforderung>();
     }
 
     /**
@@ -45,6 +48,14 @@ public class Spieler implements Serializable {
      */
     public SimLocher getLocher() {
         return this.locher;
+    }
+
+    /**
+     * Gibt die aktuell aktiven Herausforderungen des Spielers zurück.
+     * @return Die Herausforderungen.
+     */
+    public ArrayList<Herausforderung> getHerausforderungen() {
+        return this.herausforderungen;
     }
 
     /**
@@ -76,10 +87,15 @@ public class Spieler implements Serializable {
 
     /**
      * Muss regelmäßig von der GUI aufgerufen werden um der Logik ein "Zeitgefühl" zu verschaffen.
-     * Ruft automatisch die "tick" Methode des Lochers auf!
+     * Ruft automatisch die "tick" Methode des Lochers & der Herausforderungen auf!
      * @param deltaZeit Die vergangene Zeit in Sekunden. (Kann/sollte auch Kommazahl sein!)
      */
     public void tick(double deltaZeit) {
         locher.tick(deltaZeit);
+        for(Herausforderung herausforderung: this.herausforderungen) {
+            if (!herausforderung.isErreicht()) {
+                herausforderung.herausforderungTick(deltaZeit);
+            }
+        }
     }
 }
