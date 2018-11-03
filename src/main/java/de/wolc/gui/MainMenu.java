@@ -1,7 +1,10 @@
 package de.wolc.gui;
 
+import java.util.ArrayList;
+
 import de.wolc.Einstellungen;
 import de.wolc.MultiUse;
+import de.wolc.gui.herausforderung.Herausforderung;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert.AlertType;
@@ -51,6 +54,28 @@ public class MainMenu{
             einstellungen = new Einstellungen();
         }
         Gui.setEinstellungen(einstellungen);
+        
+        ArrayList<Herausforderung> herausforderungen;
+        try {
+            // TODO: "laden" generisch machen?
+            herausforderungen = (ArrayList<Herausforderung>) Gui.DB.laden("herausforderungen");
+        } catch(Exception e) {
+            Alert ladeFehler = new Alert(AlertType.ERROR);
+            ladeFehler.setTitle("Fehler bei Herausforderungen laden");
+            ladeFehler.setHeaderText("Beim Laden der Herausforderungen ist ein Fehler aufgetreten. Dies liegt " +
+                "wahrscheinlich daran, dass eine neue Version des Spiels nicht mit der vorherigen kompatibel " +
+                "ist.\nAlle aktiven Herausforderungen wurde deshalb beendet.");
+            ladeFehler.setContentText(e.toString());
+            ladeFehler.setResult(ButtonType.OK);
+            ladeFehler.showAndWait();
+            e.printStackTrace();
+
+            herausforderungen = null;
+        }
+        if (herausforderungen == null) {
+            herausforderungen = new ArrayList<Herausforderung>();
+        }
+        Gui.setHerausforderungen(herausforderungen);
 
         //Generating and setting the Objects
         BorderPane mainPane = new BorderPane();

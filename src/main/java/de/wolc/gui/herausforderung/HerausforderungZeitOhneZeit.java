@@ -1,13 +1,19 @@
-package de.wolc.spiel.herausforderung;
+package de.wolc.gui.herausforderung;
+
+import java.io.Serializable;
 
 import de.wolc.MultiUse;
+import de.wolc.gui.Game;
 import de.wolc.spiel.Preis;
 
 /**
  * Diese Herausforderung erfordert dass der Spieler eine gewisse Zeit in
  * Sekunden im Spiel verbringt.
  */
-public class HerausforderungZeitOhneZeit extends Herausforderung {
+public class HerausforderungZeitOhneZeit extends Herausforderung implements Serializable {
+    /** MUSS um 1 erhöht werden, wenn sich die Eigenschaften der Klasse ändern. */ 
+    private static final long serialVersionUID = 1L;
+
     private double zeit;
     private double vergangeneZeit;
 
@@ -42,7 +48,7 @@ public class HerausforderungZeitOhneZeit extends Herausforderung {
     }
 
     @Override
-    public void herausforderungTick(double deltaZeit) {
+    public void herausforderungTick(Game spiel, double deltaZeit) {
         this.vergangeneZeit += deltaZeit;
         if (this.vergangeneZeit >= this.zeit) {
             this.vergangeneZeit = this.zeit;

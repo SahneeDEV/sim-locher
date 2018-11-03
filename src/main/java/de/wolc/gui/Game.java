@@ -7,6 +7,8 @@ import java.util.Random;
 
 import de.wolc.MultiUse;
 import de.wolc.gui.PapierObjekt;
+import de.wolc.gui.herausforderung.Herausforderung;
+import de.wolc.gui.herausforderung.HerausforderungZeitOhneZeit;
 import de.wolc.spiel.Farbe;
 import de.wolc.spiel.Spieler;
 import de.wolc.spiel.locher.Lochprozess;
@@ -74,13 +76,15 @@ public class Game extends AnimationTimer {
     private PapierStapel<A6> stapel_A6;
 
     //Diverse Nodes
-    private Label score, remainingTime, formatLabel, papierLabel, locherCooldown, benachrichtigungen;
+    private Label score, remainingTime, formatLabel, papierLabel, locherCooldown, benachrichtigungen, 
+        herausforderungenLabel;
     private ToggleButton formatA4Button, formatA5Button, formatA6Button;
     private HashMap<Farbe, Label> scoreLabels = new HashMap<>();
 
     private ArrayList<LocherPapierObjekt> locherPapier= new ArrayList<LocherPapierObjekt>();
 
     public Game () {
+        Gui.getHerausforderungen().add(new HerausforderungZeitOhneZeit(10d));
         try {
             this.spieler = (Spieler) Gui.DB.laden("spieler");
         } catch (Exception e) {
@@ -115,8 +119,15 @@ public class Game extends AnimationTimer {
         // Sonstige Stats
         this.formatLabel.setText("Format: " + this.spieler.getLocher().getFormat().getSimpleName());
         this.papierLabel.setText("Stapel: " + this.spieler.getLocher().getStapel().groesse());
-        this.locherCooldown.setText("Cooldown: " + Math.round(spieler.getLocher().getCooldown() * 10d) / 10d + "s");
-        remainingTime.setText("Zeit: " + Math.round(this.remainingTimeAvailable * 10d) / 10d + "s");   
+        this.locherCooldown.setText("Cooldown: " + MultiUse.sekundenRunden(this.spieler.getLocher().getCooldown())+ "s");
+        this.remainingTime.setText("Zeit: " + MultiUse.sekundenRunden(this.remainingTimeAvailable) + "s"); 
+        String herausforderungenString = "";
+        for(Herausforderung herausforderung: Gui.getHerausforderungen()) {
+            if (!herausforderung.isErreicht()) {
+                herausforderungenString += "  " + herausforderung.toString() + "\n";
+            }
+        }
+        this.herausforderungenLabel.setText("Herausforderungen:\n" + herausforderungenString);
     }
     
     public Scene GameMainStage(Stage stage){
@@ -155,16 +166,18 @@ public class Game extends AnimationTimer {
         VBox rightVBox = new VBox();
 
         // Labels erstellen
-        score = new Label();
-        papierLabel = new Label();
-        formatLabel = new Label();
-        remainingTime = new Label();
-        locherCooldown = new Label();
+        this.score = new Label();
+        this.papierLabel = new Label();
+        this.formatLabel = new Label();
+        this.remainingTime = new Label();
+        this.locherCooldown = new Label();
+        this.herausforderungenLabel = new Label();
         locherCooldown.setTextFill(Color.WHITE);
         papierLabel.setTextFill(Color.WHITE);
         score.setTextFill(Color.WHITE);
         remainingTime.setTextFill(Color.WHITE);
         formatLabel.setTextFill(Color.WHITE);
+        this.herausforderungenLabel.setTextFill(Color.WHITE);
         rightVBox.getChildren().addAll(remainingTime, score);
         for(Farbe farbe : Farbe.values()) {
             Label label = new Label();
@@ -172,7 +185,7 @@ public class Game extends AnimationTimer {
             this.scoreLabels.put(farbe, label);
             rightVBox.getChildren().add(label);
         }
-        rightVBox.getChildren().addAll(locherCooldown, formatLabel, papierLabel);
+        rightVBox.getChildren().addAll(locherCooldown, formatLabel, papierLabel, this.herausforderungenLabel);
         this.updateLabels();
 
         //Adding the Format ToggleButtons + ToggleGroup + default ToggleButton configuration
@@ -251,10 +264,18 @@ public class Game extends AnimationTimer {
             if (e.getButton() == MouseButton.PRIMARY) {
                 double cooldown = spieler.getLocher().getCooldown();
                 if (cooldown == 0) {
+                    // Lochen
                     Lochprozess prozess = spieler.getLocher().lochen();
+                    // Herausforderungen aktualisieren
+                    for(Herausforderung herausforderung: Gui.getHerausforderungen()) {
+                        if (!herausforderung.isErreicht()) {
+                            herausforderung.herausforderungLochprozess(this, prozess);
+                        }
+                    }
+                    // Erzielten Score zum Spieler hinzufügen
                     ArrayList<Konfetti> spielerKonfetti = spieler.getKonfetti();
                     spielerKonfetti.addAll(prozess.getKonfetti());
-                    
+                    // Lochprozess in GUI verarbeiten...
                     int locherPapierSize = locherPapier.size() - 1;
                     for (int i = 0; i <= locherPapierSize; i++) {
                         LocherPapierObjekt toCheckPapiere = locherPapier.get(i);
@@ -267,7 +288,7 @@ public class Game extends AnimationTimer {
                             locherPapierSize--;
                         }
                     }
-
+                    
                     if(prozess.getWarZuGross()) {
                         this.benachrichtigungZeigen("Es sind zu viele Papiere eingelegt - [RECHTSKLICK] auf Locher zum entfernen!");
                         AudioClip clip = new AudioClip(MultiUse.url("de/wolc/gui/sounds/punch_error.wav"));
@@ -326,8 +347,16 @@ public class Game extends AnimationTimer {
      * Wird zu Ende des Spiels (im letzten Tick) aufgerufen.
      */
     public void spielEnde() {
+        // Herausforderungen aktualisieren
+        for(Herausforderung herausforderung: Gui.getHerausforderungen()) {
+            if (!herausforderung.isErreicht()) {
+                herausforderung.herausforderungSpielEnde(this);
+            }
+        }
+        // Spiel & Herausforderungen speichern
         try {
             Gui.DB.speichern("spieler", this.spieler);
+            Gui.DB.speichern("herausforderungen", Gui.getHerausforderungen());
         } catch (IOException e) {
             Alert speichernFehler = new Alert(AlertType.WARNING);
             speichernFehler.setTitle("Fehler bei Spielstand speichern");
@@ -337,7 +366,8 @@ public class Game extends AnimationTimer {
             speichernFehler.setResult(ButtonType.OK);
             speichernFehler.showAndWait();
             e.printStackTrace();
-		}
+        }
+        // Zum Itemshop übergehen
         ItemShopMenu menu = new ItemShopMenu();
         this.stage.setScene(menu.ItemShopStage(this.stage));
         this.stage.setFullScreen(Gui.getEinstellungen().isVollbild());
@@ -351,6 +381,12 @@ public class Game extends AnimationTimer {
         for(int i = 0; i < this.spieler.getLocher().getStapel().groesse(); i++) {
             Papier papier = this.spieler.getLocher().getStapel().get(i);
             this.spawnLocherPapierObjekt(papier);
+        }
+        // Herausforderungen aktualisieren
+        for(Herausforderung herausforderung: Gui.getHerausforderungen()) {
+            if (!herausforderung.isErreicht()) {
+                herausforderung.herausforderungSpielStart(this);
+            }
         }
     }
 
@@ -499,10 +535,17 @@ public class Game extends AnimationTimer {
         //Check for end of Time
         if(this.remainingTimeAvailable <= 0) {
             this.stop();
-            this.spielEnde();
+            Platform.runLater(() -> this.spielEnde());
         }
 
         this.updateLabels();
+
+        // Herausforderungen aktualisieren
+        for(Herausforderung herausforderung: Gui.getHerausforderungen()) {
+            if (!herausforderung.isErreicht()) {
+                herausforderung.herausforderungTick(this, elapsedSeconds);
+            }
+        }
     }
 
 }
