@@ -4,12 +4,18 @@ import javafx.stage.Stage;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Button;
 import javafx.geometry.Pos;
 import javafx.event.EventHandler;
+
+import java.io.IOException;
+
 import javafx.event.ActionEvent;
 import javafx.scene.control.ProgressIndicator;
 
@@ -38,8 +44,21 @@ public class SettingsMenu{
         //Buttons
         Button backButton = new Button("Zur\u00fcck");
             backButton.addEventHandler(ActionEvent.ACTION, new EventHandler<ActionEvent>() {
-                @Override
-                public void handle(ActionEvent actionEvent){
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                    try {
+                        Gui.DB.speichern("einstellungen", Gui.getEinstellungen());
+                    } catch (IOException e) {
+                        Alert ladeFehler = new Alert(AlertType.ERROR);
+                        ladeFehler.setTitle("Fehler bei Einstellungen speichern");
+                        ladeFehler.setHeaderText("Beim Speichern der Einstellungen ist ein Fehler aufgetreten. Hat " +
+                            "das Spiel Schreibrechte auf das eigene Verzeichnis?\nDie gemachten Änderungen werden " +
+                            "nach Spielneustart verloren gehen.");
+                        ladeFehler.setContentText(e.toString());
+                        ladeFehler.setResult(ButtonType.OK);
+                        ladeFehler.showAndWait();
+                        e.printStackTrace();
+					}
                     MainMenu mm = new MainMenu();
                     stage.setScene(mm.MainMenuStage(stage));
                     stage.centerOnScreen();
@@ -56,6 +75,12 @@ public class SettingsMenu{
         final ProgressIndicator uploadingFiles = new ProgressIndicator();
         uploadingFiles.setVisible(false);
 
+
+        CheckBox vollbildCheckBox = new CheckBox("Vollbild");
+        vollbildCheckBox.setSelected(Gui.getEinstellungen().isVollbild());
+        vollbildCheckBox.selectedProperty().addListener(e -> {
+            Gui.getEinstellungen().setVollbild(vollbildCheckBox.isSelected());
+        });
 
         //CheckBoxes
         CheckBox RTXSupport = new CheckBox("RTX Einschalten/Ausschalten");
@@ -107,8 +132,9 @@ public class SettingsMenu{
         settingsGridPane.add(diagnoseDatenCheckBox, 0, 2);
         settingsGridPane.add(uploadingFiles, 1 , 2);
         settingsGridPane.add(RTXSupport, 0, 3);
-        settingsGridPane.add(credits, 0, 4);
-        settingsGridPane.add(backButton,0,6);
+        settingsGridPane.add(vollbildCheckBox, 0, 4);
+        settingsGridPane.add(credits, 0, 5);
+        settingsGridPane.add(backButton,0,7);
 
 
         //Get Scene size and create a new Instance

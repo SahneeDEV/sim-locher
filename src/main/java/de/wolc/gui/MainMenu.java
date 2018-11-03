@@ -1,8 +1,12 @@
 package de.wolc.gui;
 
+import de.wolc.Einstellungen;
 import de.wolc.MultiUse;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.BackgroundImage;
@@ -26,6 +30,27 @@ public class MainMenu{
 
         //Set Window title
         stage.setTitle(windowTitle);
+
+        Einstellungen einstellungen;
+        try {
+            einstellungen = (Einstellungen) Gui.DB.laden("einstellungen");
+        } catch(Exception e) {
+            Alert ladeFehler = new Alert(AlertType.ERROR);
+            ladeFehler.setTitle("Fehler bei Einstellungen laden");
+            ladeFehler.setHeaderText("Beim Laden der Einstellungen ist ein Fehler aufgetreten. Dies liegt " +
+                "wahrscheinlich daran, dass eine neue Version des Spiels nicht mit der vorherigen kompatibel " +
+                "ist. Die Einstellungen wurden deshalb auf Standard zurückgesetzt.");
+            ladeFehler.setContentText(e.toString());
+            ladeFehler.setResult(ButtonType.OK);
+            ladeFehler.showAndWait();
+            e.printStackTrace();
+
+            einstellungen = null;
+        }
+        if (einstellungen == null) {
+            einstellungen = new Einstellungen();
+        }
+        Gui.setEinstellungen(einstellungen);
 
         //Generating and setting the Objects
         BorderPane mainPane = new BorderPane();
@@ -57,7 +82,7 @@ public class MainMenu{
         button_playgame.addEventHandler(ActionEvent.ACTION, actionEvent -> {
             Game g = new Game();               
             stage.setScene(g.GameMainStage(stage));
-            stage.setFullScreen(true);
+            stage.setFullScreen(Gui.getEinstellungen().isVollbild());
         });
         //Button2
         final Button button_settings = new Button("⚙ Einstellungen ⚙");
@@ -88,7 +113,6 @@ public class MainMenu{
         //Adding the Buttons to the VBox and the VBox to the BorderPane
         buttonBox.getChildren().addAll(button_playgame, button_settings, button_dummy, button_exit);
         mainPane.setCenter(buttonBox);
-
 
         return sceneMainWindow;
     }

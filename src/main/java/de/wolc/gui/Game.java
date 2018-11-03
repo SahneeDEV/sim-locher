@@ -133,7 +133,7 @@ public class Game extends AnimationTimer {
 
         //Set Fullscreen
         //TODO: wenn man den Fullscreen verlässt skalieren die Nodes nicht mehr nach bzw. ändern Ihre Position nicht erneut
-        this.stage.setFullScreen(true);
+        this.stage.setFullScreen(Gui.getEinstellungen().isVollbild());
         this.stage.setFullScreenExitHint("");
 
         //Setting Background and width and height to screen
@@ -342,8 +342,10 @@ public class Game extends AnimationTimer {
         return gameScene;
     }
 
+    /**
+     * Wird zu Ende des Spiels (im letzten Tick) aufgerufen.
+     */
     public void spielEnde() {
-        this.stop();
         try {
             Gui.DB.speichern("spieler", this.spieler);
         } catch (IOException e) {
@@ -357,7 +359,18 @@ public class Game extends AnimationTimer {
 		}
         ItemShopMenu menu = new ItemShopMenu();
         this.stage.setScene(menu.ItemShopStage(this.stage));
-        this.stage.setFullScreen(true);
+        this.stage.setFullScreen(Gui.getEinstellungen().isVollbild());
+    }
+
+    /**
+     * Wird zu Start des Spiels (im ersten Tick) aufgerufen.
+     */
+    private void spielStart() {
+        // Für alle bereits existierende Papiere ein LocherPapierObjekt spawnen um diese anzuzeigen.
+        for(int i = 0; i < this.spieler.getLocher().getStapel().groesse(); i++) {
+            Papier papier = this.spieler.getLocher().getStapel().get(i);
+            this.spawnLocherPapierObjekt(papier);
+        }
     }
 
     public void spawnPapier() {

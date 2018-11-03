@@ -417,7 +417,7 @@ public class ItemShopMenu {
         this.speichern();
         Game g = new Game();               
         stage.setScene(g.GameMainStage(stage));
-        stage.setFullScreen(true);
+        stage.setFullScreen(Gui.getEinstellungen().isVollbild());
     }
 
     private void zurueck() {
