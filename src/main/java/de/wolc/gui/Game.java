@@ -134,7 +134,6 @@ public class Game{
 
         //Set Fullscreen
         //TODO: wenn man den Fullscreen verlässt skalieren die Nodes nicht mehr nach bzw. ändern Ihre Position nicht erneut
-        this.stage.setFullScreen(true);
         this.stage.setFullScreenExitHint("");
 
         //Setting Background and width and height to screen
@@ -153,19 +152,6 @@ public class Game{
             this.spieler.getLocher().setFormat(A4.class);
             this.spieler.getLocher().einlegen(stapel_A4);
         }
-        else{
-            this.spieler.getLocher().setFormat(this.spieler.getLocher().getFormat());
-            if(this.spieler.getLocher().getFormat() == A4.class){
-                this.spieler.getLocher().einlegen(stapel_A4);
-            }
-            else if(this.spieler.getLocher().getFormat() == A5.class){
-                this.spieler.getLocher().einlegen(stapel_A5);
-            }
-            else if(this.spieler.getLocher().getFormat() == A6.class){
-                this.spieler.getLocher().einlegen(stapel_A6);
-            }
-        }
-        
         
         //Creating the Component-nodes
         //Creating the VBox for the right Output
