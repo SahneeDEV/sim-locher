@@ -81,7 +81,7 @@ public class Game extends AnimationTimer {
     private ArrayList<LocherPapierObjekt> locherPapierObjekte = new ArrayList<LocherPapierObjekt>();
 
     public Game () {
-        Gui.getHerausforderungen().add(new HerausforderungZeitOhneZeit(10d));
+        Gui.getHerausforderungen().add(new HerausforderungZeitOhneZeit(50d));
         try {
             this.spieler = (Spieler) Gui.DB.laden("spieler");
         } catch (Exception e) {
@@ -503,7 +503,12 @@ public class Game extends AnimationTimer {
      * @param belohnung Die Belohnung für die Herausforderung.
      */
     private void belohnungVerteilen(Preis belohnung) {
-        // TODO: Dem Spieler gutschreiben!
+        for(Farbe farbe: belohnung.getKosten().keySet()) {
+            int anzahl = belohnung.getKosten().getOrDefault(farbe,  0);
+            for (int i = 0; i < anzahl; i++) {
+                this.spieler.getKonfetti().add(new Konfetti(farbe));
+            }
+        }
     }
 
     /**
@@ -559,8 +564,6 @@ public class Game extends AnimationTimer {
                 herausforderung.setBelohnungErhalten();
             }
         }
-
-        // Belohnungen für erreichte Herausforderungen verteilen
     }
 
 }

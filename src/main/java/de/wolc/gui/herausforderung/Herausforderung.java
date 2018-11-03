@@ -34,7 +34,7 @@ public abstract class Herausforderung implements Serializable {
      * @return true wenn ja, sonst false.
      */
     public boolean isErreicht() {
-        return erreicht;
+        return this.erreicht;
     }
 
     /**
@@ -42,7 +42,7 @@ public abstract class Herausforderung implements Serializable {
      * @return Die Belohnung in Konfetti.
      */
     public Preis getBelohnung() {
-        return belohnung;
+        return this.belohnung;
     }
 
     /**
@@ -50,7 +50,7 @@ public abstract class Herausforderung implements Serializable {
      * @return true wenn ja, sonst false.
      */
     public boolean hatBelohnungErhalten() {
-        return belohnungErhalten;
+        return this.belohnungErhalten;
     }
 
     /**

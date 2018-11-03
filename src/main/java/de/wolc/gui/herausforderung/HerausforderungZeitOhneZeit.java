@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 import de.wolc.MultiUse;
 import de.wolc.gui.Game;
+import de.wolc.spiel.Farbe;
 import de.wolc.spiel.Preis;
 
 /**
@@ -18,7 +19,7 @@ public class HerausforderungZeitOhneZeit extends Herausforderung implements Seri
     private double vergangeneZeit;
 
     public HerausforderungZeitOhneZeit(double zeit) {
-        super(new Preis());
+        super(new Preis(Farbe.ROT, 1000));
         this.zeit = zeit;
         this.vergangeneZeit = 0d;
     }
