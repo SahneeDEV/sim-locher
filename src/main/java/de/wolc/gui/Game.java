@@ -48,14 +48,13 @@ import javafx.scene.shape.Shape;
 import javafx.scene.text.Font;
 import javafx.scene.media.AudioClip;
 
-public class Game{
+public class Game extends AnimationTimer {
 
     private final String windowTitle = "World of Locher Craft";
     private Spieler spieler;
     private Rectangle locher_new;
     private AnchorPane gameArea;   
     private Stage stage;
-    private AnimationTimer timer;
     
     private static final Random RANDOM = new Random();
     private static final double BENACHRICHTUNG_ANZEIGEZEIT = 3.5d;
@@ -65,7 +64,7 @@ public class Game{
     private double benachrichtigungenZeit = 0d;
 
     //Variables for Countdown timer
-    private long firstNanoTimeTimer = 0;
+    private long letzteNanoZeit = 0;
     private double timeToNextPapier = 0;
 
     //Papierstapel erstellen
@@ -103,7 +102,7 @@ public class Game{
         if (this.spieler == null) {
             this.spieler = new Spieler();
         }
-        this.firstNanoTimeTimer = 0;
+        this.letzteNanoZeit = 0;
     }
 
     private void updateLabels() {
@@ -134,6 +133,7 @@ public class Game{
 
         //Set Fullscreen
         //TODO: wenn man den Fullscreen verlässt skalieren die Nodes nicht mehr nach bzw. ändern Ihre Position nicht erneut
+        this.stage.setFullScreen(true);
         this.stage.setFullScreenExitHint("");
 
         //Setting Background and width and height to screen
@@ -328,49 +328,6 @@ public class Game{
         });
 
 
-        //creating a new Animation Timer for refreshing the GUI
-        this.timer = new AnimationTimer(){
-            public void handle(long currentNanoTime){
-                if (firstNanoTimeTimer == 0) {
-                    firstNanoTimeTimer = currentNanoTime;
-                }
-                //Getting new and last TimeStamp in Miliseconds and calculating 
-                long elapsedNanoSeconds = currentNanoTime - firstNanoTimeTimer;
-                double elapsedSeconds = ((elapsedNanoSeconds / 1000000000d));
-                firstNanoTimeTimer = currentNanoTime;
-
-                //Triggering Cooldown and giving him the elapsedSeconds
-                spieler.tick(elapsedSeconds);
-
-                timeToNextPapier -= elapsedSeconds;
-                remainingTimeAvailable -= elapsedSeconds;
-                benachrichtigungenZeit -= elapsedSeconds;
-
-                if (benachrichtigungenZeit <= 0) {
-                    Game.this.benachrichtigungen.setText("");
-                    benachrichtigungenZeit = 0;
-                }
-
-                if (timeToNextPapier <= 0) {
-                    spawnPapier();
-                    timeToNextPapier = 0.5d + 2.5d * RANDOM.nextDouble();
-                }
-
-                //Check for end of Time
-                if(remainingTimeAvailable <= 0) {
-                    Game.this.spielEnde();
-                }
-
-                Game.this.updateLabels();
-
-                PapierStapel<?> stapel = spieler.getLocher().getStapel();
-                if (stapel.groesse() == 0) {
-                    
-                }
-            }
-        };
-
-
         //Add Nodes to the AnchorPane
         gameArea.getChildren().addAll(locher_new, benachrichtigungen);
 
@@ -380,13 +337,13 @@ public class Game{
         //Set Window Titel
         stage.setTitle(windowTitle);
 
-        this.timer.start();
+        this.start();
 
         return gameScene;
     }
 
     public void spielEnde() {
-        this.timer.stop();
+        this.stop();
         try {
             Gui.DB.speichern("spieler", this.spieler);
         } catch (IOException e) {
@@ -470,10 +427,18 @@ public class Game{
                 abgelegt = false;
             }
             if (abgelegt) {
-                locherPapier.add(new LocherPapierObjekt(Game.this, spieler.getLocher().getStapel().groesse(), locher_new, objekt.getPapier()));
+                this.spawnLocherPapierObjekt(objekt.getPapier());
                 objekt.zerstoeren();
             }
         }
+    }
+
+    /**
+     * Spawnt ein Locherpapierobjekt für das gegebene Papier.
+     * @param papier Das Papier für das das in den Locher eingelegte Locher Papierobjekt erstellt werden soll.
+     */
+    private void spawnLocherPapierObjekt(Papier papier) {
+        this.locherPapier.add(new LocherPapierObjekt(this, this.spieler.getLocher().getStapel().groesse(), this.locher_new, papier));
     }
 
     /**
@@ -503,6 +468,46 @@ public class Game{
             papierObjekt.zerstoeren();
         }
         this.locherPapier.clear();
+    }
+
+    @Override
+    public void handle(long jetztNanoZeit) {
+        if (letzteNanoZeit == 0) {
+            letzteNanoZeit = jetztNanoZeit;
+        }
+        //Getting new and last TimeStamp in Miliseconds and calculating 
+        long elapsedNanoSeconds = jetztNanoZeit - letzteNanoZeit;
+        double elapsedSeconds = ((elapsedNanoSeconds / 1000000000d));
+        letzteNanoZeit = jetztNanoZeit;
+
+        //Triggering Cooldown and giving him the elapsedSeconds
+        spieler.tick(elapsedSeconds);
+
+        timeToNextPapier -= elapsedSeconds;
+        remainingTimeAvailable -= elapsedSeconds;
+        benachrichtigungenZeit -= elapsedSeconds;
+
+        if (benachrichtigungenZeit <= 0) {
+            Game.this.benachrichtigungen.setText("");
+            benachrichtigungenZeit = 0;
+        }
+
+        if (timeToNextPapier <= 0) {
+            spawnPapier();
+            timeToNextPapier = 0.5d + 2.5d * RANDOM.nextDouble();
+        }
+
+        //Check for end of Time
+        if(remainingTimeAvailable <= 0) {
+            Game.this.spielEnde();
+        }
+
+        Game.this.updateLabels();
+
+        PapierStapel<?> stapel = spieler.getLocher().getStapel();
+        if (stapel.groesse() == 0) {
+            
+        }
     }
 
 }
