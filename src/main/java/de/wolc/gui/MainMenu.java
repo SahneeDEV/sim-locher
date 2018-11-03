@@ -39,7 +39,7 @@ public class MainMenu{
             ladeFehler.setTitle("Fehler bei Einstellungen laden");
             ladeFehler.setHeaderText("Beim Laden der Einstellungen ist ein Fehler aufgetreten. Dies liegt " +
                 "wahrscheinlich daran, dass eine neue Version des Spiels nicht mit der vorherigen kompatibel " +
-                "ist. Die Einstellungen wurden deshalb auf Standard zurückgesetzt.");
+                "ist.\nDie Einstellungen wurden deshalb auf Standard zurückgesetzt.");
             ladeFehler.setContentText(e.toString());
             ladeFehler.setResult(ButtonType.OK);
             ladeFehler.showAndWait();

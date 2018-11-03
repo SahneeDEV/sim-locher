@@ -76,23 +76,19 @@ public class Game extends AnimationTimer {
     //Diverse Nodes
     private Label score, remainingTime, formatLabel, papierLabel, locherCooldown, benachrichtigungen;
     private ToggleButton formatA4Button, formatA5Button, formatA6Button;
-    private ToggleGroup formatGroup;
     private HashMap<Farbe, Label> scoreLabels = new HashMap<>();
-    private Alert speichernFehler, ladeFehler;
-
-    //SaveGame Toggle Buttons
-    private Boolean loadedSaveGame = false;
 
     private ArrayList<LocherPapierObjekt> locherPapier= new ArrayList<LocherPapierObjekt>();
 
     public Game () {
         try {
             this.spieler = (Spieler) Gui.DB.laden("spieler");
-            loadedSaveGame = true;
         } catch (Exception e) {
-            ladeFehler = new Alert(AlertType.INFORMATION);
-            ladeFehler.setTitle("Kein Speicherstand gefunden!");
-            ladeFehler.setHeaderText("Es wurde kein Speicherstand gefunden oder es konnte kein Speicherstand geladen werden.");
+            Alert ladeFehler = new Alert(AlertType.INFORMATION);
+            ladeFehler.setTitle("Fehler bei Spielstand laden");
+            ladeFehler.setHeaderText("Beim Laden des Spielstandes ist ein Fehler aufgetreten. Dies liegt " +
+                "wahrscheinlich daran, dass eine neue Version des Spiels nicht mit der vorherigen kompatibel " +
+                "ist.\nEs wurde deshalb ein neuer Spielstand begonnen.");
             ladeFehler.setContentText(e.toString());
             ladeFehler.setResult(ButtonType.OK);
             ladeFehler.showAndWait();
@@ -181,7 +177,7 @@ public class Game extends AnimationTimer {
 
         //Adding the Format ToggleButtons + ToggleGroup + default ToggleButton configuration
         HBox formatBox = new HBox();
-        formatGroup = new ToggleGroup();
+        ToggleGroup formatGroup = new ToggleGroup();
         formatBox.setPadding(new Insets(20, 5 , 20 ,5));
 
         formatA4Button = new ToggleButton("A4");
@@ -213,26 +209,9 @@ public class Game extends AnimationTimer {
         BorderPane.setAlignment(formatBox, Pos.CENTER_LEFT);
 
         //If a SaveGame has been loaded the ToggleButtons get adjusted here
-        if(loadedSaveGame){
-            //A4
-            if(this.spieler.getLocher().getFormat() == A4.class){
-                this.formatA4Button.setSelected(true);
-                this.formatA5Button.setSelected(false);
-                this.formatA6Button.setSelected(false);
-            }
-            //A5
-            else if(this.spieler.getLocher().getFormat() == A5.class){
-                this.formatA4Button.setSelected(false);
-                this.formatA5Button.setSelected(true);
-                this.formatA6Button.setSelected(false);
-            }
-            //A6
-            else if(this.spieler.getLocher().getFormat() == A6.class){
-                this.formatA4Button.setSelected(false);
-                this.formatA5Button.setSelected(false);
-                this.formatA6Button.setSelected(true);
-            }
-        }
+        this.formatA4Button.setSelected(this.spieler.getLocher().getFormat() == A4.class);
+        this.formatA5Button.setSelected(this.spieler.getLocher().getFormat() == A5.class);
+        this.formatA6Button.setSelected(this.spieler.getLocher().getFormat() == A6.class);
 
         //Adding remainingTime and score to VBox 
 
@@ -350,9 +329,10 @@ public class Game extends AnimationTimer {
         try {
             Gui.DB.speichern("spieler", this.spieler);
         } catch (IOException e) {
-            speichernFehler = new Alert(AlertType.WARNING);
-            speichernFehler.setTitle("Fehler beim Speichern deines Spielstands!");
-            speichernFehler.setHeaderText("Beim Speichern deines Spielstands ist ein Fehler aufgetreten.");
+            Alert speichernFehler = new Alert(AlertType.WARNING);
+            speichernFehler.setTitle("Fehler bei Spielstand speichern");
+            speichernFehler.setHeaderText("Beim Speichern des Spielstandes ist ein Fehler aufgetreten. Hat " +
+                "das Spiel Schreibrechte auf das eigene Verzeichnis?\nDer erzielte Fortschritt ist verloren gegangen.");
             speichernFehler.setContentText(e.toString());
             speichernFehler.setResult(ButtonType.OK);
             speichernFehler.showAndWait();
