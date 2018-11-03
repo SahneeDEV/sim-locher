@@ -43,8 +43,11 @@
                 <includeEmptyDirs>true</includeEmptyDirs>
                 <resources>
                   <resource>
-                      <directory>${basedir}/src/main/java/</directory>
-                      <filtering>false</filtering>
+                    <directory>${basedir}/src/main/java/</directory>
+                    <filtering>false</filtering>
+                    <excludes>
+                      <exclude>**/*.java</exclude>
+                    </excludes>
                   </resource>
                 </resources>
               </configuration>

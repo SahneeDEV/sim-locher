@@ -2,6 +2,7 @@
   "files.exclude": {
     "**/*.class": true,
     "**/*.ctxt": true,
+    "**/target": true,
     "**/*.bluej": true
   },
   "editor.tabSize": 4,
