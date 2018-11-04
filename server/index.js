@@ -1,12 +1,13 @@
 const dotenv = require("dotenv");
 const express = require("express");
-const path = require("path");
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const BadWordFilter = require("bad-words");
 
 // Für die lokale Entwicklung kann eine .env Datei angelegt werden welche Umgebungsvariablen beinhaltet.
-// Diese wird nicht commited.
+// Diese wird nicht commited. z.B:
+// DB=mongodb://user:password@host:port/datenbank
+// PORT=12345
 dotenv.config();
 
 // Port für Kommunikation mit dem Server

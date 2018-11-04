@@ -14,6 +14,8 @@ Je mehr Konfetti man erzeugt desto bessere Upgrades können für den eigenen Loc
 
 ### Leaderboardserver
 
+#### Verwenden
+
 Der Leaderboard REST Server ist unter https://sim-locher.herokuapp.com/ erreichbar.
 
 Folgende HTTP Requests können verwendet werden(Alle Requests verwenden JSON als Payload Format):
@@ -26,6 +28,16 @@ Folgende HTTP Requests können verwendet werden(Alle Requests verwenden JSON als
 
 Rückgabecodes sind entweder 200, 400 oder 500. Bei 400 und 500 ist der Fehler in der Property `fehler` zu finden.
 Bei 200 wird stets die Antwort auf die Anfrage gesendet.
+
+#### Entwickeln
+
+Server lokal laufen lassen: 
+
+1. Node.js(10) installieren: https://nodejs.org/en/
+2. MongoDB(3.6) installieren: https://www.mongodb.com/download-center/community
+3. MongoDB starten, eventuell als Service einrichten
+4. `/server/.env` Datei erstellen und `DB=mongodb://user:password@host:port/datenbank` eintragen. (`user`, `password`, `host`, `port` & `datenbank` sind hier natürlich durch die eigenen Werte zu ersetzen.)
+5. `/scripts/run-server` ausführen um den Server zu starten.
 
 ### IDEs
 
