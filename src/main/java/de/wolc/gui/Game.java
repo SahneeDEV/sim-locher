@@ -63,7 +63,7 @@ public class Game extends AnimationTimer {
     private static final double BENACHRICHTUNG_ANZEIGEZEIT = 3.5d;
     
     //Game Variables
-    private double remainingTimeAvailable = 100000000d;
+    private double remainingTimeAvailable = 30d;
     private double benachrichtigungenZeit = 0d;
 
     //Variables for Countdown timer
