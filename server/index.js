@@ -46,7 +46,8 @@ mongoose.connection.once("open", () => {
       const name = filter.clean(req.body.name);
       const punkte = req.body.punkte;
       // Sicherstellen dass man keine ungültigen Datentypen sendet, was den Server zum Absturz bringen könnte.
-      if (typeof name !== "string" || typeof punkte !== "number" || punkte < 0 || name.length < 1 || Number.isNaN(punkte)) {
+      if (typeof name !== "string" || typeof punkte !== "number" || punkte < 0 || name.length < 1 
+        || Number.isNaN(punkte) || punkte % 1 !== 0) {
         return res.json({ fehler: "Ungültige Daten" }).status(400).end();
       }
       // Alten Datensatz suchen
