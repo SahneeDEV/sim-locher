@@ -11,3 +11,6 @@ scripts/sources.txt
 target/
 # Spielinterne Datenbank
 .db/
+# Server Dependencies
+server/node_modules/
+*.env
