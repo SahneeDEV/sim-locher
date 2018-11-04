@@ -115,7 +115,7 @@ public class Game extends AnimationTimer {
         this.letzteNanoZeit = 0;
 
         upgrades = this.spieler.getLocher().getUpgrades();
-        double remainingTimeAvailable = STANDARD_REMAINING_TIME_AVAILABLE;
+        remainingTimeAvailable = STANDARD_REMAINING_TIME_AVAILABLE;
         for (LocherUpgrade upgrade : upgrades) {
             remainingTimeAvailable = upgrade.upgradeSpielZeit(remainingTimeAvailable); 
         }

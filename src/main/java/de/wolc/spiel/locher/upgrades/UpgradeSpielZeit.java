@@ -33,6 +33,6 @@ public class UpgradeSpielZeit extends LocherUpgrade {
 
     @Override
     public String toString() {
-        return this.getGuiName() + ": +" + time + " Spielzeit";
+        return this.getGuiName() + ": +" + (Math.round((time * 10) / 10)) + "s Spielezeit";
     }
 }

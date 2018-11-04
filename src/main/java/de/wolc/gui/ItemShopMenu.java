@@ -203,7 +203,7 @@ public class ItemShopMenu {
         }
         { // Upgrade Spiel Zeit
             //TODO: Wer einen besseren Namen weiß kann dieses anpassen -jh            
-            UpgradeSpielZeit upgrade = new UpgradeSpielZeit(ZUFALL.nextDouble());
+            UpgradeSpielZeit upgrade = new UpgradeSpielZeit(ZUFALL.nextDouble()*10+0.1);
             Label label = new Label();
             label.setText("Upgrade Spiel Zeit");
             Button kaufen = new Button();
