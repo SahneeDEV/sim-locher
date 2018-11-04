@@ -124,7 +124,8 @@ public class Game extends AnimationTimer {
         this.score.setText("Score: " + this.spieler.getKonfetti().size());
         // Sonstige Stats
         this.formatLabel.setText("Format: " + this.spieler.getLocher().getFormat().getSimpleName());
-        this.papierLabel.setText("Stapel: " + this.spieler.getLocher().getStapel().groesse());
+        this.papierLabel.setText("Stapel: " + this.spieler.getLocher().getStapel().groesse() + "/" + this.spieler.getLocher().getStaerke());
+        this.formatLabel.setText("Stanzer: " + this.spieler.getLocher().getStanzer());
         this.locherCooldown.setText("Cooldown: " + Math.round(spieler.getLocher().getCooldown() * 10d) / 10d + "s");
         remainingTime.setText("Zeit: " + Math.round(this.remainingTimeAvailable * 10d) / 10d + "s");   
     }
