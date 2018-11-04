@@ -18,13 +18,13 @@ Je mehr Konfetti man erzeugt desto bessere Upgrades können für den eigenen Loc
 
 Der Leaderboard REST Server ist unter https://sim-locher.herokuapp.com/ erreichbar.
 
-Folgende HTTP Requests können verwendet werden(Alle Requests verwenden JSON als Payload Format):
+Folgende HTTP Requests können verwendet werden(Alle Requests verwenden XML als Payload Format):
 
- * `GET / {}` - Leitet nur auf GitHub weiter. Dient nur dem falls jemand die URL in den Browser tippen sollte.
- * `POST /api/leaderboard { name: String, punkte: Integer }` - Legt den neuen Leaderboard Score für den Spieler fest.
- * `GET /api/leaderboard {}` - Gibt alle Leaderboard Scores zurück.
- * `GET /api/leaderboard/top/:top {}` - Gibt die Top `:top` Leaderboard Scores zurück.
- * `GET /api/leaderboard/spieler/:name {}` - Gibt den aktuellen Leaderboard Score von `:name` zurück.
+ * `GET / </>` - Leitet nur auf GitHub weiter. Dient nur dem falls jemand die URL in den Browser tippen sollte.
+ * `POST /api/leaderboard <root><name>String</name><punkte>Integer</punkte></root>` - Legt den neuen Leaderboard Score für den Spieler fest.
+ * `GET /api/leaderboard </>` - Gibt alle Leaderboard Scores zurück.
+ * `GET /api/leaderboard/top/:top </>` - Gibt die Top `:top` Leaderboard Scores zurück.
+ * `GET /api/leaderboard/spieler/:name </>` - Gibt den aktuellen Leaderboard Score von `:name` zurück.
 
 Rückgabecodes sind entweder 200, 400 oder 500. Bei 400 und 500 ist der Fehler in der Property `fehler` zu finden.
 Bei 200 wird stets die Antwort auf die Anfrage gesendet.
