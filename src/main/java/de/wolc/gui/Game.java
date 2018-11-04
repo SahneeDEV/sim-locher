@@ -11,6 +11,7 @@ import de.wolc.gui.PapierObjekt;
 import de.wolc.spiel.Farbe;
 import de.wolc.spiel.Spieler;
 import de.wolc.spiel.locher.Lochprozess;
+import de.wolc.spiel.locher.upgrades.LocherUpgrade;
 import de.wolc.spiel.papier.A4;
 import de.wolc.spiel.papier.A5;
 import de.wolc.spiel.papier.A6;
@@ -63,8 +64,10 @@ public class Game extends AnimationTimer {
     private static final double BENACHRICHTUNG_ANZEIGEZEIT = 3.5d;
     
     //Game Variables
-    private double remainingTimeAvailable = 30d;
+    private static final double STANDARD_REMAINING_TIME_AVAILABLE = 30d;
+    private double remainingTimeAvailable;
     private double benachrichtigungenZeit = 0d;
+    private ArrayList<LocherUpgrade> upgrades;
 
     //Variables for Countdown timer
     private long letzteNanoZeit = 0;
@@ -110,7 +113,16 @@ public class Game extends AnimationTimer {
             }
         }
         this.letzteNanoZeit = 0;
+
+        upgrades = this.spieler.getLocher().getUpgrades();
+        double remainingTimeAvailable = STANDARD_REMAINING_TIME_AVAILABLE;
+        for (LocherUpgrade upgrade : upgrades) {
+            remainingTimeAvailable = upgrade.upgradeSpielZeit(remainingTimeAvailable); 
+        }
+        
     }
+
+
 
     private void updateLabels() {
         // Score einteilen nach Farbe

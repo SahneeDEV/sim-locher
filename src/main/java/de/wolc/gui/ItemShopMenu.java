@@ -41,6 +41,7 @@ import de.wolc.spiel.locher.LocherSkin;
 import de.wolc.spiel.locher.upgrades.LocherUpgrade;
 import de.wolc.spiel.locher.upgrades.UpgradeLocherAufSpeed;
 import de.wolc.spiel.locher.upgrades.UpgradePanzerStanzer;
+import de.wolc.spiel.locher.upgrades.UpgradeSpielZeit;
 import de.wolc.spiel.locher.upgrades.UpgradeWeissesLoch;
 import de.wolc.spiel.papier.Konfetti;
 
@@ -200,6 +201,28 @@ public class ItemShopMenu {
                 }
             });
         }
+        { // Upgrade Spiel Zeit
+            //TODO: Wer einen besseren Namen weiß kann dieses anpassen -jh            
+            UpgradeSpielZeit upgrade = new UpgradeSpielZeit(ZUFALL.nextDouble());
+            Label label = new Label();
+            label.setText("Upgrade Spiel Zeit");
+            Button kaufen = new Button();
+            kaufen.setText("Kaufen");
+            Button ansehen = new Button();
+            ansehen.setText("Ansehen");
+            grid.add(label, 0, 4);
+            grid.add(kaufen, 1, 4);
+            grid.add(ansehen, 2, 4);
+            ansehen.setOnMouseClicked(e -> {
+                this.upgradesZeigen(label.getText(), updatesVonTyp(UpgradeSpielZeit.class));
+            });
+            kaufen.setOnMouseClicked(e -> {
+                if (this.kaufErbitten(upgrade.toString(), upgrade.getPreis())) {
+                    this.spieler.getLocher().getUpgrades().add(upgrade);
+                }
+            });
+        }
+
         ScrollPane scroll = new ScrollPane();
         scroll.setContent(grid);
         return scroll;
