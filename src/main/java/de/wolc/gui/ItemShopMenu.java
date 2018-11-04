@@ -32,6 +32,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Random;
+import java.util.concurrent.Callable;
 
 import de.wolc.spiel.Farbe;
 import de.wolc.spiel.Preis;
@@ -41,6 +42,7 @@ import de.wolc.spiel.locher.LocherSkin;
 import de.wolc.spiel.locher.upgrades.LocherUpgrade;
 import de.wolc.spiel.locher.upgrades.UpgradeLocherAufSpeed;
 import de.wolc.spiel.locher.upgrades.UpgradePanzerStanzer;
+import de.wolc.spiel.locher.upgrades.UpgradeVampir;
 import de.wolc.spiel.locher.upgrades.UpgradeWeissesLoch;
 import de.wolc.spiel.papier.Konfetti;
 
@@ -48,6 +50,7 @@ public class ItemShopMenu {
     private static final String TITLE = "World of Locher Craft - 💲 Pay2Win 💲";
     private static final Random ZUFALL = new Random();
 
+    private Map<String, LocherUpgrade> upgradeCache = new HashMap<>();
     private Spieler spieler;
     private Stage stage;
 
@@ -55,6 +58,7 @@ public class ItemShopMenu {
     private Rectangle locherVorschau;
     private Label scoreLabel;
     private BorderPane pane;
+    private GridPane upgradeShopGrid;
 
     private Alert speichernFehler, ladeFehler;
 
@@ -127,87 +131,74 @@ public class ItemShopMenu {
     }
 
     private Node guiUpgradeShop() {
-        GridPane grid = new GridPane();
-        grid.setHgap(1);
-        grid.setVgap(2);
+        this.upgradeShopGrid = new GridPane();
+        this.upgradeShopGrid.setHgap(1);
+        this.upgradeShopGrid.setVgap(2);
         { // Alle Upgrades
             Label label = new Label();
             label.setText("⚒ Upgrades 🔨");
             Button ansehen = new Button();
             ansehen.setText("Ansehen");
-            grid.add(label, 0, 0);
-            grid.add(ansehen, 2, 0);
+            this.upgradeShopGrid.add(label, 0, 0);
+            this.upgradeShopGrid.add(ansehen, 2, 0);
             ansehen.setOnMouseClicked(e -> {
                 this.upgradesZeigen("Alle Upgrades", this.spieler.getLocher().getUpgrades());
             });
         }
-        { // PANZER STANZER
-            UpgradePanzerStanzer upgrade = new UpgradePanzerStanzer(ZUFALL.nextInt(10));
-            Label label = new Label();
-            label.setText("Panzer Stanzer");
-            Button kaufen = new Button();
-            kaufen.setText("Kaufen");
-            Button ansehen = new Button();
-            ansehen.setText("Ansehen");
-            grid.add(label, 0, 1);
-            grid.add(kaufen, 1, 1);
-            grid.add(ansehen, 2, 1);
-            ansehen.setOnMouseClicked(e -> {
-                this.upgradesZeigen(label.getText(), updatesVonTyp(UpgradePanzerStanzer.class));
-            });
-            kaufen.setOnMouseClicked(e -> {
-                if (this.kaufErbitten(upgrade.toString(), upgrade.getPreis())) {
-                    this.spieler.getLocher().getUpgrades().add(upgrade);
-                }
-            });
-        }
-        { // LOCHER AUF SPEED
-            double min = Math.round(ZUFALL.nextDouble() * 10d) / 10d;
+        guiUpgradeShop(UpgradePanzerStanzer.class, "Panzer Stanzer", () -> {
+            UpgradePanzerStanzer upgrade = new UpgradePanzerStanzer(ZUFALL.nextInt(10) + 1);
+            return upgrade;
+        });
+        guiUpgradeShop(UpgradeLocherAufSpeed.class, "Locher auf Speed", () -> {
+            double min = Math.round(ZUFALL.nextDouble() * 10d) / 10d + 0.1d;
             double max = min + Math.round(ZUFALL.nextDouble() * 10d) / 10d;
             UpgradeLocherAufSpeed upgrade = new UpgradeLocherAufSpeed(min, max);
-            Label label = new Label();
-            label.setText("Locher auf Speed");
-            Button kaufen = new Button();
-            kaufen.setText("Kaufen");
-            Button ansehen = new Button();
-            ansehen.setText("Ansehen");
-            grid.add(label, 0, 2);
-            grid.add(kaufen, 1, 2);
-            grid.add(ansehen, 2, 2);
-            ansehen.setOnMouseClicked(e -> {
-                this.upgradesZeigen(label.getText(), updatesVonTyp(UpgradeLocherAufSpeed.class));
-            });
-            kaufen.setOnMouseClicked(e -> {
-                if (this.kaufErbitten(upgrade.toString(), upgrade.getPreis())) {
-                    this.spieler.getLocher().getUpgrades().add(upgrade);
-                }
-            });
-        }
-        { // WEISSES LOCH
-            int min = ZUFALL.nextInt(5);
+            return upgrade;
+        });
+        guiUpgradeShop(UpgradeWeissesLoch.class, "Weißes Loch", () -> {
+            int min = ZUFALL.nextInt(5) + 1;
             int max = min + ZUFALL.nextInt(5);
             UpgradeWeissesLoch upgrade = new UpgradeWeissesLoch(min, max);
-            Label label = new Label();
-            label.setText("Weißes Loch");
-            Button kaufen = new Button();
-            kaufen.setText("Kaufen");
-            Button ansehen = new Button();
-            ansehen.setText("Ansehen");
-            grid.add(label, 0, 3);
-            grid.add(kaufen, 1, 3);
-            grid.add(ansehen, 2, 3);
-            ansehen.setOnMouseClicked(e -> {
-                this.upgradesZeigen(label.getText(), updatesVonTyp(UpgradeWeissesLoch.class));
-            });
-            kaufen.setOnMouseClicked(e -> {
+            return upgrade;
+        });
+        guiUpgradeShop(UpgradeVampir.class, "Vampir", () -> {
+            UpgradeVampir upgrade = new UpgradeVampir(ZUFALL.nextInt(5) + 1);
+            return upgrade;
+        });
+        ScrollPane scroll = new ScrollPane();
+        scroll.setContent(this.upgradeShopGrid);
+        return scroll;
+    }
+
+    private <T extends LocherUpgrade> void guiUpgradeShop(Class<T> typ, String name, Callable<T> factory) {
+        upgradeCache.put(name, null);
+        Label label = new Label();
+        label.setText(name);
+        Button kaufen = new Button();
+        kaufen.setText("Kaufen");
+        Button ansehen = new Button();
+        ansehen.setText("Ansehen");
+        upgradeShopGrid.add(label, 0, upgradeCache.size());
+        upgradeShopGrid.add(kaufen, 1, upgradeCache.size());
+        upgradeShopGrid.add(ansehen, 2, upgradeCache.size());
+        ansehen.setOnMouseClicked(e -> {
+            this.upgradesZeigen(label.getText(), updatesVonTyp(typ));
+        });
+        kaufen.setOnMouseClicked(e -> {
+            try {
+                LocherUpgrade upgrade = upgradeCache.get(name);
+                if (upgrade == null) {
+                    upgrade = factory.call();
+                    upgradeCache.put(name, factory.call());
+                }
                 if (this.kaufErbitten(upgrade.toString(), upgrade.getPreis())) {
                     this.spieler.getLocher().getUpgrades().add(upgrade);
+                    upgradeCache.put(name, null);
                 }
-            });
-        }
-        ScrollPane scroll = new ScrollPane();
-        scroll.setContent(grid);
-        return scroll;
+            } catch (Exception error) {
+                error.printStackTrace();
+            }
+        });
     }
 
     private Node guiScoreScreen() {
