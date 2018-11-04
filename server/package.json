@@ -1,14 +1,13 @@
 {
-  "name": "node-js-getting-started",
-  "version": "0.3.0",
-  "description": "A sample Node.js app using Express 4",
+  "name": "sim-locher",
+  "version": "1.0.0",
+  "description": "Leaderboard Server für sim-locher",
   "engines": {
     "node": "10.x"
   },
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
-    "test": "node test.js"
+    "start": "node index.js"
   },
   "dependencies": {
     "bad-words": "^3.0.0",
@@ -17,15 +16,17 @@
     "express": "^4.16.4",
     "mongoose": "^5.3.9"
   },
-  "devDependencies": {},
   "repository": {
     "type": "git",
-    "url": "https://github.com/heroku/node-js-getting-started"
+    "url": "https://github.com/PatrickSachs/sim-locher/"
   },
   "keywords": [
-    "node",
-    "heroku",
-    "express"
+    "java",
+    "schule",
+    "locher",
+    "sim-locher",
+    "spieler",
+    "wolc"
   ],
   "license": "MIT"
 }

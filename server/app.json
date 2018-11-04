@@ -1,8 +1,8 @@
 {
-  "name": "Start on Heroku: Node.js",
-  "description": "A barebones Node.js app using Express 4",
-  "repository": "https://github.com/heroku/node-js-getting-started",
+  "name": "sim-locher",
+  "description": "Der Leaderboard Server für sim-locher",
+  "repository": "https://github.com/PatrickSachs/sim-locher/",
   "logo": "https://cdn.rawgit.com/heroku/node-js-getting-started/master/public/node.svg",
-  "keywords": ["node", "express", "heroku"],
+  "keywords": ["java", "schule", "locher", "sim-locher", "spieler", "wolc"],
   "image": "heroku/nodejs"
 }
