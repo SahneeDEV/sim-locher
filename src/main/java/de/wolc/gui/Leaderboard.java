@@ -4,6 +4,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -82,7 +84,30 @@ public class Leaderboard {
             con.getOutputStream().close();
             // Antwort
             Document antwort = xml(con.getInputStream());
-            return leaderboardLesen((Element)antwort.getFirstChild());
+            Leaderboard leaderboard = leaderboardLesen((Element)antwort.getFirstChild());
+            System.out.println("Leaderboard(" + url + ") gesendet: " + leaderboard);
+            return leaderboard;
+        }
+        finally {
+            con.disconnect();
+        }
+    }
+
+    public static Leaderboard[] topScore(int top) throws Exception {
+        if (top <= 0) {
+            throw new IllegalArgumentException("Muss mindestens top 1 vom Leaderboard auslesen. Übergeben: " + top);
+        }
+        // Request erzeugen
+        URL url = new URL("https://sim-locher.herokuapp.com/api/leaderboard/top/" + top);
+        HttpURLConnection con = (HttpURLConnection) url.openConnection();
+        try {
+            con.setRequestMethod("GET");
+            con.setRequestProperty("Content-Type", "text/xml");
+            con.setUseCaches(false);
+            // Antwort
+            System.out.println(con.getRequestMethod() + " " + url + ": " + con.getResponseCode() + " " + con.getResponseMessage());
+            Document antwort = xml(con.getInputStream());
+            return leaderboardArrayLesen((Element)antwort.getFirstChild());
         }
         finally {
             con.disconnect();
@@ -93,6 +118,17 @@ public class Leaderboard {
         String name = element.getElementsByTagName("name").item(0).getTextContent();
         int punkte = Integer.parseInt(element.getElementsByTagName("punkte").item(0).getTextContent());
         return new Leaderboard(name, punkte);
+    }
+
+    private static Leaderboard[] leaderboardArrayLesen(Element element) {
+        List<Leaderboard> array = new ArrayList<>();
+        for (int i = 0; i < element.getChildNodes().getLength(); i++) {
+            if (element.getChildNodes().item(i) instanceof Element) {
+                Element entry = (Element)element.getChildNodes().item(i);
+                array.add(leaderboardLesen(entry));
+            }
+        }
+        return array.toArray(new Leaderboard[array.size()]);
     }
 
     private static void xmlStream(Document doc, OutputStream stream) throws Exception {
@@ -115,5 +151,10 @@ public class Leaderboard {
         DocumentBuilder db = factory.newDocumentBuilder();
         Document doc = db.newDocument();
         return doc;
+    }
+
+    @Override
+    public String toString() {
+        return this.getName() + ": " + this.getPunkte();
     }
 }

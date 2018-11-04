@@ -116,8 +116,13 @@ public class ItemShopMenu {
         continueButton.addEventHandler(ActionEvent.ACTION, (ActionEvent actionEvent) -> {
             this.weiterspielen();
         });
+        Button leaderboardButton = new Button("🏅 Leaderboard 🏅");
+        leaderboardButton.addEventHandler(ActionEvent.ACTION, (ActionEvent actionEvent) -> {
+            this.leaderboard();
+        });
         grid.add(backButton, 0, 0);
         grid.add(continueButton, 1, 0);
+        grid.add(leaderboardButton, 4, 0);
         return grid;
     }
 
@@ -340,10 +345,33 @@ public class ItemShopMenu {
         this.scoreLabel.setText("🎉 Score: " + this.spieler.getKonfetti().size() + " 🎊");
     }
 
+    private void leaderboard() {
+        Leaderboard[] top;
+        try {
+            top = Leaderboard.topScore(15);
+        } catch (Exception e) {
+            e.printStackTrace();
+            top = new Leaderboard[0];
+        }
+        Alert zuteuer = new Alert(AlertType.INFORMATION);
+        zuteuer.setTitle("🏅 Leaderboard 🏅");
+        zuteuer.setHeaderText("Hier sind die besten Locherspieler aufgelistet.");
+        String topString = "🏅 Top " + top.length + " 🏅\n";
+        for(int i = 0; i < top.length; i++) {
+            topString += "  " + (top[i].getName().equals(this.spieler.getName()) ? top[i] + " 🏁" : top[i]) + "\n";
+        }
+        topString += "🥈 Deine Punkte 🥈\n";
+        topString += "  " + new Leaderboard(this.spieler.getName(), this.spieler.getKonfetti().size());
+        zuteuer.setContentText(topString);
+        zuteuer.setResult(ButtonType.OK);
+        zuteuer.showAndWait();
+    }
+
     private void speichern() {
         try {
+            Leaderboard gesendet = Leaderboard.scoreSenden(this.spieler);
+            this.spieler.setName(gesendet.getName());
             Gui.DB.speichern("spieler", this.spieler);
-            Leaderboard.scoreSenden(this.spieler);
         } catch (Exception e) {
             this.spieler = new Spieler();
             speichernFehler = new Alert(AlertType.WARNING);

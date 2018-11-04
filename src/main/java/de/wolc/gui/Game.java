@@ -63,7 +63,7 @@ public class Game extends AnimationTimer {
     private static final double BENACHRICHTUNG_ANZEIGEZEIT = 3.5d;
     
     //Game Variables
-    private double remainingTimeAvailable = 30d;
+    private double remainingTimeAvailable = 3d;
     private double benachrichtigungenZeit = 0d;
 
     //Variables for Countdown timer
@@ -337,8 +337,10 @@ public class Game extends AnimationTimer {
      */
     public void spielEnde() {
         try {
+            // Name ändern um den Bad Word filter vom Server anzuwenden.
+            Leaderboard gesendet = Leaderboard.scoreSenden(this.spieler);
+            this.spieler.setName(gesendet.getName());
             Gui.DB.speichern("spieler", this.spieler);
-            Leaderboard.scoreSenden(this.spieler);
         } catch (Exception e) {
             Alert speichernFehler = new Alert(AlertType.WARNING);
             speichernFehler.setTitle("Fehler bei Spielstand speichern");
