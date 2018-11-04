@@ -60,6 +60,27 @@ public class Preis implements Serializable {
         this.kosten = hash;
     }
 
+    public Preis(Farbe farbe1, int kosten1, Farbe farbe2, int kosten2, Farbe farbe3, int kosten3, Farbe farbe4, int kosten4, Farbe farbe5, int kosten5) {
+        HashMap<Farbe, Integer> hash = new HashMap<>();
+        hash.put(farbe1, kosten1);
+        hash.put(farbe2, kosten2);
+        hash.put(farbe3, kosten3);
+        hash.put(farbe4, kosten4);
+        hash.put(farbe5, kosten5);
+        this.kosten = hash;
+    }
+
+    public Preis(Farbe farbe1, int kosten1, Farbe farbe2, int kosten2, Farbe farbe3, int kosten3, Farbe farbe4, int kosten4, Farbe farbe5, int kosten5, Farbe farbe6, int kosten6) {
+        HashMap<Farbe, Integer> hash = new HashMap<>();
+        hash.put(farbe1, kosten1);
+        hash.put(farbe2, kosten2);
+        hash.put(farbe3, kosten3);
+        hash.put(farbe4, kosten4);
+        hash.put(farbe5, kosten5);
+        hash.put(farbe6, kosten6);
+        this.kosten = hash;
+    }
+
     @Override
     public String toString() {
         if (kosten.size() == 0) {

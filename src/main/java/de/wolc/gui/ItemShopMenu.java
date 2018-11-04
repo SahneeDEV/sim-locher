@@ -42,6 +42,7 @@ import de.wolc.spiel.locher.LocherSkin;
 import de.wolc.spiel.locher.upgrades.LocherUpgrade;
 import de.wolc.spiel.locher.upgrades.UpgradeLocherAufSpeed;
 import de.wolc.spiel.locher.upgrades.UpgradePanzerStanzer;
+import de.wolc.spiel.locher.upgrades.UpgradeSpielZeit;
 import de.wolc.spiel.locher.upgrades.UpgradeVampir;
 import de.wolc.spiel.locher.upgrades.UpgradeWeissesLoch;
 import de.wolc.spiel.papier.Konfetti;
@@ -163,6 +164,10 @@ public class ItemShopMenu {
         });
         guiUpgradeShop(UpgradeVampir.class, "Vampir", () -> {
             UpgradeVampir upgrade = new UpgradeVampir(ZUFALL.nextInt(5) + 1);
+            return upgrade;
+        });
+        guiUpgradeShop(UpgradeSpielZeit.class, "Upgrade Spiel Zeit", () -> {
+            UpgradeSpielZeit upgrade = new UpgradeSpielZeit(ZUFALL.nextDouble()*10+0.5);
             return upgrade;
         });
         ScrollPane scroll = new ScrollPane();
