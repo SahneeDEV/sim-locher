@@ -1,0 +1,8 @@
+{
+  "name": "sim-locher",
+  "description": "Der Leaderboard Server für sim-locher",
+  "repository": "https://github.com/PatrickSachs/sim-locher/",
+  "logo": "https://cdn.rawgit.com/heroku/node-js-getting-started/master/public/node.svg",
+  "keywords": ["java", "schule", "locher", "sim-locher", "spieler", "wolc"],
+  "image": "heroku/nodejs"
+}

@@ -2,7 +2,8 @@ package de.wolc.gui;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap; 
+import java.util.HashMap;
+import java.util.Optional;
 import java.util.Random;
 
 import de.wolc.MultiUse;
@@ -51,6 +52,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 import javafx.scene.text.Font;
 import javafx.scene.media.AudioClip;
+import javafx.scene.control.TextInputDialog;
 
 public class Game extends AnimationTimer {
 
@@ -99,6 +101,14 @@ public class Game extends AnimationTimer {
         }
         if (this.spieler == null) {
             this.spieler = new Spieler();
+            TextInputDialog dialog = new TextInputDialog(this.spieler.getName());
+            dialog.setTitle("Spielername");
+            dialog.setHeaderText("Gebe deinen Spielernamen ein.");
+            dialog.setContentText("Name:");
+            Optional<String> result = dialog.showAndWait();
+            if (result.isPresent()) {
+                this.spieler.setName(result.get());
+            }
         }
         this.letzteNanoZeit = 0;
     }
@@ -151,10 +161,10 @@ public class Game extends AnimationTimer {
         mainPane.setBackground(new Background(backgroundImageGame));
 
         //Papierstapel creation
-        this.stapel_A4 = new PapierStapel<>(A4.class);
-        this.stapel_A5 = new PapierStapel<>(A5.class);
-        this.stapel_A6 = new PapierStapel<>(A6.class);
-        if(this.spieler.getLocher().getFormat() == null){
+        stapel_A4 = new PapierStapel<>(A4.class);
+        stapel_A5 = new PapierStapel<>(A5.class);
+        stapel_A6 = new PapierStapel<>(A6.class);
+        if(this.spieler.getLocher().getStapel() == null){
             this.spieler.getLocher().setFormat(A4.class);
             this.spieler.getLocher().einlegen(stapel_A4);
         }
@@ -284,6 +294,7 @@ public class Game extends AnimationTimer {
                             toCheckPapiere.zerstoeren();
                             locherPapierObjekte.remove(i);
                             locherPapierSize--;
+                            i--;
                         }
                     }
                     

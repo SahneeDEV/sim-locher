@@ -1,0 +1,33 @@
+{
+  "name": "sim-locher",
+  "version": "1.0.0",
+  "description": "Leaderboard Server für sim-locher",
+  "engines": {
+    "node": "10.x"
+  },
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "bad-words": "^3.0.0",
+    "dotenv": "^6.1.0",
+    "express": "^4.16.4",
+    "express-xml-bodyparser": "^0.3.0",
+    "mongoose": "^5.3.9",
+    "xml2js": "^0.4.19"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/PatrickSachs/sim-locher/"
+  },
+  "keywords": [
+    "java",
+    "schule",
+    "locher",
+    "sim-locher",
+    "spieler",
+    "wolc"
+  ],
+  "license": "MIT"
+}

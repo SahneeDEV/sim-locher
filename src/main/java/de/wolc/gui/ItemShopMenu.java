@@ -408,7 +408,7 @@ public class ItemShopMenu {
             zuteuer.setContentText("Kosten:\n" + kosten.toString());
             zuteuer.setResult(ButtonType.OK);
             zuteuer.showAndWait();
-            // todo: Anzeigen wieviel es kostet und wieviel man hat
+            //TODO: Anzeigen wieviel es kostet und wieviel man hat
             return false;
         }
         Alert frage = new Alert(AlertType.CONFIRMATION);

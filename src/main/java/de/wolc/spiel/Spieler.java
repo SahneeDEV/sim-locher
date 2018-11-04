@@ -13,16 +13,32 @@ import de.wolc.spiel.papier.Konfetti;
  */
 public class Spieler implements Serializable {
     /** MUSS um 1 erhöht werden, wenn sich die Eigenschaften der Klasse ändern. */ 
-    private static final long serialVersionUID = 2L;
+    private static final long serialVersionUID = 3L;
     
     private SimLocher locher;
     private SchreibtischSkin schreibtischSkin;
     private ArrayList<Konfetti> konfetti;
+    private String name;
 
     public Spieler() {
         this.locher = new SimLocher();
         this.schreibtischSkin = SchreibtischSkin.BACKGROUND_BASE;
         this.konfetti = new ArrayList<Konfetti>();
+        this.name = "Namenloser Held";
+    }
+
+    /**
+     * @return the name
+     */
+    public String getName() {
+        return this.name;
+    }
+
+    /**
+     * @param name the name to set
+     */
+    public void setName(String name) {
+        this.name = name;
     }
 
     /**
