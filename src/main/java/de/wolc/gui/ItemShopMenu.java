@@ -166,6 +166,10 @@ public class ItemShopMenu {
             UpgradeVampir upgrade = new UpgradeVampir(ZUFALL.nextInt(5) + 1);
             return upgrade;
         });
+        guiUpgradeShop(UpgradeSpielZeit.class, "Upgrade Spiel Zeit", () -> {
+            UpgradeSpielZeit upgrade = new UpgradeSpielZeit(ZUFALL.nextDouble()*10+0.5);
+            return upgrade;
+        });
         ScrollPane scroll = new ScrollPane();
         scroll.setContent(this.upgradeShopGrid);
         return scroll;
@@ -196,33 +200,6 @@ public class ItemShopMenu {
                     this.spieler.getLocher().getUpgrades().add(upgrade);
                     upgradeCache.put(name, null);
                 }
-            });
-        }
-        { // Upgrade Spiel Zeit
-            //TODO: Wer einen besseren Namen weiß kann dieses anpassen -jh            
-            UpgradeSpielZeit upgrade = new UpgradeSpielZeit(ZUFALL.nextDouble()*10+0.1);
-            Label label = new Label();
-            label.setText("Upgrade Spiel Zeit");
-            Button kaufen = new Button();
-            kaufen.setText("Kaufen");
-            Button ansehen = new Button();
-            ansehen.setText("Ansehen");
-            grid.add(label, 0, 4);
-            grid.add(kaufen, 1, 4);
-            grid.add(ansehen, 2, 4);
-            ansehen.setOnMouseClicked(e -> {
-                this.upgradesZeigen(label.getText(), updatesVonTyp(UpgradeSpielZeit.class));
-            });
-            kaufen.setOnMouseClicked(e -> {
-                if (this.kaufErbitten(upgrade.toString(), upgrade.getPreis())) {
-                    this.spieler.getLocher().getUpgrades().add(upgrade);
-                }
-            });
-        }
-
-        ScrollPane scroll = new ScrollPane();
-        scroll.setContent(grid);
-        return scroll;
             } catch (Exception error) {
                 error.printStackTrace();
             }
