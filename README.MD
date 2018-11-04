@@ -12,15 +12,32 @@ Je mehr Konfetti man erzeugt desto bessere Upgrades können für den eigenen Loc
 
 ## Entwicklerhinweise
 
+### Leaderboardserver
+
+Der Leaderboard REST Server ist unter https://sim-locher.herokuapp.com/ erreichbar.
+
+Folgende HTTP Requests können verwendet werden(Alle Requests verwenden JSON als Payload Format):
+
+ * `GET / {}` - Leitet nur auf GitHub weiter. Dient nur dem falls jemand die URL in den Browser tippen sollte.
+ * `POST /api/leaderboard { name: String, punkte: Integer }` - Legt den neuen Leaderboard Score für den Spieler fest.
+ * `GET /api/leaderboard {}` - Gibt alle Leaderboard Scores zurück.
+ * `GET /api/leaderboard/top/:top {}` - Gibt die Top `:top` Leaderboard Scores zurück.
+ * `GET /api/leaderboard/spieler/:name {}` - Gibt den aktuellen Leaderboard Score von `:name` zurück.
+
+Rückgabecodes sind entweder 200, 400 oder 500. Bei 400 und 500 ist der Fehler in der Property `fehler` zu finden.
+Bei 200 wird stets die Antwort auf die Anfrage gesendet.
+
+### IDEs
+
 Das Projekt ist mit Maven und BlueJ kompatibel.
 
-### BlueJ
+#### BlueJ
 
 1. Öffnen und loslegen.
 2. Merken dass die Performance schlecht ist und zu VS Code wechseln
 3. Anwendung nicht über die Gui.java starten, sondern die JavaFX Anwendung "Stages" via Rechtsklick starten
 
-### Maven & VS Code
+#### Maven & VS Code
 
 1. Download: https://archive.apache.org/dist/maven/maven-3/3.5.4/binaries/apache-maven-3.5.4-bin.zip
 2. Das `.zip` Archiv in einen Ordner mit Schreibrechne für den aktuellen Nutzer entpacken. (z.B. `E:/Data/Maven/`)
@@ -30,5 +47,7 @@ Das Projekt ist mit Maven und BlueJ kompatibel.
 6. Kompilieren: Maven Goal "compile"
 7. Ausführen/Debuggen: https://www.youtube.com/watch?v=0Ky_RnluHUY
 8. .jar erstellen: Maven Goal "package"
+
+
  
 # RGB Locher 4 the Win
