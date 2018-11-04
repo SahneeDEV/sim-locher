@@ -8,13 +8,13 @@ import de.wolc.spiel.Preis;
  */
 public class UpgradeSpielZeit extends LocherUpgrade {
     /** MUSS um 1 erhöht werden, wenn sich die Eigenschaften der Klasse ändern. */ 
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 3L;
     private static final Preis PREIS = new Preis(Farbe.GRUEN, 15, Farbe.ROT, 10);
     
     private double time;
 
     public UpgradeSpielZeit(double time) {
-        super("SpielZeit", PREIS);
+        super("Spielzeit", PREIS);
         this.time = time;
     }
 
