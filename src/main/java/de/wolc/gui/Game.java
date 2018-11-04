@@ -275,6 +275,7 @@ public class Game extends AnimationTimer {
                             toCheckPapiere.zerstoeren();
                             locherPapier.remove(i);
                             locherPapierSize--;
+                            i--;
                         }
                     }
 
