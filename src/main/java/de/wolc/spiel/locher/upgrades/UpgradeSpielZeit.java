@@ -14,7 +14,7 @@ public class UpgradeSpielZeit extends LocherUpgrade {
     private double time;
 
     public UpgradeSpielZeit(double time) {
-        super("Upgrade Spiele Zeit", PREIS);
+        super("SpielZeit", PREIS);
         this.time = time;
     }
 
@@ -33,6 +33,6 @@ public class UpgradeSpielZeit extends LocherUpgrade {
 
     @Override
     public String toString() {
-        return this.getGuiName() + ": +" + (Math.round((time * 10) / 10)) + "s Spielezeit";
+        return this.getGuiName() + ": +" + (Math.round((time * 10) / 10)) + "s Spielzeit";
     }
 }
