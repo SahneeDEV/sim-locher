@@ -343,6 +343,7 @@ public class ItemShopMenu {
     private void speichern() {
         try {
             Gui.DB.speichern("spieler", this.spieler);
+            Leaderboard.scoreSenden(this.spieler);
         } catch (Exception e) {
             this.spieler = new Spieler();
             speichernFehler = new Alert(AlertType.WARNING);

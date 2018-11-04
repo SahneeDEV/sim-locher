@@ -338,11 +338,13 @@ public class Game extends AnimationTimer {
     public void spielEnde() {
         try {
             Gui.DB.speichern("spieler", this.spieler);
-        } catch (IOException e) {
+            Leaderboard.scoreSenden(this.spieler);
+        } catch (Exception e) {
             Alert speichernFehler = new Alert(AlertType.WARNING);
             speichernFehler.setTitle("Fehler bei Spielstand speichern");
             speichernFehler.setHeaderText("Beim Speichern des Spielstandes ist ein Fehler aufgetreten. Hat " +
-                "das Spiel Schreibrechte auf das eigene Verzeichnis?\nDer erzielte Fortschritt ist verloren gegangen.");
+                "das Spiel Schreibrechte auf das eigene Verzeichnis?\nDer erzielte Fortschritt kann verloren gegangen" +
+                "sein.");
             speichernFehler.setContentText(e.toString());
             speichernFehler.setResult(ButtonType.OK);
             speichernFehler.showAndWait();
