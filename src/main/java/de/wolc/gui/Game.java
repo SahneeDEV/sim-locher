@@ -136,7 +136,8 @@ public class Game extends AnimationTimer {
         this.score.setText("Score: " + this.spieler.getKonfetti().size());
         // Sonstige Stats
         this.formatLabel.setText("Format: " + this.spieler.getLocher().getFormat().getSimpleName());
-        this.papierLabel.setText("Stapel: " + this.spieler.getLocher().getStapel().groesse());
+        this.papierLabel.setText("Stapel: " + this.spieler.getLocher().getStapel().groesse() + "/" + this.spieler.getLocher().getStaerke());
+        this.formatLabel.setText("Stanzer: " + this.spieler.getLocher().getStanzer());
         this.locherCooldown.setText("Cooldown: " + Math.round(spieler.getLocher().getCooldown() * 10d) / 10d + "s");
         remainingTime.setText("Zeit: " + Math.round(this.remainingTimeAvailable * 10d) / 10d + "s");   
     }
@@ -350,12 +351,16 @@ public class Game extends AnimationTimer {
      */
     public void spielEnde() {
         try {
+            // Name ändern um den Bad Word filter vom Server anzuwenden.
+            Leaderboard gesendet = Leaderboard.scoreSenden(this.spieler);
+            this.spieler.setName(gesendet.getName());
             Gui.DB.speichern("spieler", this.spieler);
-        } catch (IOException e) {
+        } catch (Exception e) {
             Alert speichernFehler = new Alert(AlertType.WARNING);
             speichernFehler.setTitle("Fehler bei Spielstand speichern");
             speichernFehler.setHeaderText("Beim Speichern des Spielstandes ist ein Fehler aufgetreten. Hat " +
-                "das Spiel Schreibrechte auf das eigene Verzeichnis?\nDer erzielte Fortschritt ist verloren gegangen.");
+                "das Spiel Schreibrechte auf das eigene Verzeichnis?\nDer erzielte Fortschritt kann verloren gegangen" +
+                "sein.");
             speichernFehler.setContentText(e.toString());
             speichernFehler.setResult(ButtonType.OK);
             speichernFehler.showAndWait();

@@ -38,13 +38,13 @@ const filter = new BadWordFilter();
 const convertLeaderboard = leaderboard => {
   const wasArray = Array.isArray(leaderboard);
   leaderboard = wasArray ? leaderboard : [leaderboard];
-  const values = leaderboard.reduce((a, value) => {
-    return {...a, [value._id]: {
+  const values = leaderboard.reduce((a, value, i) => {
+    return {...a, ["i" + i]: {
       name: value._id,
       punkte: value.punkte
     }}
   }, {});
-  return wasArray ? values : values[leaderboard[0]._id];
+  return wasArray ? values : values["i0"];
 };
 
 mongoose.connection.once("open", () => {
