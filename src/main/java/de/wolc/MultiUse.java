@@ -67,4 +67,12 @@ public class MultiUse{
             throw new IllegalArgumentException("Invalid URL " + url, e);
         }
     }
+
+    /**
+     * Verwandelt ein Objekt in eine String Repräsentation die der Ausgabe von "toString"(ohne Überschreibung) 
+     * entspricht.
+     */
+    public static String standardToString(Object von) {
+        return von.getClass().getName() + '@' + Integer.toHexString(von.hashCode());
+    }
 }

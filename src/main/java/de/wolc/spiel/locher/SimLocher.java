@@ -103,28 +103,30 @@ public class SimLocher implements Serializable
     /**
      * Setzt das aktuelle Format auf das der Locher eingestellt ist. Das Format kann nicht geändert werden wenn bereits 
      * ein Papier Stapel eingelegt ist.
+     * @throws IllegalStateException Es ist bereits ein Stapel eingelegt.
      * @param format A4.class, A5.class, A6.class
-     * @return Wurde das Format umgestellt? true wenn ja, sonst false.
      */
-    public boolean setFormat(Class<? extends Papier> format) {
+    public void setFormat(Class<? extends Papier> format) {
         if (this.stapel != null) {
-            return false;
+            throw new IllegalStateException("Kann das Format nicht verstellt werden wenn bereits ein Stapel eingelegt ist.");
         }
         this.format = format;
-        return true;
     }
 
     /**
      * Legt einen Papier Stapel in den Locher ein, wenn der Locher auf das richtige Format eingestellt ist.
+     * @throws IllegalArgumentException Der Stapel ist in einem falschen Format.
+     * @throws IllegalStateException Es ist bereits ein Stapel eingelegt.
      * @param stapel Der Papier Stapel.
-     * @return Wurde der Stapel eingelegt? true wenn ja, sonst false.
      */
-    public boolean einlegen(PapierStapel<?> stapel) {
+    public void einlegen(PapierStapel<?> stapel) {
         if (stapel.getFormat() != this.getFormat()) {
-            return false;
+            throw new IllegalArgumentException("Der Locher ist auf ein anderes Format eingestellt als der Stapel.");
+        }
+        if (this.stapel != null) {
+            throw new IllegalStateException("Kann keinen neuen Stapel einlegen wenn bereits einer eingelegt ist.");
         }
         this.stapel = stapel;
-        return true;
     }
 
     /**
