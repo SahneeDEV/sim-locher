@@ -52,7 +52,7 @@ public class KonfettiObjekt {
     }
 
     public void tick(double deltaZeit) {
-        this.objekt.toFront();
+        this.objekt.toBack();
         this.alter += deltaZeit;
         this.y -= KonfettiObjekt.FALLGESCHWINDIGKEIT * deltaZeit;
         this.x += MultiUse.zufall(-KonfettiObjekt.WACKEL, KonfettiObjekt.WACKEL);
