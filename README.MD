@@ -1,5 +1,7 @@
 # sim-locher
 
+[![CircleCI](https://circleci.com/gh/PatrickSachs/sim-locher.svg?style=svg)](https://circleci.com/gh/PatrickSachs/sim-locher)
+
 ## Was ist das?
 
 sim-locher(auch wolc) ist eine Hochrealistische Lochersimulation. Es wird simuliert Papiere zu lochen um diese zu Konfetti zu verarbeiten.
