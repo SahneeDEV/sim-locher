@@ -17,25 +17,13 @@ public class PapierObjekt {
     private static final Random RANDOM = new Random();
 
     public double zufallsBreite() {
-        double halfWidth = this.game.getArea().getWidth() / 2d;
-        if (RANDOM.nextBoolean()) {
-            // links
-            return zufall(0, halfWidth / 2);
-        } else {
-            // rechts
-            return zufall(halfWidth + halfWidth / 2, halfWidth + halfWidth);
-        }
+        double versetzung = IMAGE.getWidth() / 2d;
+        return zufall(-versetzung, this.game.getArea().getWidth() - versetzung);
     }
 
     public double zufallsHoehe() {
         double halfHeight = this.game.getArea().getHeight() / 2d;
-        if (RANDOM.nextBoolean()) {
-            // oben
-            return zufall(0, halfHeight / 2);
-        } else {
-            // unten
-            return zufall(halfHeight + halfHeight / 2, halfHeight + halfHeight);
-        }
+        return zufall(halfHeight + IMAGE.getHeight(), halfHeight + halfHeight - IMAGE.getHeight());
     }
 
     public double zufall(double min, double max) {
