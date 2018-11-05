@@ -502,16 +502,23 @@ public class Game extends AnimationTimer {
             this.spielStart();
         }
         //Getting new and last TimeStamp in Miliseconds and calculating 
-        long elapsedNanoSeconds = jetztNanoZeit - this.letzteNanoZeit;
-        double elapsedSeconds = ((elapsedNanoSeconds / 1000000000d));
+        long vergangenNanoZeit = jetztNanoZeit - this.letzteNanoZeit;
+        double sekundenLetzterFrame = ((vergangenNanoZeit / 1000000000d));
         this.letzteNanoZeit = jetztNanoZeit;
+        this.deltaZeit += sekundenLetzterFrame;
+
+        // Durch das setzen einer FPS-Rate bekommen wir wesentlich bessere Performance.
+        if (this.deltaZeit < 1d / ZIEL_FPS) {
+            return;
+        }
+        this.fps = 1d / this.deltaZeit;
 
         //Triggering Cooldown and giving him the elapsedSeconds
-        spieler.tick(elapsedSeconds);
+        spieler.tick(this.deltaZeit);
 
-        this.timeToNextPapier -= elapsedSeconds;
-        this.remainingTimeAvailable -= elapsedSeconds;
-        this.benachrichtigungenZeit -= elapsedSeconds;
+        this.timeToNextPapier -= this.deltaZeit;
+        this.remainingTimeAvailable -= this.deltaZeit;
+        this.benachrichtigungenZeit -= this.deltaZeit;
 
         if (this.benachrichtigungenZeit <= 0) {
             Game.this.benachrichtigungen.setText("");
@@ -530,6 +537,8 @@ public class Game extends AnimationTimer {
         }
 
         this.updateLabels();
+
+        this.deltaZeit = 0;
     }
 
 }
