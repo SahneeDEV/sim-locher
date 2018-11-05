@@ -1,4 +1,4 @@
-package de.wolc.test.spiel;
+package de.wolc.test.spiel.locher;
 
 import de.wolc.spiel.locher.SimLocher;
 import de.wolc.spiel.papier.A4;
@@ -49,7 +49,7 @@ public class LocherTest extends TestCase {
         try {
             locher.einlegen(stapel);
             fail();
-        } catch(IllegalStateException e) {
+        } catch(IllegalArgumentException e) {
         }
     }
 

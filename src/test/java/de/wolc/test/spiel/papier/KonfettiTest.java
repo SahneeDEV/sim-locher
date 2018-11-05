@@ -1,4 +1,4 @@
-package de.wolc.test.spiel;
+package de.wolc.test.spiel.papier;
 
 import de.wolc.spiel.Farbe;
 import de.wolc.spiel.papier.Konfetti;
