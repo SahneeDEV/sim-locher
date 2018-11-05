@@ -272,8 +272,8 @@ public class Game extends AnimationTimer {
         benachrichtigungen.setTextFill(Color.RED);
         benachrichtigungen.setFont(new Font(20));
 
-        AnchorPane.setLeftAnchor(benachrichtigungen, stage.getWidth() * 0.50);
-        AnchorPane.setBottomAnchor(benachrichtigungen, stage.getHeight() * 0.25);
+        AnchorPane.setLeftAnchor(benachrichtigungen, stage.getWidth() * 0.40);
+        AnchorPane.setBottomAnchor(benachrichtigungen, stage.getHeight() * 0.85);
 
         //Locher_new Mouse Events
         locher_new.setOnMouseClicked(e -> {
