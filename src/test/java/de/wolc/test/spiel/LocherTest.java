@@ -13,8 +13,14 @@ public class LocherTest extends TestCase {
     
     public void testStandardLeer() {
         SimLocher locher = new SimLocher();
-        
-        assertNull(locher.entnehmen());
+
+        assertNull(locher.getStapel());
+    }
+
+    public void testHatUpgrades() {
+        SimLocher locher = new SimLocher();
+
+        assertNotNull(locher.getUpgrades());
     }
 
     public void testStandardFormat() {
@@ -32,6 +38,17 @@ public class LocherTest extends TestCase {
         try {
             locher.einlegen(stapel2);
             fail("Stapel dürfen nicht eingelegt werden wenn einer drinnen ist.");
+        } catch(IllegalStateException e) {
+        }
+    }
+
+    public void testKannNichtFalschesFormatEinlegen() {
+        SimLocher locher = new SimLocher();
+        PapierStapel<A5> stapel = new PapierStapel<>(A5.class);
+        
+        try {
+            locher.einlegen(stapel);
+            fail();
         } catch(IllegalStateException e) {
         }
     }
