@@ -33,6 +33,7 @@ import javafx.scene.layout.Background;
 import javafx.scene.layout.VBox;
 import javafx.scene.layout.HBox;
 import javafx.geometry.Pos;
+import javafx.geometry.Bounds;
 import javafx.geometry.Insets;
 import javafx.scene.control.Label;
 import javafx.scene.control.ToggleButton;
@@ -61,6 +62,7 @@ public class Game extends AnimationTimer {
     
     private static final Random RANDOM = new Random();
     private static final double BENACHRICHTUNG_ANZEIGEZEIT = 3.5d;
+    private static final double ZIEL_FPS = 30d;
     
     //Game Variables
     private static final double STANDARD_REMAINING_TIME_AVAILABLE = 30d;
@@ -69,8 +71,10 @@ public class Game extends AnimationTimer {
     private ArrayList<LocherUpgrade> upgrades;
 
     //Variables for Countdown timer
+    private double deltaZeit = 0d;
     private long letzteNanoZeit = 0;
-    private double timeToNextPapier = 0;
+    private double timeToNextPapier = 0d;
+    private double fps = 0d;
 
     //Papierstapel erstellen
     private PapierStapel<A4> stapel_A4;
@@ -78,11 +82,12 @@ public class Game extends AnimationTimer {
     private PapierStapel<A6> stapel_A6;
 
     //Diverse Nodes
-    private Label score, remainingTime, formatLabel, papierLabel, locherCooldown, benachrichtigungen;
+    private Label fpsLabel, score, remainingTime, formatLabel, papierLabel, locherCooldown, benachrichtigungen;
     private ToggleButton formatA4Button, formatA5Button, formatA6Button;
     private HashMap<Farbe, Label> scoreLabels = new HashMap<>();
 
     private ArrayList<LocherPapierObjekt> locherPapier= new ArrayList<LocherPapierObjekt>();
+    private ArrayList<KonfettiObjekt> konfettiObjekte = new ArrayList<>();
 
     public Game () {
         try {
@@ -132,6 +137,7 @@ public class Game extends AnimationTimer {
             int zahl = liste != null ? liste.size() : 0;
             label.setText("  " + farbe.getAnzeigeName() + ": " + zahl);
         }
+        this.fpsLabel.setText("FPS: " + (Math.round(this.fps * 10d) / 10d));
         this.score.setText("Score: " + this.spieler.getKonfetti().size());
         // Sonstige Stats
         this.formatLabel.setText("Format: " + this.spieler.getLocher().getFormat().getSimpleName());
@@ -182,12 +188,14 @@ public class Game extends AnimationTimer {
         formatLabel = new Label();
         remainingTime = new Label();
         locherCooldown = new Label();
+        this.fpsLabel = new Label();
         locherCooldown.setTextFill(Color.WHITE);
         papierLabel.setTextFill(Color.WHITE);
         score.setTextFill(Color.WHITE);
         remainingTime.setTextFill(Color.WHITE);
         formatLabel.setTextFill(Color.WHITE);
-        rightVBox.getChildren().addAll(remainingTime, score);
+        this.fpsLabel.setTextFill(Color.WHITE);
+        rightVBox.getChildren().addAll(fpsLabel, remainingTime, score);
         for(Farbe farbe : Farbe.values()) {
             Label label = new Label();
             label.setTextFill(farbe.getGuiFarbe());
@@ -276,6 +284,13 @@ public class Game extends AnimationTimer {
                     Lochprozess prozess = spieler.getLocher().lochen();
                     ArrayList<Konfetti> spielerKonfetti = spieler.getKonfetti();
                     spielerKonfetti.addAll(prozess.getKonfetti());
+
+                    Bounds bounds = locher_new.getBoundsInParent();
+                    for(Konfetti konfetti : prozess.getKonfetti()) {
+                        konfettiObjekte.add(new KonfettiObjekt(this, konfetti, 
+                            MultiUse.zufall(bounds.getMinX(), bounds.getMaxX()), 
+                            MultiUse.zufall(bounds.getMaxY() - 5, bounds.getMaxY() + 5)));
+                    }
                     
                     int locherPapierSize = locherPapier.size() - 1;
                     for (int i = 0; i <= locherPapierSize; i++) {
@@ -515,6 +530,17 @@ public class Game extends AnimationTimer {
 
         //Triggering Cooldown and giving him the elapsedSeconds
         spieler.tick(this.deltaZeit);
+        // Konfetti Objekte ticken
+        int size = this.konfettiObjekte.size();
+        for(int i = 0; i < size; i++) {
+            KonfettiObjekt objekt = this.konfettiObjekte.get(i);
+            objekt.tick(this.deltaZeit);
+            if (objekt.istZerstoert()) {
+                this.konfettiObjekte.remove(i);
+                size--; 
+                i--;
+            }
+        }
 
         this.timeToNextPapier -= this.deltaZeit;
         this.remainingTimeAvailable -= this.deltaZeit;
