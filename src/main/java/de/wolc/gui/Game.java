@@ -21,6 +21,7 @@ import de.wolc.gui.LocherPapierObjekt;
 
 import javafx.application.Platform;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
@@ -51,6 +52,8 @@ import javafx.scene.shape.Shape;
 import javafx.scene.text.Font;
 import javafx.scene.media.AudioClip;
 import javafx.scene.control.TextInputDialog;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 
 public class Game extends AnimationTimer {
 
@@ -82,7 +85,8 @@ public class Game extends AnimationTimer {
     private PapierStapel<A6> stapel_A6;
 
     //Hintergrundmusik
-
+    private Media hintergrundMusikMedia;
+    private MediaPlayer hintergrundMusik;
 
     //Diverse Nodes
     private Label fpsLabel, score, remainingTime, formatLabel, papierLabel, locherCooldown, benachrichtigungen;
@@ -152,6 +156,24 @@ public class Game extends AnimationTimer {
     
     public Scene GameMainStage(Stage stage){
         this.stage = stage;
+
+        //Hintergrundmusik
+        if(Gui.getEinstellungen().ambientSoundEnabled()){
+            hintergrundMusikMedia = new Media(MultiUse.url("de/wolc/gui/sounds/" + spieler.geHintergrundMusik().getMusikName()));
+            hintergrundMusik = new MediaPlayer(hintergrundMusikMedia);
+            hintergrundMusik.setCycleCount(MediaPlayer.INDEFINITE);
+            //hintergrundMusik.setVolume(60d);
+            hintergrundMusik.setAutoPlay(true);
+            hintergrundMusik.setOnEndOfMedia(new Runnable(){
+            
+                @Override
+                public void run() {
+                    hintergrundMusik.seek(Duration.INDEFINITE);
+                    hintergrundMusik.play();
+                }
+            });
+        }
+
 
         //Main Orientation Node and initale settings
         BorderPane mainPane = new BorderPane();
@@ -388,7 +410,9 @@ public class Game extends AnimationTimer {
             speichernFehler.setResult(ButtonType.OK);
             speichernFehler.showAndWait();
             e.printStackTrace();
-		}
+        }
+        //TODO: Übergang zum ItemShop dauert etwas zu lange
+        hintergrundMusik.stop();
         ItemShopMenu menu = new ItemShopMenu();
         this.stage.setScene(menu.ItemShopStage(this.stage));
         this.stage.setFullScreen(Gui.getEinstellungen().isVollbild());
