@@ -13,18 +13,20 @@ import de.wolc.spiel.papier.Konfetti;
  */
 public class Spieler implements Serializable {
     /** MUSS um 1 erhöht werden, wenn sich die Eigenschaften der Klasse ändern. */ 
-    private static final long serialVersionUID = 3L;
+    private static final long serialVersionUID = 4L;
     
     private SimLocher locher;
     private SchreibtischSkin schreibtischSkin;
     private ArrayList<Konfetti> konfetti;
     private String name;
+    private HintergrundMusik hintergrundMusik;
 
     public Spieler() {
         this.locher = new SimLocher();
         this.schreibtischSkin = SchreibtischSkin.BACKGROUND_BASE;
         this.konfetti = new ArrayList<Konfetti>();
         this.name = "Namenloser Held";
+        this.hintergrundMusik = HintergrundMusik.BACKGROUNDMUSIK_OFFICIALSOUNDTRACK;
     }
 
     /**
@@ -53,6 +55,20 @@ public class Spieler implements Serializable {
      */
     public void setSchreibtischSkin(SchreibtischSkin schreibtischSkin) {
         this.schreibtischSkin = schreibtischSkin;
+    }
+
+        /**
+     * @return the hintergrundMusik
+     */
+    public HintergrundMusik geHintergrundMusik(){
+        return this.hintergrundMusik;
+    }
+
+    /**
+     * @param hintergrundMusik the hintergrundMusik to set
+     */
+    public void setHintergrundMusik(HintergrundMusik hintergrundMusik){
+        this.hintergrundMusik = hintergrundMusik;
     }
 
     /**

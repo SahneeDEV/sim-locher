@@ -75,14 +75,13 @@ public class SettingsMenu{
         final ProgressIndicator uploadingFiles = new ProgressIndicator();
         uploadingFiles.setVisible(false);
 
-
+            //CheckBoxes
         CheckBox vollbildCheckBox = new CheckBox("Vollbild");
         vollbildCheckBox.setSelected(Gui.getEinstellungen().isVollbild());
         vollbildCheckBox.selectedProperty().addListener(e -> {
             Gui.getEinstellungen().setVollbild(vollbildCheckBox.isSelected());
         });
-
-        //CheckBoxes
+        
         CheckBox RTXSupport = new CheckBox("RTX Einschalten/Ausschalten");
             RTXSupport.setSelected(true);
             final CheckBox diagnoseDatenCheckBox = new CheckBox("Diagnosedaten an Entwickler senden");
@@ -98,6 +97,18 @@ public class SettingsMenu{
                     uploadingFiles.setProgress(100);
                 }
             });
+
+            CheckBox entitieSoundCheckBox = new CheckBox("Sounds abspielen");
+            entitieSoundCheckBox.setSelected(Gui.getEinstellungen().entitySoundEnabled());
+            entitieSoundCheckBox.selectedProperty().addListener(e -> {
+                Gui.getEinstellungen().setEntitySoundEnabled(entitieSoundCheckBox.isSelected());
+            });
+    
+            CheckBox ambientSoundCheckBox = new CheckBox("Musik abspielen");
+            ambientSoundCheckBox.setSelected(Gui.getEinstellungen().ambientSoundEnabled());
+            entitieSoundCheckBox.selectedProperty().addListener(e -> {
+                Gui.getEinstellungen().setAmbientSoundEnabled(ambientSoundCheckBox.isSelected());
+            });        
 
         //ComboBox
         ComboBox<String> anisotropeFilterungComboBox = new ComboBox<String>();
@@ -133,14 +144,16 @@ public class SettingsMenu{
         settingsGridPane.add(uploadingFiles, 1 , 2);
         settingsGridPane.add(RTXSupport, 0, 3);
         settingsGridPane.add(vollbildCheckBox, 0, 4);
-        settingsGridPane.add(credits, 0, 5);
-        settingsGridPane.add(backButton,0,7);
+        settingsGridPane.add(entitieSoundCheckBox, 0, 5);
+        settingsGridPane.add(ambientSoundCheckBox, 0 ,6);
+        settingsGridPane.add(credits, 0, 7);
+        settingsGridPane.add(backButton,0,9);
 
 
         //Get Scene size and create a new Instance
         settingsPane.setCenter(settingsGridPane);
 
-        Scene sceneMainWindow = new Scene(settingsPane, 500, 250);
+        Scene sceneMainWindow = new Scene(settingsPane, 500, 350);
 
         //Updating the Title
         stage.setTitle(windowTitle);

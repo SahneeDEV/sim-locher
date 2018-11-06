@@ -81,6 +81,9 @@ public class Game extends AnimationTimer {
     private PapierStapel<A5> stapel_A5;
     private PapierStapel<A6> stapel_A6;
 
+    //Hintergrundmusik
+
+
     //Diverse Nodes
     private Label fpsLabel, score, remainingTime, formatLabel, papierLabel, locherCooldown, benachrichtigungen;
     private ToggleButton formatA4Button, formatA5Button, formatA6Button;
@@ -308,16 +311,22 @@ public class Game extends AnimationTimer {
 
                     if(prozess.getWarZuGross()) {
                         this.benachrichtigungZeigen("Es sind zu viele Papiere eingelegt - [RECHTSKLICK] auf Locher zum entfernen!");
-                        AudioClip clip = new AudioClip(MultiUse.url("de/wolc/gui/sounds/punch_error.wav"));
-                        clip.play(100);
+                        if(Gui.getEinstellungen().entitySoundEnabled()){
+                            AudioClip clip = new AudioClip(MultiUse.url("de/wolc/gui/sounds/punch_error.wav"));
+                            clip.play(100);
+                        }
                     } else {
-                        AudioClip clip = new AudioClip(MultiUse.url("de/wolc/gui/sounds/punch_1.wav"));
-                        clip.play(100);
+                        if(Gui.getEinstellungen().entitySoundEnabled()){
+                            AudioClip clip = new AudioClip(MultiUse.url("de/wolc/gui/sounds/punch_1.wav"));
+                            clip.play(100);
+                        }
                     }
                 } else {
                     this.benachrichtigungZeigen("Noch " + (Math.round(cooldown * 10d) / 10d) + "s auf Cooldown!");
-                    AudioClip clip = new AudioClip(MultiUse.url("de/wolc/gui/sounds/punch_error.wav"));
-                    clip.play(100);
+                    if(Gui.getEinstellungen().entitySoundEnabled()){
+                        AudioClip clip = new AudioClip(MultiUse.url("de/wolc/gui/sounds/punch_error.wav"));
+                        clip.play(100);
+                    }
                 }
             }
             //Abgleichen des gedrückten Buttons
