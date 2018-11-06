@@ -162,7 +162,7 @@ public class Game extends AnimationTimer {
             hintergrundMusikMedia = new Media(MultiUse.url("de/wolc/gui/sounds/" + spieler.geHintergrundMusik().getMusikName()));
             hintergrundMusik = new MediaPlayer(hintergrundMusikMedia);
             hintergrundMusik.setCycleCount(MediaPlayer.INDEFINITE);
-            //hintergrundMusik.setVolume(60d);
+            hintergrundMusik.setVolume(Gui.getEinstellungen().getAmbientSoundVolume());
             hintergrundMusik.setAutoPlay(true);
             hintergrundMusik.setOnEndOfMedia(new Runnable(){
             
@@ -411,7 +411,6 @@ public class Game extends AnimationTimer {
             speichernFehler.showAndWait();
             e.printStackTrace();
         }
-        //TODO: Übergang zum ItemShop dauert etwas zu lange
         hintergrundMusik.stop();
         ItemShopMenu menu = new ItemShopMenu();
         this.stage.setScene(menu.ItemShopStage(this.stage));

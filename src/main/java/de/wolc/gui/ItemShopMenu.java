@@ -46,6 +46,7 @@ import de.wolc.spiel.locher.upgrades.UpgradeSpielZeit;
 import de.wolc.spiel.locher.upgrades.UpgradeVampir;
 import de.wolc.spiel.locher.upgrades.UpgradeWeissesLoch;
 import de.wolc.spiel.papier.Konfetti;
+import de.wolc.spiel.HintergrundMusik;
 
 public class ItemShopMenu {
     private static final String TITLE = "World of Locher Craft - 💲 Pay2Win 💲";
@@ -254,6 +255,17 @@ public class ItemShopMenu {
             rect.setFill(new ImagePattern(img));
             grid.add(rect, i, 1);
         }
+        HintergrundMusik[] hintergrundMusiks = HintergrundMusik.values();
+        for(int i = 0; i < hintergrundMusiks.length; i++){
+            HintergrundMusik hintergrundMusik = hintergrundMusiks[i];
+            Image img = new Image("de/wolc/gui/images/" + hintergrundMusik.getGuiBild());
+            Rectangle rect = new Rectangle();
+            rect.setOnMouseClicked(e -> this.hintergrundMusikKaufen(hintergrundMusik));
+            rect.setHeight(80d);
+            rect.setWidth(img.getWidth() / (img.getHeight() / 80d));
+            rect.setFill(new ImagePattern(img));
+            grid.add(rect , i, 2);
+        }
         return scroll;
     }
 
@@ -294,6 +306,22 @@ public class ItemShopMenu {
         this.spieler.getLocher().setSkin(skin);
         System.out.println("Neuer Skin gekauft: " + skin);
         this.locherVorschauAktualisieren();
+        return true;
+    }
+
+        /**
+     * Checks if you can buy another/a new hintergrundMusik
+     * @param hintergrundMusik die neu zu kaufende hintergrundMusik
+     * @return  true wenn ja, sonst false
+     */
+    //TODO: Funktion um die Musik für ein paar Sekunden preview zu hören
+    private boolean hintergrundMusikKaufen(HintergrundMusik hintergrundMusik){
+        if(!this.kaufErbitten(hintergrundMusik.getName(), hintergrundMusik.getPreis())){
+            System.out.println("Neuer Hintergrundmusik Kauf abgelehnt: " + hintergrundMusik);
+            return false;
+        }
+        this.spieler.setHintergrundMusik(hintergrundMusik);
+        System.out.println("Neue Hintergrundmusik gekauft: " + hintergrundMusik);
         return true;
     }
 
