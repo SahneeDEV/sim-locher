@@ -277,7 +277,7 @@ public class ItemShopMenu {
                 hintergrundMusikPreviewMedia = new Media(MultiUse.url("de/wolc/gui/sounds/" + hintergrundMusik.getMusikName()));
                 hintergrundMusikPreview = new MediaPlayer(hintergrundMusikPreviewMedia);
                 hintergrundMusikPreview.setCycleCount(1);
-                hintergrundMusikPreview.setVolume(0.5d);
+                hintergrundMusikPreview.setVolume(0.25d);
                 hintergrundMusikPreview.setAutoPlay(true);
                 hintergrundMusikPreview.setStartTime(Duration.ONE);
                 hintergrundMusikPreview.setStopTime(Duration.seconds(hintergrundMusikPreviewZeit));
