@@ -16,7 +16,7 @@ public class Einstellungen implements Serializable {
         this.vollbild = true;
         this.entitySound = true;
         this.ambientSound = true;
-        this.ambientSoundVolume = 0.5d;
+        this.ambientSoundVolume = 0.3d;
     }
 
     private boolean vollbild;

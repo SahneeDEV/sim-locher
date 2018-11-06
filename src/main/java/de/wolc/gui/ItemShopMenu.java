@@ -337,7 +337,6 @@ public class ItemShopMenu {
      * @param hintergrundMusik die neu zu kaufende hintergrundMusik
      * @return  true wenn ja, sonst false
      */
-    //TODO: Funktion um die Musik für ein paar Sekunden preview zu hören
     private boolean hintergrundMusikKaufen(HintergrundMusik hintergrundMusik){
         if(!this.kaufErbitten(hintergrundMusik.getName(), hintergrundMusik.getPreis())){
             System.out.println("Neuer Hintergrundmusik Kauf abgelehnt: " + hintergrundMusik);
