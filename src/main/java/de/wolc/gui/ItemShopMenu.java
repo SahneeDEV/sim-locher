@@ -1,6 +1,7 @@
 package de.wolc.gui;
 
 import javafx.stage.Stage;
+import javafx.util.Duration;
 import javafx.scene.Scene;
 import javafx.scene.Node;
 import javafx.scene.layout.BackgroundImage;
@@ -25,6 +26,9 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.event.ActionEvent;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -34,6 +38,7 @@ import java.util.Optional;
 import java.util.Random;
 import java.util.concurrent.Callable;
 
+import de.wolc.MultiUse;
 import de.wolc.spiel.Farbe;
 import de.wolc.spiel.Preis;
 import de.wolc.spiel.SchreibtischSkin;
@@ -61,6 +66,9 @@ public class ItemShopMenu {
     private Label scoreLabel;
     private BorderPane pane;
     private GridPane upgradeShopGrid;
+    private Media hintergrundMusikPreviewMedia;
+    private MediaPlayer hintergrundMusikPreview;
+    private double hintergrundMusikPreviewZeit = 5d;
 
     private Alert speichernFehler, ladeFehler;
 
@@ -264,6 +272,21 @@ public class ItemShopMenu {
             rect.setHeight(80d);
             rect.setWidth(img.getWidth() / (img.getHeight() / 80d));
             rect.setFill(new ImagePattern(img));
+            rect.setOnMouseEntered((MouseEvent e) -> {
+                //Autoplay for Music
+                hintergrundMusikPreviewMedia = new Media(MultiUse.url("de/wolc/gui/sounds/" + hintergrundMusik.getMusikName()));
+                hintergrundMusikPreview = new MediaPlayer(hintergrundMusikPreviewMedia);
+                hintergrundMusikPreview.setCycleCount(1);
+                hintergrundMusikPreview.setVolume(0.5d);
+                hintergrundMusikPreview.setAutoPlay(true);
+                hintergrundMusikPreview.setStartTime(Duration.ONE);
+                hintergrundMusikPreview.setStopTime(Duration.seconds(hintergrundMusikPreviewZeit));
+                hintergrundMusikPreview.seek(Duration.seconds(hintergrundMusikPreviewZeit));
+            });
+            rect.setOnMouseExited((MouseEvent e) -> {
+                //Stop autoplay on mouse leave
+                hintergrundMusikPreview.stop();
+            });
             grid.add(rect , i, 2);
         }
         return scroll;
