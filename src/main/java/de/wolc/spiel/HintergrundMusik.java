@@ -7,7 +7,8 @@ public enum HintergrundMusik{
 
     BACKGROUNDMUSIK_OFFICIALSOUNDTRACK("mainTheme.wav","backgroundMusik_mainTheme.gif","Offizieller Soundtrack©️", new Preis()),
     BACKGROUNDMUSIK_HOUSE("houseTheme.wav","backgroundMusik_house.png","House Track🏠", new Preis(Farbe.WEISS, 50, Farbe.ROT, 45, Farbe.BLAU, 50)),
-    BACKGROUNDMUSIK_METAL("metalTheme.wav","backgroundMusik_metal.png","Metal Track🤘", new Preis(Farbe.GRUEN, 30, Farbe.PINK, 55, Farbe.ORANGE, 50, Farbe.ROT, 10));
+    BACKGROUNDMUSIK_METAL("metalTheme.wav","backgroundMusik_metal.png","Metal Track🤘", new Preis(Farbe.GRUEN, 30, Farbe.PINK, 55, Farbe.ORANGE, 50, Farbe.ROT, 10)),
+    BACKGROUNDMUSIK_CHILL("chilloutTheme.wav","backgroundMusik_chillout.png","Chillout Track🌿☀️🌴", new Preis(Farbe.BLAU, 60, Farbe.WEISS, 10, Farbe.GRUEN, 30));
     
     //Constructor
     private HintergrundMusik(String guiMusik, String guiBild, String name, Preis preis){
