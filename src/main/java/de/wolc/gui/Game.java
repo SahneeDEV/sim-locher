@@ -95,7 +95,6 @@ public class Game extends AnimationTimer {
     private ArrayList<KonfettiObjekt> konfettiObjekte = new ArrayList<KonfettiObjekt>();
 
     public Game () {
-        Gui.getHerausforderungen().add(new HerausforderungZeitOhneZeit(50d));
         try {
             this.spieler = (Spieler) Gui.DB.laden("spieler");
         } catch (Exception e) {
@@ -132,7 +131,23 @@ public class Game extends AnimationTimer {
         
     }
 
-
+    private void zufallsHerausforderungStarten() {
+        Herausforderung herausforderung = null;
+        switch(RANDOM.nextInt(2)) {
+            // Keine Herausforderung
+            case 0: {
+                break;
+            }
+            case 1: {
+                herausforderung = new HerausforderungZeitOhneZeit(50d);
+                break;
+            }
+        }
+        if (herausforderung != null) {
+            Gui.getHerausforderungen().add(herausforderung);
+            this.benachrichtigungZeigen("Neue Herausforderung:\n" + herausforderung);
+        }
+    }
 
     private void updateLabels() {
         // Score einteilen nach Farbe
@@ -426,6 +441,8 @@ public class Game extends AnimationTimer {
             Papier papier = this.spieler.getLocher().getStapel().get(i);
             this.spawnLocherPapierObjekt(papier);
         }
+        // Neue Herausforderung zu jedem Spielstart
+        this.zufallsHerausforderungStarten();
         // Herausforderungen aktualisieren
         for(Herausforderung herausforderung: Gui.getHerausforderungen()) {
             if (!herausforderung.isErreicht()) {
