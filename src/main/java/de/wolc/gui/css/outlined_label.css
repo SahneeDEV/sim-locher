@@ -1,0 +1,11 @@
+.label {
+    -fx-alignment: center ;
+    -fx-font-size: 35px;
+}
+
+.outline.label .text {
+    -fx-alignment: center ;
+    -fx-fill: black;
+    -fx-stroke: firebrick;
+    -fx-stroke-width: 1px;
+}

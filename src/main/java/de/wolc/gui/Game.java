@@ -299,10 +299,12 @@ public class Game extends AnimationTimer {
 
         // Benachrichtigungen
         benachrichtigungenLabel = new Label();
-        benachrichtigungenLabel.setTextFill(Color.RED);
-        benachrichtigungenLabel.setFont(new Font(20));
+        //benachrichtigungenLabel.setTextFill(Color.RED);
+        benachrichtigungenLabel.getStylesheets().add(MultiUse.url("de/wolc/gui/css/outlined_label.css"));  
+        benachrichtigungenLabel.getStyleClass().add("outline");      
+        //benachrichtigungenLabel.setFont(new Font(20));
 
-        AnchorPane.setLeftAnchor(this.benachrichtigungenLabel, stage.getWidth() * 0.40);
+        AnchorPane.setLeftAnchor(this.benachrichtigungenLabel, stage.getWidth() * 0.30);
         AnchorPane.setBottomAnchor(this.benachrichtigungenLabel, stage.getHeight() * 0.85);
 
         //Locher_new Mouse Events
