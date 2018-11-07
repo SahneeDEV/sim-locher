@@ -163,21 +163,7 @@ public class Game extends AnimationTimer {
         this.stage = stage;
 
         //Hintergrundmusik
-        if(Gui.getEinstellungen().ambientSoundEnabled()){
-            hintergrundMusikMedia = new Media(MultiUse.url("de/wolc/gui/sounds/" + spieler.geHintergrundMusik().getMusikName()));
-            hintergrundMusik = new MediaPlayer(hintergrundMusikMedia);
-            hintergrundMusik.setCycleCount(MediaPlayer.INDEFINITE);
-            hintergrundMusik.setVolume(Gui.getEinstellungen().getAmbientSoundVolume());
-            hintergrundMusik.setAutoPlay(true);
-            hintergrundMusik.setOnEndOfMedia(new Runnable(){
-            
-                @Override
-                public void run() {
-                    hintergrundMusik.seek(Duration.INDEFINITE);
-                    hintergrundMusik.play();
-                }
-            });
-        }
+        loopBackgroundMusic();
 
 
         //Main Orientation Node and initale settings
@@ -420,6 +406,24 @@ public class Game extends AnimationTimer {
         ItemShopMenu menu = new ItemShopMenu();
         this.stage.setScene(menu.ItemShopStage(this.stage));
         this.stage.setFullScreen(Gui.getEinstellungen().isVollbild());
+    }
+
+    
+    private void loopBackgroundMusic(){
+        //Background Music
+        if(Gui.getEinstellungen().ambientSoundEnabled()){
+            hintergrundMusikMedia = new Media(MultiUse.url("de/wolc/gui/sounds/" + spieler.geHintergrundMusik().getMusikName()));
+            hintergrundMusik = new MediaPlayer(hintergrundMusikMedia);
+            hintergrundMusik.setVolume(Gui.getEinstellungen().getAmbientSoundVolume());
+            hintergrundMusik.play();
+            hintergrundMusik.setOnEndOfMedia(new Runnable(){
+            
+                @Override
+                public void run() {
+                    loopBackgroundMusic();
+                }
+            });
+        }
     }
 
     /**
