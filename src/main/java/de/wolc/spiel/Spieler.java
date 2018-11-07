@@ -14,14 +14,13 @@ import de.wolc.spiel.papier.Konfetti;
  */
 public class Spieler implements Serializable {
     /** MUSS um 1 erhöht werden, wenn sich die Eigenschaften der Klasse ändern. */ 
-    private static final long serialVersionUID = 5L;
+    private static final long serialVersionUID = 6L;
     
     private SimLocher locher;
     private SchreibtischSkin schreibtischSkin;
     private ArrayList<Konfetti> konfetti;
     private String name;
     private HintergrundMusik hintergrundMusik;
-    private double hintergrundMusikVolume;
 
     public Spieler() {
         this.locher = new SimLocher();
@@ -29,7 +28,6 @@ public class Spieler implements Serializable {
         this.konfetti = new ArrayList<Konfetti>();
         this.name = "Namenloser Held";
         this.hintergrundMusik = HintergrundMusik.BACKGROUNDMUSIK_OFFICIALSOUNDTRACK;
-        this.hintergrundMusikVolume = Gui.getEinstellungen().getAmbientSoundVolume();
     }
 
     /**
@@ -72,23 +70,6 @@ public class Spieler implements Serializable {
      */
     public void setHintergrundMusik(HintergrundMusik hintergrundMusik){
         this.hintergrundMusik = hintergrundMusik;
-    }
-
-    /**
-     * @return die lautstärke der Hintergrundmusik
-     */
-    public double getHintergrundMusikVolume(){
-        return this.hintergrundMusikVolume;
-    }
-
-    /**
-     * Setzt die lautstärke der Hintergrundmusik
-     * @param hintergrundMusikVolume die lautstärke der Hintergrundmusik zwischen 0 und 100
-     */
-    public void setHintergrundMusikVolume(double hintergrundMusikVolume){
-        if(hintergrundMusikVolume > 0 && hintergrundMusikVolume <= 100){
-            this.hintergrundMusikVolume = hintergrundMusikVolume;
-        }
     }
 
     /**
