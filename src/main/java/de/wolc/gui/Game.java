@@ -2,6 +2,7 @@ package de.wolc.gui;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 
@@ -342,9 +343,9 @@ public class Game extends AnimationTimer {
 
                     Bounds bounds = locher_new.getBoundsInParent();
                     for(Konfetti konfetti : prozess.getKonfetti()) {
-                        konfettiObjekte.add(new KonfettiObjekt(this, konfetti, 
+                        this.spawnKonfettiObjekt(konfetti, 
                             MultiUse.zufall(bounds.getMinX(), bounds.getMaxX()), 
-                            MultiUse.zufall(bounds.getMaxY() - 5, bounds.getMaxY() + 5)));
+                            MultiUse.zufall(bounds.getMaxY() - 5, bounds.getMaxY() + 5));
                     }
                     
                     int locherPapierSize = locherPapierObjekte.size() - 1;
@@ -549,6 +550,10 @@ public class Game extends AnimationTimer {
         this.locherPapierObjekte.add(new LocherPapierObjekt(this, this.spieler.getLocher().getStapel().groesse(), this.locher_new, papier));
     }
 
+    private void spawnKonfettiObjekt(Konfetti konfetti, double x, double y) {
+        this.konfettiObjekte.add(new KonfettiObjekt(this, konfetti,  x, y));
+    }
+
     /**
      * Wechselt das Papier anhand des ausgewählten neuen Formats
      * @param papierStapel - der neue Papierstapel des Formats
@@ -634,6 +639,15 @@ public class Game extends AnimationTimer {
         if (this.benachrichtigungenZeit <= 0) {
             Game.this.benachrichtigungenLabel.setText("");
             this.benachrichtigungenZeit = 0;
+        }
+        
+        List<Konfetti> konfettiGenerator = new ArrayList<>();
+        for(LocherUpgrade upgrade: this.spieler.getLocher().getUpgrades()) {
+            upgrade.upgradeKonfettiGenerator(this.deltaZeit, konfettiGenerator);
+        }
+        for(Konfetti konfettiGeneriert: konfettiGenerator) {
+            this.spieler.getKonfetti().add(konfettiGeneriert);
+            this.spawnKonfettiObjekt(konfettiGeneriert, MultiUse.zufall(0, gameArea.getWidth()), 1);
         }
 
         if (this.timeToNextPapier <= 0) {

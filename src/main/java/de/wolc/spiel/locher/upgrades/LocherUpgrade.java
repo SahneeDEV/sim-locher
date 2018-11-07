@@ -1,10 +1,12 @@
 package de.wolc.spiel.locher.upgrades;
 
 import java.io.Serializable;
+import java.util.List;
 
 import de.wolc.spiel.Preis;
 import de.wolc.spiel.locher.Lochprozess;
 import de.wolc.spiel.locher.SimLocher;
+import de.wolc.spiel.papier.Konfetti;
 
 /**
  * Stellt ein Locher Upgrade dar.
@@ -72,6 +74,10 @@ public abstract class LocherUpgrade implements Serializable {
      */
     public double upgradeSpielZeit(double time) {
         return time;
+    }
+
+    public void upgradeKonfettiGenerator(double deltaZeit, List<Konfetti> konfetti) {
+
     }
 
     public abstract String toString();

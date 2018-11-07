@@ -33,6 +33,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Random;
 
+import de.wolc.MultiUse;
 import de.wolc.gui.herausforderung.Herausforderung;
 import java.util.concurrent.Callable;
 
@@ -44,6 +45,7 @@ import de.wolc.spiel.locher.LocherSkin;
 import de.wolc.spiel.locher.upgrades.LocherUpgrade;
 import de.wolc.spiel.locher.upgrades.UpgradeLocherAufSpeed;
 import de.wolc.spiel.locher.upgrades.UpgradePanzerStanzer;
+import de.wolc.spiel.locher.upgrades.UpgradePraktikant;
 import de.wolc.spiel.locher.upgrades.UpgradeSpielZeit;
 import de.wolc.spiel.locher.upgrades.UpgradeVampir;
 import de.wolc.spiel.locher.upgrades.UpgradeWeissesLoch;
@@ -175,6 +177,10 @@ public class ItemShopMenu {
         });
         guiUpgradeShop(UpgradeSpielZeit.class, "Upgrade Spiel Zeit", () -> {
             UpgradeSpielZeit upgrade = new UpgradeSpielZeit(ZUFALL.nextDouble()*10+0.5);
+            return upgrade;
+        });
+        guiUpgradeShop(UpgradePraktikant.class, "Praktikant", () -> {
+            UpgradePraktikant upgrade = new UpgradePraktikant(MultiUse.zufall(1d, 10d), MultiUse.zufall(1, 5), MultiUse.zufall(5, 10));
             return upgrade;
         });
         ScrollPane scroll = new ScrollPane();
