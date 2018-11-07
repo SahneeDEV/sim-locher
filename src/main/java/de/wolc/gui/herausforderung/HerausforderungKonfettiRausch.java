@@ -46,7 +46,7 @@ public class HerausforderungKonfettiRausch extends Herausforderung implements Se
 
     @Override
     public String toString() {
-        return "Konfetti Rausch (" + this.getAnzahl() + "/" + this.getErreicht() + " Konfetti erzeugt)";
+        return "Konfetti Rausch (" + this.getErreicht() + "/" + this.getAnzahl() + " Konfetti erzeugt)";
     }
 
 }

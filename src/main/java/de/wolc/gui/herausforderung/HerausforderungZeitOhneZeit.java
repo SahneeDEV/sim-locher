@@ -61,7 +61,7 @@ public class HerausforderungZeitOhneZeit extends Herausforderung implements Seri
     public String toString() {
         return "Zeit ohne Zeit (" + 
             MultiUse.sekundenRunden(this.getVergangeneZeit()) + "s / " + 
-            MultiUse.sekundenRunden(this.getZeit()) + "s)";
+            MultiUse.sekundenRunden(this.getZeit()) + "s spielen)";
     }
 
 }

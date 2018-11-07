@@ -9,6 +9,7 @@ import de.wolc.MultiUse;
 import de.wolc.gui.PapierObjekt;
 import de.wolc.gui.herausforderung.Herausforderung;
 import de.wolc.gui.herausforderung.HerausforderungKonfettiRausch;
+import de.wolc.gui.herausforderung.HerausforderungSpeedKlicker;
 import de.wolc.gui.herausforderung.HerausforderungTapfererLocher;
 import de.wolc.gui.herausforderung.HerausforderungZeitOhneZeit;
 import de.wolc.spiel.Farbe;
@@ -135,7 +136,7 @@ public class Game extends AnimationTimer {
 
     private void zufallsHerausforderungStarten() {
         Herausforderung herausforderung = null;
-        switch(RANDOM.nextInt(4)) {
+        switch(RANDOM.nextInt(5)) {
             case 0: {
                 // Keine Herausforderung
                 break;
@@ -150,6 +151,10 @@ public class Game extends AnimationTimer {
             }
             case 3: {
                 herausforderung = new HerausforderungKonfettiRausch(MultiUse.zufall(10, 500));
+                break;
+            }
+            case 4: {
+                herausforderung = new HerausforderungSpeedKlicker(MultiUse.zufall(10, 30), MultiUse.zufall(10, 40));
                 break;
             }
         }
