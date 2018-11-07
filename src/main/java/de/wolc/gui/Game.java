@@ -54,6 +54,7 @@ import javafx.scene.media.AudioClip;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
+import javafx.scene.DepthTest;
 
 public class Game extends AnimationTimer {
 
@@ -95,6 +96,9 @@ public class Game extends AnimationTimer {
 
     private ArrayList<LocherPapierObjekt> locherPapier= new ArrayList<LocherPapierObjekt>();
     private ArrayList<KonfettiObjekt> konfettiObjekte = new ArrayList<>();
+
+    //Nicht auswählen des Formats verhindern
+    HBox formatBox = new HBox();
 
     public Game () {
         try {
@@ -151,7 +155,8 @@ public class Game extends AnimationTimer {
         this.papierLabel.setText("Stapel: " + this.spieler.getLocher().getStapel().groesse() + "/" + this.spieler.getLocher().getStaerke());
         this.formatLabel.setText("Stanzer: " + this.spieler.getLocher().getStanzer());
         this.locherCooldown.setText("Cooldown: " + Math.round(spieler.getLocher().getCooldown() * 10d) / 10d + "s");
-        remainingTime.setText("Zeit: " + Math.round(this.remainingTimeAvailable * 10d) / 10d + "s");   
+        remainingTime.setText("Zeit: " + Math.round(this.remainingTimeAvailable * 10d) / 10d + "s");
+        formatBox.toFront();
     }
     
     public Scene GameMainStage(Stage stage){
@@ -231,7 +236,7 @@ public class Game extends AnimationTimer {
         this.updateLabels();
 
         //Adding the Format ToggleButtons + ToggleGroup + default ToggleButton configuration
-        HBox formatBox = new HBox();
+        formatBox.setDepthTest(DepthTest.ENABLE);
         ToggleGroup formatGroup = new ToggleGroup();
         formatBox.setPadding(new Insets(20, 5 , 20 ,5));
 

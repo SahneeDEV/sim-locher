@@ -9,6 +9,7 @@ import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
+import javafx.scene.DepthTest;
 import javafx.scene.effect.Light;
 import javafx.scene.effect.Lighting;
 
@@ -55,6 +56,7 @@ public class PapierObjekt {
         this.drawnPapier.setHeight(IMAGE.getHeight());
         this.drawnPapier.setTranslateX(this.zufallsBreite());
         this.drawnPapier.setTranslateY(this.zufallsHoehe());
+        this.drawnPapier.setDepthTest(DepthTest.ENABLE);
         this.drawnPapier.setEffect(lighting);
         this.drawnPapier.setOnMouseDragged((MouseEvent e) -> {
             //Change the location if the cursor has moved
