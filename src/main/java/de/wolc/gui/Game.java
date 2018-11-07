@@ -190,7 +190,7 @@ private void zufallsHerausforderungStarten() {
         this.scoreLabel.setText("Score: " + this.spieler.getKonfetti().size());
         // Sonstige Stats
         this.formatLabel.setText("Format: " + this.spieler.getLocher().getFormat().getSimpleName());
-        this.papierLabel.setText("Stapel: " + this.spieler.getLocher().getStapel().groesse());
+        this.papierLabel.setText("Stapel: " + this.spieler.getLocher().getStapel().groesse() + "/" + this.spieler.getLocher().getStaerke());
         this.locherCooldownLabel.setText("Cooldown: " + MultiUse.sekundenRunden(this.spieler.getLocher().getCooldown())+ "s");
         this.remainingTimeLabel.setText("Zeit: " + MultiUse.sekundenRunden(this.remainingTimeAvailable) + "s"); 
         String herausforderungenString = "";
