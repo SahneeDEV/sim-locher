@@ -88,9 +88,15 @@ public class MultiUse{
     }
 
     /**
-     * Gibt einen ZUfallswert zwischen den beiden Werten zurück.
+     * Gibt einen Zufallswert zwischen den beiden Werten zurück.
      */
     public static double zufall(double min, double max) {
         return min + (max - min) * RANDOM.nextDouble();
+    }
+    /**
+     * Gibt einen Zufallswert zwischen den beiden Werten zurück.
+     */
+    public static int zufall(int min, int max) {
+        return min + RANDOM.nextInt(max - min);
     }
 }

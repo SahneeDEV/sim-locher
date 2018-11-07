@@ -19,7 +19,7 @@ public class HerausforderungZeitOhneZeit extends Herausforderung implements Seri
     private double vergangeneZeit;
 
     public HerausforderungZeitOhneZeit(double zeit) {
-        super(new Preis(Farbe.ROT, 1000));
+        super(new Preis(Farbe.BLAU, 20, Farbe.WEISS, 5));
         this.zeit = zeit;
         this.vergangeneZeit = 0d;
     }
@@ -61,7 +61,7 @@ public class HerausforderungZeitOhneZeit extends Herausforderung implements Seri
     public String toString() {
         return "Zeit ohne Zeit (" + 
             MultiUse.sekundenRunden(this.getVergangeneZeit()) + "s / " + 
-            MultiUse.sekundenRunden(this.getZeit()) + "s)";
+            MultiUse.sekundenRunden(this.getZeit()) + "s spielen)";
     }
 
 }

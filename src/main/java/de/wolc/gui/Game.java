@@ -8,6 +8,9 @@ import java.util.Random;
 import de.wolc.MultiUse;
 import de.wolc.gui.PapierObjekt;
 import de.wolc.gui.herausforderung.Herausforderung;
+import de.wolc.gui.herausforderung.HerausforderungKonfettiRausch;
+import de.wolc.gui.herausforderung.HerausforderungSpeedKlicker;
+import de.wolc.gui.herausforderung.HerausforderungTapfererLocher;
 import de.wolc.gui.herausforderung.HerausforderungZeitOhneZeit;
 import de.wolc.spiel.Farbe;
 import de.wolc.spiel.Preis;
@@ -58,7 +61,7 @@ import javafx.scene.control.TextInputDialog;
 public class Game extends AnimationTimer {
 
     private static final Random RANDOM = new Random();
-    private static final double BENACHRICHTUNG_ANZEIGEZEIT = 3.5d;
+    private static final double BENACHRICHTUNG_ANZEIGEZEIT = 5d;
     private static final String TITEL = "World of Locher Craft";
 
     private Spieler spieler;
@@ -133,13 +136,25 @@ public class Game extends AnimationTimer {
 
     private void zufallsHerausforderungStarten() {
         Herausforderung herausforderung = null;
-        switch(RANDOM.nextInt(2)) {
-            // Keine Herausforderung
+        switch(RANDOM.nextInt(5)) {
             case 0: {
+                // Keine Herausforderung
                 break;
             }
             case 1: {
-                herausforderung = new HerausforderungZeitOhneZeit(50d);
+                herausforderung = new HerausforderungZeitOhneZeit(MultiUse.zufall(30, 120));
+                break;
+            }
+            case 2: {
+                herausforderung = new HerausforderungTapfererLocher(MultiUse.zufall(10, 30));
+                break;
+            }
+            case 3: {
+                herausforderung = new HerausforderungKonfettiRausch(MultiUse.zufall(10, 500));
+                break;
+            }
+            case 4: {
+                herausforderung = new HerausforderungSpeedKlicker(MultiUse.zufall(10, 30), MultiUse.zufall(10, 40));
                 break;
             }
         }
@@ -299,10 +314,12 @@ public class Game extends AnimationTimer {
 
         // Benachrichtigungen
         benachrichtigungenLabel = new Label();
-        benachrichtigungenLabel.setTextFill(Color.RED);
-        benachrichtigungenLabel.setFont(new Font(20));
+        //benachrichtigungenLabel.setTextFill(Color.RED);
+        benachrichtigungenLabel.getStylesheets().add(MultiUse.url("de/wolc/gui/css/outlined_label.css"));  
+        benachrichtigungenLabel.getStyleClass().add("outline");      
+        //benachrichtigungenLabel.setFont(new Font(20));
 
-        AnchorPane.setLeftAnchor(this.benachrichtigungenLabel, stage.getWidth() * 0.40);
+        AnchorPane.setLeftAnchor(this.benachrichtigungenLabel, stage.getWidth() * 0.30);
         AnchorPane.setBottomAnchor(this.benachrichtigungenLabel, stage.getHeight() * 0.85);
 
         //Locher_new Mouse Events
@@ -640,9 +657,20 @@ public class Game extends AnimationTimer {
             }
             // Wenn sie erreicht ist und der Spieler noch keine Belohnung erhalten hat -> Belohnung verteilen
             // (Es wird erneut auf "isErreicht" gecheckt, da sie im Tick möglicherweise erreicht wurde)
+            boolean hatWelcheErreicht = false;
             if (herausforderung.isErreicht() && !herausforderung.hatBelohnungErhalten()) {
                 this.belohnungVerteilen(herausforderung.getBelohnung());
                 herausforderung.setBelohnungErhalten();
+                this.benachrichtigungZeigen(
+                    "Herausforderung erreicht:\n" + 
+                    herausforderung + "\n" + 
+                    herausforderung.getBelohnung().toString().replace("\n", ", ")
+                );
+                hatWelcheErreicht = true;
+            }
+            if (hatWelcheErreicht) {
+                AudioClip clip = new AudioClip(MultiUse.url("de/wolc/gui/sounds/herausforderung_erreicht.wav"));
+                clip.play(100);
             }
         }
         this.deltaZeit = 0;
