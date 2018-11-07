@@ -58,6 +58,10 @@ import javafx.scene.shape.Shape;
 import javafx.scene.text.Font;
 import javafx.scene.media.AudioClip;
 import javafx.scene.control.TextInputDialog;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
+import javafx.scene.DepthTest;
+
 
 public class Game extends AnimationTimer {
 
@@ -93,11 +97,19 @@ public class Game extends AnimationTimer {
     //Diverse Nodes
     private Label fpsLabel, scoreLabel, remainingTimeLabel, formatLabel, papierLabel, locherCooldownLabel, 
         benachrichtigungenLabel, herausforderungenLabel;
+    private ToggleButton formatA4Button, formatA5Button, formatA6Button;
     private HashMap<Farbe, Label> scoreLabels = new HashMap<>();
 
     private ArrayList<LocherPapierObjekt> locherPapierObjekte = new ArrayList<LocherPapierObjekt>();
     private ArrayList<KonfettiObjekt> konfettiObjekte = new ArrayList<KonfettiObjekt>();
 
+    //Hintergrundmusik
+    private Media hintergrundMusikMedia;
+    private MediaPlayer hintergrundMusik;
+	
+	//Nicht auswählen des Formats verhindern
+    HBox formatBox = new HBox();
+	
     public Game () {
         try {
             this.spieler = (Spieler) Gui.DB.laden("spieler");
@@ -135,7 +147,7 @@ public class Game extends AnimationTimer {
         
     }
 
-    private void zufallsHerausforderungStarten() {
+private void zufallsHerausforderungStarten() {
         Herausforderung herausforderung = null;
         switch(RANDOM.nextInt(5)) {
             case 0: {
@@ -165,7 +177,7 @@ public class Game extends AnimationTimer {
         }
     }
 
-    private void updateLabels() {
+   private void updateLabels() {
         // Score einteilen nach Farbe
         HashMap<Farbe, ArrayList<Konfetti>> hash = this.spieler.getKonfettiSortiert();
         for(Farbe farbe : Farbe.values()) {
@@ -189,11 +201,14 @@ public class Game extends AnimationTimer {
         }
         this.herausforderungenLabel.setText(herausforderungenString.length() == 0 
             ? "" : "Herausforderungen:\n" + herausforderungenString);
+		formatBox.toFront();
     }
-    
-    public Scene GameMainStage(Stage stage){
+	
+   public Scene GameMainStage(Stage stage){
         this.stage = stage;
-
+		
+		//Hintergrundmusik
+        loopBackgroundMusic();
         //Main Orientation Node and initale settings
         BorderPane mainPane = new BorderPane();
 
@@ -251,12 +266,12 @@ public class Game extends AnimationTimer {
         rightVBox.getChildren().addAll(locherCooldownLabel, formatLabel, papierLabel, this.herausforderungenLabel);
         this.updateLabels();
 
-        //Adding the Format ToggleButtons + ToggleGroup + default ToggleButton configuration
-        HBox formatBox = new HBox();
+		//Adding the Format ToggleButtons + ToggleGroup + default ToggleButton configuration
+        formatBox.setDepthTest(DepthTest.ENABLE);
         ToggleGroup formatGroup = new ToggleGroup();
         formatBox.setPadding(new Insets(20, 5 , 20 ,5));
 
-        ToggleButton formatA4Button = new ToggleButton("A4");
+        formatA4Button = new ToggleButton("A4");
         formatA4Button.setSelected(true);
         formatA4Button.setToggleGroup(formatGroup);
         formatA4Button.setOnMousePressed((MouseEvent e) -> {
@@ -264,7 +279,7 @@ public class Game extends AnimationTimer {
             locherPapierEntfernen();
         });
 
-        ToggleButton formatA5Button = new ToggleButton("A5");
+        formatA5Button = new ToggleButton("A5");
         formatA5Button.setSelected(false);
         formatA5Button.setToggleGroup(formatGroup);
         formatA5Button.setOnMousePressed((MouseEvent e) -> {
@@ -272,7 +287,7 @@ public class Game extends AnimationTimer {
             locherPapierEntfernen();
         });
 
-        ToggleButton formatA6Button = new ToggleButton("A6");
+        formatA6Button = new ToggleButton("A6");
         formatA6Button.setSelected(false);
         formatA6Button.setToggleGroup(formatGroup);
         formatA6Button.setOnMousePressed((MouseEvent e) -> {
@@ -283,8 +298,8 @@ public class Game extends AnimationTimer {
         formatBox.getChildren().addAll(formatA4Button, formatA5Button, formatA6Button);
         mainPane.setLeft(formatBox);
         BorderPane.setAlignment(formatBox, Pos.CENTER_LEFT);
-
-        //If a SaveGame has been loaded the ToggleButtons get adjusted here
+		
+		//If a SaveGame has been loaded the ToggleButtons get adjusted here
         formatA4Button.setSelected(this.spieler.getLocher().getFormat() == A4.class);
         formatA5Button.setSelected(this.spieler.getLocher().getFormat() == A5.class);
         formatA6Button.setSelected(this.spieler.getLocher().getFormat() == A6.class);
@@ -312,7 +327,7 @@ public class Game extends AnimationTimer {
 
         AnchorPane.setBottomAnchor(locher_new, stage.getWidth() * 0.20);
         AnchorPane.setLeftAnchor(locher_new, stage.getHeight() * 0.65);
-
+		
         // Benachrichtigungen
         benachrichtigungenLabel = new Label();
         //benachrichtigungenLabel.setTextFill(Color.RED);
@@ -322,8 +337,8 @@ public class Game extends AnimationTimer {
 
         AnchorPane.setLeftAnchor(this.benachrichtigungenLabel, stage.getWidth() * 0.30);
         AnchorPane.setBottomAnchor(this.benachrichtigungenLabel, stage.getHeight() * 0.85);
-
-        //Locher_new Mouse Events
+		
+		//Locher_new Mouse Events
         locher_new.setOnMouseClicked(e -> {
             //Abgleichen des gedrückten Buttons und des Cooldowns
             if (e.getButton() == MouseButton.PRIMARY) {
@@ -361,19 +376,24 @@ public class Game extends AnimationTimer {
                             i--;
                         }
                     }
-                    
                     if(prozess.getWarZuGross()) {
                         this.benachrichtigungZeigen("Es sind zu viele Papiere eingelegt - [RECHTSKLICK] auf Locher zum entfernen!");
-                        AudioClip clip = new AudioClip(MultiUse.url("de/wolc/gui/sounds/punch_error.wav"));
-                        clip.play(100);
+                        if(Gui.getEinstellungen().entitySoundEnabled()){
+                            AudioClip clip = new AudioClip(MultiUse.url("de/wolc/gui/sounds/punch_error.wav"));
+                            clip.play(100);
+                        }
                     } else {
-                        AudioClip clip = new AudioClip(MultiUse.url("de/wolc/gui/sounds/punch_1.wav"));
-                        clip.play(100);
+                        if(Gui.getEinstellungen().entitySoundEnabled()){
+                            AudioClip clip = new AudioClip(MultiUse.url("de/wolc/gui/sounds/punch_1.wav"));
+                            clip.play(100);
+                        }
                     }
                 } else {
                     this.benachrichtigungZeigen("Noch " + (Math.round(cooldown * 10d) / 10d) + "s auf Cooldown!");
-                    AudioClip clip = new AudioClip(MultiUse.url("de/wolc/gui/sounds/punch_error.wav"));
-                    clip.play(100);
+                    if(Gui.getEinstellungen().entitySoundEnabled()){
+                        AudioClip clip = new AudioClip(MultiUse.url("de/wolc/gui/sounds/punch_error.wav"));
+                        clip.play(100);
+                    }
                 }
             }
             //Abgleichen des gedrückten Buttons
@@ -415,8 +435,8 @@ public class Game extends AnimationTimer {
 
         return gameScene;
     }
-
-    /**
+	
+   /**
      * Wird zu Ende des Spiels (im letzten Tick) aufgerufen.
      */
     public void spielEnde() {
@@ -444,13 +464,33 @@ public class Game extends AnimationTimer {
             speichernFehler.showAndWait();
             e.printStackTrace();
         }
+		//HintergrundMusik beenden
+		hintergrundMusik.stop();
         // Zum Itemshop übergehen
         ItemShopMenu menu = new ItemShopMenu();
         this.stage.setScene(menu.ItemShopStage(this.stage));
         this.stage.setFullScreen(Gui.getEinstellungen().isVollbild());
     }
+	
+    
+    private void loopBackgroundMusic(){
+        //Background Music
+        if(Gui.getEinstellungen().ambientSoundEnabled()){
+            hintergrundMusikMedia = new Media(MultiUse.url("de/wolc/gui/sounds/" + spieler.geHintergrundMusik().getMusikName()));
+            hintergrundMusik = new MediaPlayer(hintergrundMusikMedia);
+            hintergrundMusik.setVolume(Gui.getEinstellungen().getAmbientSoundVolume());
+            hintergrundMusik.play();
+            hintergrundMusik.setOnEndOfMedia(new Runnable(){
+            
+                @Override
+                public void run() {
+                    loopBackgroundMusic();
+                }
+            });
+        }
+    }
 
-    /**
+   /**
      * Wird zu Start des Spiels (im ersten Tick) aufgerufen.
      */
     private void spielStart() {
@@ -689,5 +729,4 @@ public class Game extends AnimationTimer {
         }
         this.deltaZeit = 0;
     }
-
 }

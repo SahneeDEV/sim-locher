@@ -37,21 +37,19 @@ public class LocherPapierObjekt {
         Class<? extends Papier> aktuellesFormat = papier.getClass();
         if (aktuellesFormat == A4.class) {
             bild = BILD_A4;
-            x = locherPosition.getMinX() - 199  - (stapelGroesse * 0.15);
-            y = locherPosition.getMinY() + 249  - (stapelGroesse * 0.15);
+            x = locherPosition.getMinX() - 90.5d  - (stapelGroesse * 0.15d);
+            y = locherPosition.getMinY() + 260d  - (stapelGroesse * 0.15d);
         } else if (aktuellesFormat == A5.class) {
             bild = BILD_A5;
-            x = locherPosition.getMinX() - 100  - (stapelGroesse * 0.15);
-            y = locherPosition.getMinY() + 290  - (stapelGroesse * 0.15);
+            x = locherPosition.getMinX() + 2.5d  - (stapelGroesse * 0.15d);
+            y = locherPosition.getMinY() + 290d  - (stapelGroesse * 0.15d);
         } else if (aktuellesFormat == A6.class) {
             bild = BILD_A6;
-            x = locherPosition.getMinX() - 23.5  - (stapelGroesse * 0.15);
-            y = locherPosition.getMinY() + 309.5  - (stapelGroesse * 0.15);
+            x = locherPosition.getMinX() + 86d  - (stapelGroesse * 0.15d);
+            y = locherPosition.getMinY() + 310.5d - (stapelGroesse * 0.15d);
         } else {
             throw new IllegalStateException("Ungültiges Papierformat: " + aktuellesFormat);
         }
-
-        System.out.println("Neues LocherPapierObjekt (papier=" + papier + ", locherPosition=" + locherPosition + ", x=" + x + ", y=" + y + ")");
 
         //Effekt für die Farbe des Papieres setzen
         Lighting lighting = new Lighting();

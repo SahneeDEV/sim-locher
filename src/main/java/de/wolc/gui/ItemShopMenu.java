@@ -1,6 +1,7 @@
 package de.wolc.gui;
 
 import javafx.stage.Stage;
+import javafx.util.Duration;
 import javafx.scene.Scene;
 import javafx.scene.Node;
 import javafx.scene.layout.BackgroundImage;
@@ -25,6 +26,9 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.event.ActionEvent;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -32,6 +36,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Random;
+import java.util.concurrent.Callable;
 
 import de.wolc.MultiUse;
 import de.wolc.gui.herausforderung.Herausforderung;
@@ -41,6 +46,7 @@ import de.wolc.spiel.Farbe;
 import de.wolc.spiel.Preis;
 import de.wolc.spiel.SchreibtischSkin;
 import de.wolc.spiel.Spieler;
+import de.wolc.spiel.HintergrundMusik;
 import de.wolc.spiel.locher.LocherSkin;
 import de.wolc.spiel.locher.upgrades.LocherUpgrade;
 import de.wolc.spiel.locher.upgrades.UpgradeLocherAufSpeed;
@@ -64,6 +70,9 @@ public class ItemShopMenu {
     private Label scoreLabel;
     private BorderPane pane;
     private GridPane upgradeShopGrid;
+    private Media hintergrundMusikPreviewMedia;
+    private MediaPlayer hintergrundMusikPreview;
+    private double hintergrundMusikPreviewZeit = 5d;
 
     private Alert speichernFehler, ladeFehler;
 
@@ -112,8 +121,7 @@ public class ItemShopMenu {
         this.locherVorschau = new Rectangle();
         return this.locherVorschau;
     }
-
-    private Node guiButtons() {
+	    private Node guiButtons() {
         GridPane grid = new GridPane();
         grid.setBackground(new Background(new BackgroundFill(Color.DARKGRAY, CornerRadii.EMPTY, Insets.EMPTY)));
         grid.setVgap(1);
@@ -267,9 +275,35 @@ public class ItemShopMenu {
             rect.setFill(new ImagePattern(img));
             grid.add(rect, i, 1);
         }
+		HintergrundMusik[] hintergrundMusiks = HintergrundMusik.values();
+        for(int i = 0; i < hintergrundMusiks.length; i++){
+            HintergrundMusik hintergrundMusik = hintergrundMusiks[i];
+            Image img = new Image("de/wolc/gui/images/" + hintergrundMusik.getGuiBild());
+            Rectangle rect = new Rectangle();
+            rect.setOnMouseClicked(e -> this.hintergrundMusikKaufen(hintergrundMusik));
+            rect.setHeight(80d);
+            rect.setWidth(img.getWidth() / (img.getHeight() / 80d));
+            rect.setFill(new ImagePattern(img));
+            rect.setOnMouseEntered((MouseEvent e) -> {
+                //Autoplay for Music
+                hintergrundMusikPreviewMedia = new Media(MultiUse.url("de/wolc/gui/sounds/" + hintergrundMusik.getMusikName()));
+                hintergrundMusikPreview = new MediaPlayer(hintergrundMusikPreviewMedia);
+                hintergrundMusikPreview.setCycleCount(1);
+                hintergrundMusikPreview.setVolume(0.25d);
+                hintergrundMusikPreview.setAutoPlay(true);
+                hintergrundMusikPreview.setStartTime(Duration.ONE);
+                hintergrundMusikPreview.setStopTime(Duration.seconds(hintergrundMusikPreviewZeit));
+                hintergrundMusikPreview.seek(Duration.seconds(hintergrundMusikPreviewZeit));
+            });
+            rect.setOnMouseExited((MouseEvent e) -> {
+                //Stop autoplay on mouse leave
+                hintergrundMusikPreview.stop();
+            });
+            grid.add(rect , i, 2);
+        }
         return scroll;
     }
-
+	
     private <T extends LocherUpgrade> void upgradesZeigen(String name, List<T> list) {
         String upgrades;
         if (list.size() != 0) {
@@ -329,6 +363,21 @@ public class ItemShopMenu {
         this.spieler.getLocher().setSkin(skin);
         System.out.println("Neuer Skin gekauft: " + skin);
         this.locherVorschauAktualisieren();
+        return true;
+    }
+	
+     /**
+     * Checks if you can buy another/a new hintergrundMusik
+     * @param hintergrundMusik die neu zu kaufende hintergrundMusik
+     * @return  true wenn ja, sonst false
+     */
+    private boolean hintergrundMusikKaufen(HintergrundMusik hintergrundMusik){
+        if(!this.kaufErbitten(hintergrundMusik.getName(), hintergrundMusik.getPreis())){
+            System.out.println("Neuer Hintergrundmusik Kauf abgelehnt: " + hintergrundMusik);
+            return false;
+        }
+        this.spieler.setHintergrundMusik(hintergrundMusik);
+        System.out.println("Neue Hintergrundmusik gekauft: " + hintergrundMusik);
         return true;
     }
 
@@ -397,7 +446,7 @@ public class ItemShopMenu {
         zuteuer.setResult(ButtonType.OK);
         zuteuer.showAndWait();
     }
-
+	
     private void speichern() {
         try {
             Leaderboard gesendet = Leaderboard.scoreSenden(this.spieler);

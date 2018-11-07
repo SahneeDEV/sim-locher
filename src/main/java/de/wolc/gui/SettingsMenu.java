@@ -13,6 +13,7 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.Button;
 import javafx.geometry.Pos;
 import javafx.event.EventHandler;
+import javafx.scene.control.Slider;
 
 import java.io.IOException;
 
@@ -40,6 +41,11 @@ public class SettingsMenu{
         settingsGridPane.setAlignment(Pos.CENTER);
         settingsGridPane.setMinHeight(100);
 
+        //Slider
+        Slider ambientSoundSlider = new Slider(0.0d,1.0d, Gui.getEinstellungen().getAmbientSoundVolume());
+        ambientSoundSlider.setShowTickMarks(true);
+        ambientSoundSlider.setShowTickLabels(true);
+        ambientSoundSlider.setMajorTickUnit(0.1d);
 
         //Buttons
         Button backButton = new Button("Zur\u00fcck");
@@ -47,6 +53,9 @@ public class SettingsMenu{
             @Override
             public void handle(ActionEvent actionEvent) {
                     try {
+                        //Ambientsound volume speichern
+                        Gui.getEinstellungen().setAmbientSoundVolume(ambientSoundSlider.getValue());
+
                         Gui.DB.speichern("einstellungen", Gui.getEinstellungen());
                     } catch (IOException e) {
                         Alert ladeFehler = new Alert(AlertType.ERROR);
@@ -75,14 +84,13 @@ public class SettingsMenu{
         final ProgressIndicator uploadingFiles = new ProgressIndicator();
         uploadingFiles.setVisible(false);
 
-
+        //CheckBoxes
         CheckBox vollbildCheckBox = new CheckBox("Vollbild");
         vollbildCheckBox.setSelected(Gui.getEinstellungen().isVollbild());
         vollbildCheckBox.selectedProperty().addListener(e -> {
             Gui.getEinstellungen().setVollbild(vollbildCheckBox.isSelected());
         });
-
-        //CheckBoxes
+        
         CheckBox RTXSupport = new CheckBox("RTX Einschalten/Ausschalten");
             RTXSupport.setSelected(true);
             final CheckBox diagnoseDatenCheckBox = new CheckBox("Diagnosedaten an Entwickler senden");
@@ -98,6 +106,18 @@ public class SettingsMenu{
                     uploadingFiles.setProgress(100);
                 }
             });
+
+            CheckBox entitieSoundCheckBox = new CheckBox("Sounds abspielen");
+            entitieSoundCheckBox.setSelected(Gui.getEinstellungen().entitySoundEnabled());
+            entitieSoundCheckBox.selectedProperty().addListener(e -> {
+                Gui.getEinstellungen().setEntitySoundEnabled(entitieSoundCheckBox.isSelected());
+            });
+    
+            CheckBox ambientSoundCheckBox = new CheckBox("Musik abspielen");
+            ambientSoundCheckBox.setSelected(Gui.getEinstellungen().ambientSoundEnabled());
+            entitieSoundCheckBox.selectedProperty().addListener(e -> {
+                Gui.getEinstellungen().setAmbientSoundEnabled(ambientSoundCheckBox.isSelected());
+            });        
 
         //ComboBox
         ComboBox<String> anisotropeFilterungComboBox = new ComboBox<String>();
@@ -124,6 +144,7 @@ public class SettingsMenu{
         );
         antiAliasingComboBox.setValue(baseSettingNames[12]);        
 
+
         //Positioning
         settingsGridPane.add(anisotropeFilterung, 0, 0);
         settingsGridPane.add(anisotropeFilterungComboBox, 1, 0);
@@ -133,14 +154,17 @@ public class SettingsMenu{
         settingsGridPane.add(uploadingFiles, 1 , 2);
         settingsGridPane.add(RTXSupport, 0, 3);
         settingsGridPane.add(vollbildCheckBox, 0, 4);
-        settingsGridPane.add(credits, 0, 5);
-        settingsGridPane.add(backButton,0,7);
+        settingsGridPane.add(entitieSoundCheckBox, 0, 5);
+        settingsGridPane.add(ambientSoundCheckBox, 0 ,6);
+        settingsGridPane.add(ambientSoundSlider,0, 7);
+        settingsGridPane.add(credits, 0, 8);
+        settingsGridPane.add(backButton,0,10);
 
 
         //Get Scene size and create a new Instance
         settingsPane.setCenter(settingsGridPane);
 
-        Scene sceneMainWindow = new Scene(settingsPane, 500, 250);
+        Scene sceneMainWindow = new Scene(settingsPane, 500, 390);
 
         //Updating the Title
         stage.setTitle(windowTitle);
