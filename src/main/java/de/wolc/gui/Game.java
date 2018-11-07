@@ -26,6 +26,7 @@ import de.wolc.spiel.papier.Papier;
 import de.wolc.spiel.papier.PapierStapel;
 import de.wolc.gui.LocherPapierObjekt;
 
+import javafx.geometry.Bounds;
 import javafx.application.Platform;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
@@ -40,7 +41,6 @@ import javafx.scene.layout.Background;
 import javafx.scene.layout.VBox;
 import javafx.scene.layout.HBox;
 import javafx.geometry.Pos;
-import javafx.geometry.Bounds;
 import javafx.geometry.Insets;
 import javafx.scene.control.Label;
 import javafx.scene.control.ToggleButton;
@@ -55,7 +55,6 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
-import javafx.scene.text.Font;
 import javafx.scene.media.AudioClip;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.media.Media;
@@ -87,6 +86,7 @@ public class Game extends AnimationTimer {
     private double deltaZeit = 0d;
     private long letzteNanoZeit = 0;
     private double timeToNextPapier = 0d;
+    private double timeToPapierObjekt = 0.3d;
     private double fps = 0d;
 
     // Papierstapel erstellen
@@ -147,7 +147,7 @@ public class Game extends AnimationTimer {
         
     }
 
-private void zufallsHerausforderungStarten() {
+    private void zufallsHerausforderungStarten() {
         Herausforderung herausforderung = null;
         switch(RANDOM.nextInt(5)) {
             case 0: {
@@ -190,7 +190,7 @@ private void zufallsHerausforderungStarten() {
         this.scoreLabel.setText("Score: " + this.spieler.getKonfetti().size());
         // Sonstige Stats
         this.formatLabel.setText("Format: " + this.spieler.getLocher().getFormat().getSimpleName());
-        this.papierLabel.setText("Stapel: " + this.spieler.getLocher().getStapel().groesse());
+        this.papierLabel.setText("Stapel: " + this.spieler.getLocher().getStapel().groesse() + "/" + this.spieler.getLocher().getStaerke());
         this.locherCooldownLabel.setText("Cooldown: " + MultiUse.sekundenRunden(this.spieler.getLocher().getCooldown())+ "s");
         this.remainingTimeLabel.setText("Zeit: " + MultiUse.sekundenRunden(this.remainingTimeAvailable) + "s"); 
         String herausforderungenString = "";
@@ -430,7 +430,7 @@ private void zufallsHerausforderungStarten() {
 
         //Set Window Titel
         stage.setTitle(TITEL);
-
+        
         Platform.runLater(() -> this.start());
 
         return gameScene;
@@ -494,11 +494,6 @@ private void zufallsHerausforderungStarten() {
      * Wird zu Start des Spiels (im ersten Tick) aufgerufen.
      */
     private void spielStart() {
-        // Für alle bereits existierende Papiere ein LocherPapierObjekt spawnen um diese anzuzeigen.
-        for(int i = 0; i < this.spieler.getLocher().getStapel().groesse(); i++) {
-            Papier papier = this.spieler.getLocher().getStapel().get(i);
-            this.spawnLocherPapierObjekt(papier);
-        }
         // Neue Herausforderung zu jedem Spielstart
         this.zufallsHerausforderungStarten();
         // Herausforderungen aktualisieren
@@ -651,13 +646,22 @@ private void zufallsHerausforderungStarten() {
         double sekundenLetzterFrame = ((vergangenNanoZeit / 1000000000d));
         this.letzteNanoZeit = jetztNanoZeit;
         this.deltaZeit += sekundenLetzterFrame;
-
         // Durch das setzen einer FPS-Rate bekommen wir wesentlich bessere Performance.
         if (this.deltaZeit < 1d / ZIEL_FPS) {
             return;
+        } 
+        // FIXME: Hässlicher Workaround, gehört eigentlich in spielStart
+        if (timeToPapierObjekt < 0 && timeToPapierObjekt != -100) {
+            timeToPapierObjekt = -100;
+            // Für alle bereits existierende Papiere ein LocherPapierObjekt spawnen um diese anzuzeigen.
+            for(int i = 0; i < this.spieler.getLocher().getStapel().groesse(); i++) {
+                Papier papier = this.spieler.getLocher().getStapel().get(i);
+                this.spawnLocherPapierObjekt(papier);
+            }
+        } else {
+            timeToPapierObjekt -= this.deltaZeit;
         }
         this.fps = 1d / this.deltaZeit;
-
         //Triggering Cooldown and giving him the elapsedSeconds
         spieler.tick(this.deltaZeit);
         // Konfetti Objekte ticken
@@ -723,8 +727,10 @@ private void zufallsHerausforderungStarten() {
                 hatWelcheErreicht = true;
             }
             if (hatWelcheErreicht) {
-                AudioClip clip = new AudioClip(MultiUse.url("de/wolc/gui/sounds/herausforderung_erreicht.wav"));
-                clip.play(100);
+                if (Gui.getEinstellungen().entitySoundEnabled()) {
+                    AudioClip clip = new AudioClip(MultiUse.url("de/wolc/gui/sounds/herausforderung_erreicht.wav"));
+                    clip.play(100);
+                }
             }
         }
         this.deltaZeit = 0;

@@ -281,8 +281,8 @@ public class ItemShopMenu {
             Image img = new Image("de/wolc/gui/images/" + hintergrundMusik.getGuiBild());
             Rectangle rect = new Rectangle();
             rect.setOnMouseClicked(e -> this.hintergrundMusikKaufen(hintergrundMusik));
-            rect.setHeight(80d);
-            rect.setWidth(img.getWidth() / (img.getHeight() / 80d));
+            rect.setHeight(120d);
+            rect.setWidth(120d);
             rect.setFill(new ImagePattern(img));
             rect.setOnMouseEntered((MouseEvent e) -> {
                 //Autoplay for Music
