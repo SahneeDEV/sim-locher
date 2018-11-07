@@ -1,7 +1,10 @@
 package de.wolc.gui;
 
+import java.util.ArrayList;
+
 import de.wolc.Einstellungen;
 import de.wolc.db.Datenbank;
+import de.wolc.gui.herausforderung.Herausforderung;
 import javafx.application.Application;
 
 /**
@@ -14,6 +17,7 @@ public class Gui {
     public static final Datenbank DB = new Datenbank();
 
     private static Einstellungen einstellungen;
+    private static ArrayList<Herausforderung> herausforderungen;
 
     /**
      * Gibt die aktuellen Spieleinstellungen zurück.
@@ -24,14 +28,32 @@ public class Gui {
     }
 
     /**
+     * Gibt alle aktuellen Herausforderungen zurück.
+     * @return Die Herausforderungen.
+     */
+    public static ArrayList<Herausforderung> getHerausforderungen() {
+        return Gui.herausforderungen;
+    }
+
+    /**
      * Setzt die aktuellen Spieleinstellungen auf die neue Einstellungsinstanz.
      * ACHTUNG! Diese Methode wird NICHT verwendet um eine Einstellung zu ändern. Um dies zu tun sollte der Wert der
      * von "getEinstellungen()" zurückgegebenen Insanz angepasst werden, und dannach diese Instanz in die Datenbank
      * gespeichert werden(Key: "einstellungen").
      * @param einstellungen Die neue Einstellungsinstanz.
      */
-    public static void setEinstellungen(Einstellungen einstellungen) {
+    static void setEinstellungen(Einstellungen einstellungen) {
         Gui.einstellungen = einstellungen;
+    }
+
+    /**
+     * Setzt die aktuellen Herausforderungen auf die gegebene Liste. Dies beendet noch aktive Herausforderungen NICHT
+     * automatisch, dies müsste manuell geschiehen.
+     * ACHTUNG! Selbe Warnung wie bei "setEinstellungen" gilt auch hier!
+     * @param herausforderungen Die neuen Herausforderungen.
+     */
+    static void setHerausforderungen(ArrayList<Herausforderung> herausforderungen) {
+        Gui.herausforderungen = herausforderungen;
     }
 
     /**

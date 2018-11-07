@@ -32,6 +32,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Random;
+
+import de.wolc.gui.herausforderung.Herausforderung;
 import java.util.concurrent.Callable;
 
 import de.wolc.spiel.Farbe;
@@ -113,7 +115,7 @@ public class ItemShopMenu {
         GridPane grid = new GridPane();
         grid.setBackground(new Background(new BackgroundFill(Color.DARKGRAY, CornerRadii.EMPTY, Insets.EMPTY)));
         grid.setVgap(1);
-        Button backButton = new Button("◀ Zur\u00fcck ◀");
+        Button backButton = new Button("◀ Zur\u00fcck zum Hauptmenü ◀");
         backButton.addEventHandler(ActionEvent.ACTION, (ActionEvent actionEvent) -> {
             this.zurueck();
         });
@@ -121,12 +123,17 @@ public class ItemShopMenu {
         continueButton.addEventHandler(ActionEvent.ACTION, (ActionEvent actionEvent) -> {
             this.weiterspielen();
         });
+        Button herausforderungenButton = new Button("🏆 Herausforderungen 🏆");
+        herausforderungenButton.addEventHandler(ActionEvent.ACTION, (ActionEvent actionEvent) -> {
+            this.herausforderungenZeigen();
+        });
         Button leaderboardButton = new Button("🏅 Leaderboard 🏅");
         leaderboardButton.addEventHandler(ActionEvent.ACTION, (ActionEvent actionEvent) -> {
             this.leaderboard();
         });
         grid.add(backButton, 0, 0);
         grid.add(continueButton, 1, 0);
+        grid.add(herausforderungenButton, 3, 0);
         grid.add(leaderboardButton, 4, 0);
         return grid;
     }
@@ -275,6 +282,28 @@ public class ItemShopMenu {
         info.showAndWait();
     }
 
+    private void herausforderungenZeigen() {
+        String erreicht = "";
+        String nichtErreicht = "";
+        for(Herausforderung herausforderung: Gui.getHerausforderungen()) {
+            if (herausforderung.isErreicht()) {
+                erreicht += "  " + herausforderung.toString() + "\n";
+            } else {
+                nichtErreicht += "  " + herausforderung.toString() + "\n";
+            }
+        }
+        Alert info = new Alert(AlertType.INFORMATION);
+        info.setTitle("🏆 Herausforderungen 🏆");
+        info.setHeaderText("Hier werden alle aktiven und bereits erreichten Herausforderungen angezeigt.");
+        info.setContentText(
+            "⏱ Aktive Herausforderungen: ⏱\n" + 
+            (nichtErreicht.length() == 0 ? "Keine!\n" : nichtErreicht) +
+            "\n🏆 Erreichte Herausforderungen: 🏆\n"+ 
+            (erreicht.length() == 0 ? "Keine!\n" : erreicht) );
+        info.setResult(ButtonType.OK);
+        info.showAndWait();
+    }
+
     private boolean schreibtischKaufen(SchreibtischSkin skin) {
         if (!this.kaufErbitten(skin.getGuiName(), skin.getPreis())) {
             System.out.println("Neuer Schreibtisch Skin Kauf abgelehnt: " + skin);
@@ -368,6 +397,7 @@ public class ItemShopMenu {
             Leaderboard gesendet = Leaderboard.scoreSenden(this.spieler);
             this.spieler.setName(gesendet.getName());
             Gui.DB.speichern("spieler", this.spieler);
+            Gui.DB.speichern("herausforderungen", Gui.getHerausforderungen());
         } catch (Exception e) {
             this.spieler = new Spieler();
             speichernFehler = new Alert(AlertType.WARNING);
