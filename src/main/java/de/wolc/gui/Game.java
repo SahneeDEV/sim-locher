@@ -656,7 +656,11 @@ public class Game extends AnimationTimer {
             if (herausforderung.isErreicht() && !herausforderung.hatBelohnungErhalten()) {
                 this.belohnungVerteilen(herausforderung.getBelohnung());
                 herausforderung.setBelohnungErhalten();
-                this.benachrichtigungZeigen("Herausforderung erreicht:\n" + herausforderung);
+                this.benachrichtigungZeigen(
+                    "Herausforderung erreicht:\n" + 
+                    herausforderung + "\n" + 
+                    herausforderung.getBelohnung().toString().replace("\n", ", ")
+                );
                 hatWelcheErreicht = true;
             }
             if (hatWelcheErreicht) {
