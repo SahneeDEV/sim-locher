@@ -723,8 +723,10 @@ private void zufallsHerausforderungStarten() {
                 hatWelcheErreicht = true;
             }
             if (hatWelcheErreicht) {
-                AudioClip clip = new AudioClip(MultiUse.url("de/wolc/gui/sounds/herausforderung_erreicht.wav"));
-                clip.play(100);
+                if (Gui.getEinstellungen().entitySoundEnabled()) {
+                    AudioClip clip = new AudioClip(MultiUse.url("de/wolc/gui/sounds/herausforderung_erreicht.wav"));
+                    clip.play(100);
+                }
             }
         }
         this.deltaZeit = 0;
