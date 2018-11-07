@@ -57,7 +57,6 @@ public abstract class LocherUpgrade implements Serializable {
         return staerke;
     }
 
-
     /**
      * Wird nach jedem Lochprozess aufgerufen.
      * @param locher Der Locher.
@@ -65,6 +64,14 @@ public abstract class LocherUpgrade implements Serializable {
      */
     public void upgradeLochprozess(SimLocher locher, Lochprozess prozess) {
         
+    }
+
+    /**
+     * Modifiziert die Spielzeit des Games
+     * @param time Die Spielzeit.
+     */
+    public double upgradeSpielZeit(double time) {
+        return time;
     }
 
     public abstract String toString();

@@ -3,12 +3,14 @@ package de.wolc;
 import java.awt.GraphicsEnvironment;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Random;
 import java.util.regex.Pattern;
 import java.awt.GraphicsDevice;
 
 
 public class MultiUse{
 
+    private static final Random RANDOM = new Random();
     // Matches strings that start with a valid URI scheme
     private static final Pattern URL_QUICKMATCH = Pattern.compile("^\\p{Alpha}[\\p{Alnum}+.-]*:.*$");
 
@@ -75,5 +77,20 @@ public class MultiUse{
         } catch (MalformedURLException e) {
             throw new IllegalArgumentException("Invalid URL " + url, e);
         }
+    }
+
+    /**
+     * Verwandelt ein Objekt in eine String Repräsentation die der Ausgabe von "toString"(ohne Überschreibung) 
+     * entspricht.
+     */
+    public static String standardToString(Object von) {
+        return von.getClass().getName() + '@' + Integer.toHexString(von.hashCode());
+    }
+
+    /**
+     * Gibt einen ZUfallswert zwischen den beiden Werten zurück.
+     */
+    public static double zufall(double min, double max) {
+        return min + (max - min) * RANDOM.nextDouble();
     }
 }

@@ -1,6 +1,5 @@
 package de.wolc.gui;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Optional;
@@ -14,6 +13,7 @@ import de.wolc.spiel.Farbe;
 import de.wolc.spiel.Preis;
 import de.wolc.spiel.Spieler;
 import de.wolc.spiel.locher.Lochprozess;
+import de.wolc.spiel.locher.upgrades.LocherUpgrade;
 import de.wolc.spiel.papier.A4;
 import de.wolc.spiel.papier.A5;
 import de.wolc.spiel.papier.A6;
@@ -36,6 +36,7 @@ import javafx.scene.layout.Background;
 import javafx.scene.layout.VBox;
 import javafx.scene.layout.HBox;
 import javafx.geometry.Pos;
+import javafx.geometry.Bounds;
 import javafx.geometry.Insets;
 import javafx.scene.control.Label;
 import javafx.scene.control.ToggleButton;
@@ -66,21 +67,32 @@ public class Game extends AnimationTimer {
     private Stage stage;  
     
     // Variables for Countdown timer
-    private double remainingTimeAvailable = 30d;
+    private static final double ZIEL_FPS = 30d;
+    
+    //Game Variables
+    private static final double STANDARD_REMAINING_TIME_AVAILABLE = 30d;
+    private double remainingTimeAvailable;
     private double benachrichtigungenZeit = 0d;
+    private ArrayList<LocherUpgrade> upgrades;
+
+    //Variables for Countdown timer
+    private double deltaZeit = 0d;
     private long letzteNanoZeit = 0;
-    private double timeToNextPapier = 0;
+    private double timeToNextPapier = 0d;
+    private double fps = 0d;
 
     // Papierstapel erstellen
     private PapierStapel<A4> stapel_A4;
     private PapierStapel<A5> stapel_A5;
     private PapierStapel<A6> stapel_A6;
 
-    // Diverse Nodes
-    private Label scoreLabel, remainingTimeLabel, formatLabel, papierLabel, locherCooldownLabel, 
+    //Diverse Nodes
+    private Label fpsLabel, scoreLabel, remainingTimeLabel, formatLabel, papierLabel, locherCooldownLabel, 
         benachrichtigungenLabel, herausforderungenLabel;
     private HashMap<Farbe, Label> scoreLabels = new HashMap<>();
+
     private ArrayList<LocherPapierObjekt> locherPapierObjekte = new ArrayList<LocherPapierObjekt>();
+    private ArrayList<KonfettiObjekt> konfettiObjekte = new ArrayList<KonfettiObjekt>();
 
     public Game () {
         Gui.getHerausforderungen().add(new HerausforderungZeitOhneZeit(50d));
@@ -111,7 +123,16 @@ public class Game extends AnimationTimer {
             }
         }
         this.letzteNanoZeit = 0;
+
+        upgrades = this.spieler.getLocher().getUpgrades();
+        remainingTimeAvailable = STANDARD_REMAINING_TIME_AVAILABLE;
+        for (LocherUpgrade upgrade : upgrades) {
+            remainingTimeAvailable = upgrade.upgradeSpielZeit(remainingTimeAvailable); 
+        }
+        
     }
+
+
 
     private void updateLabels() {
         // Score einteilen nach Farbe
@@ -122,6 +143,7 @@ public class Game extends AnimationTimer {
             int zahl = liste != null ? liste.size() : 0;
             label.setText("  " + farbe.getAnzeigeName() + ": " + zahl);
         }
+        this.fpsLabel.setText("FPS: " + (Math.round(this.fps * 10d) / 10d));
         this.scoreLabel.setText("Score: " + this.spieler.getKonfetti().size());
         // Sonstige Stats
         this.formatLabel.setText("Format: " + this.spieler.getLocher().getFormat().getSimpleName());
@@ -180,13 +202,15 @@ public class Game extends AnimationTimer {
         this.remainingTimeLabel = new Label();
         this.locherCooldownLabel = new Label();
         this.herausforderungenLabel = new Label();
+        this.fpsLabel = new Label();
         locherCooldownLabel.setTextFill(Color.WHITE);
         papierLabel.setTextFill(Color.WHITE);
         scoreLabel.setTextFill(Color.WHITE);
         remainingTimeLabel.setTextFill(Color.WHITE);
         formatLabel.setTextFill(Color.WHITE);
         this.herausforderungenLabel.setTextFill(Color.WHITE);
-        rightVBox.getChildren().addAll(remainingTimeLabel, scoreLabel);
+        this.fpsLabel.setTextFill(Color.WHITE);
+        rightVBox.getChildren().addAll(fpsLabel, remainingTimeLabel, scoreLabel);
         for(Farbe farbe : Farbe.values()) {
             Label label = new Label();
             label.setTextFill(farbe.getGuiFarbe());
@@ -263,8 +287,8 @@ public class Game extends AnimationTimer {
         benachrichtigungenLabel.setTextFill(Color.RED);
         benachrichtigungenLabel.setFont(new Font(20));
 
-        AnchorPane.setLeftAnchor(benachrichtigungenLabel, stage.getWidth() * 0.50);
-        AnchorPane.setBottomAnchor(benachrichtigungenLabel, stage.getHeight() * 0.25);
+        AnchorPane.setLeftAnchor(this.benachrichtigungenLabel, stage.getWidth() * 0.40);
+        AnchorPane.setBottomAnchor(this.benachrichtigungenLabel, stage.getHeight() * 0.85);
 
         //Locher_new Mouse Events
         locher_new.setOnMouseClicked(e -> {
@@ -283,7 +307,14 @@ public class Game extends AnimationTimer {
                     // Erzielten Score zum Spieler hinzufügen
                     ArrayList<Konfetti> spielerKonfetti = spieler.getKonfetti();
                     spielerKonfetti.addAll(prozess.getKonfetti());
-                    // Lochprozess in GUI verarbeiten...
+
+                    Bounds bounds = locher_new.getBoundsInParent();
+                    for(Konfetti konfetti : prozess.getKonfetti()) {
+                        konfettiObjekte.add(new KonfettiObjekt(this, konfetti, 
+                            MultiUse.zufall(bounds.getMinX(), bounds.getMaxX()), 
+                            MultiUse.zufall(bounds.getMaxY() - 5, bounds.getMaxY() + 5)));
+                    }
+                    
                     int locherPapierSize = locherPapierObjekte.size() - 1;
                     for (int i = 0; i <= locherPapierSize; i++) {
                         LocherPapierObjekt toCheckPapiere = locherPapierObjekte.get(i);
@@ -364,13 +395,17 @@ public class Game extends AnimationTimer {
         }
         // Spiel & Herausforderungen speichern
         try {
+            // Name ändern um den Bad Word filter vom Server anzuwenden.
+            Leaderboard gesendet = Leaderboard.scoreSenden(this.spieler);
+            this.spieler.setName(gesendet.getName());
             Gui.DB.speichern("spieler", this.spieler);
             Gui.DB.speichern("herausforderungen", Gui.getHerausforderungen());
-        } catch (IOException e) {
+        } catch (Exception e) {
             Alert speichernFehler = new Alert(AlertType.WARNING);
             speichernFehler.setTitle("Fehler bei Spielstand speichern");
             speichernFehler.setHeaderText("Beim Speichern des Spielstandes ist ein Fehler aufgetreten. Hat " +
-                "das Spiel Schreibrechte auf das eigene Verzeichnis?\nDer erzielte Fortschritt ist verloren gegangen.");
+                "das Spiel Schreibrechte auf das eigene Verzeichnis?\nDer erzielte Fortschritt kann verloren gegangen" +
+                "sein.");
             speichernFehler.setContentText(e.toString());
             speichernFehler.setResult(ButtonType.OK);
             speichernFehler.showAndWait();
@@ -533,16 +568,34 @@ public class Game extends AnimationTimer {
             this.spielStart();
         }
         //Getting new and last TimeStamp in Miliseconds and calculating 
-        long elapsedNanoSeconds = jetztNanoZeit - this.letzteNanoZeit;
-        double elapsedSeconds = ((elapsedNanoSeconds / 1000000000d));
+        long vergangenNanoZeit = jetztNanoZeit - this.letzteNanoZeit;
+        double sekundenLetzterFrame = ((vergangenNanoZeit / 1000000000d));
         this.letzteNanoZeit = jetztNanoZeit;
+        this.deltaZeit += sekundenLetzterFrame;
+
+        // Durch das setzen einer FPS-Rate bekommen wir wesentlich bessere Performance.
+        if (this.deltaZeit < 1d / ZIEL_FPS) {
+            return;
+        }
+        this.fps = 1d / this.deltaZeit;
 
         //Triggering Cooldown and giving him the elapsedSeconds
-        spieler.tick(elapsedSeconds);
+        spieler.tick(this.deltaZeit);
+        // Konfetti Objekte ticken
+        int size = this.konfettiObjekte.size();
+        for(int i = 0; i < size; i++) {
+            KonfettiObjekt objekt = this.konfettiObjekte.get(i);
+            objekt.tick(this.deltaZeit);
+            if (objekt.istZerstoert()) {
+                this.konfettiObjekte.remove(i);
+                size--; 
+                i--;
+            }
+        }
 
-        this.timeToNextPapier -= elapsedSeconds;
-        this.remainingTimeAvailable -= elapsedSeconds;
-        this.benachrichtigungenZeit -= elapsedSeconds;
+        this.timeToNextPapier -= this.deltaZeit;
+        this.remainingTimeAvailable -= this.deltaZeit;
+        this.benachrichtigungenZeit -= this.deltaZeit;
 
         if (this.benachrichtigungenZeit <= 0) {
             Game.this.benachrichtigungenLabel.setText("");
@@ -566,7 +619,7 @@ public class Game extends AnimationTimer {
         for(Herausforderung herausforderung: Gui.getHerausforderungen()) {
             // Tick der Herausforderung ausführen.
             if (!herausforderung.isErreicht()) {
-                herausforderung.herausforderungTick(this, elapsedSeconds);
+                herausforderung.herausforderungTick(this, this.deltaZeit);
             }
             // Wenn sie erreicht ist und der Spieler noch keine Belohnung erhalten hat -> Belohnung verteilen
             // (Es wird erneut auf "isErreicht" gecheckt, da sie im Tick möglicherweise erreicht wurde)
@@ -575,6 +628,7 @@ public class Game extends AnimationTimer {
                 herausforderung.setBelohnungErhalten();
             }
         }
+        this.deltaZeit = 0;
     }
 
 }
