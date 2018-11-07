@@ -39,19 +39,23 @@ import java.util.Random;
 import java.util.concurrent.Callable;
 
 import de.wolc.MultiUse;
+import de.wolc.gui.herausforderung.Herausforderung;
+import java.util.concurrent.Callable;
+
 import de.wolc.spiel.Farbe;
 import de.wolc.spiel.Preis;
 import de.wolc.spiel.SchreibtischSkin;
 import de.wolc.spiel.Spieler;
+import de.wolc.spiel.HintergrundMusik;
 import de.wolc.spiel.locher.LocherSkin;
 import de.wolc.spiel.locher.upgrades.LocherUpgrade;
 import de.wolc.spiel.locher.upgrades.UpgradeLocherAufSpeed;
 import de.wolc.spiel.locher.upgrades.UpgradePanzerStanzer;
+import de.wolc.spiel.locher.upgrades.UpgradePraktikant;
 import de.wolc.spiel.locher.upgrades.UpgradeSpielZeit;
 import de.wolc.spiel.locher.upgrades.UpgradeVampir;
 import de.wolc.spiel.locher.upgrades.UpgradeWeissesLoch;
 import de.wolc.spiel.papier.Konfetti;
-import de.wolc.spiel.HintergrundMusik;
 
 public class ItemShopMenu {
     private static final String TITLE = "World of Locher Craft - 💲 Pay2Win 💲";
@@ -117,12 +121,11 @@ public class ItemShopMenu {
         this.locherVorschau = new Rectangle();
         return this.locherVorschau;
     }
-
-    private Node guiButtons() {
+	    private Node guiButtons() {
         GridPane grid = new GridPane();
         grid.setBackground(new Background(new BackgroundFill(Color.DARKGRAY, CornerRadii.EMPTY, Insets.EMPTY)));
         grid.setVgap(1);
-        Button backButton = new Button("◀ Zur\u00fcck ◀");
+        Button backButton = new Button("◀ Zur\u00fcck zum Hauptmenü ◀");
         backButton.addEventHandler(ActionEvent.ACTION, (ActionEvent actionEvent) -> {
             this.zurueck();
         });
@@ -130,12 +133,17 @@ public class ItemShopMenu {
         continueButton.addEventHandler(ActionEvent.ACTION, (ActionEvent actionEvent) -> {
             this.weiterspielen();
         });
+        Button herausforderungenButton = new Button("🏆 Herausforderungen 🏆");
+        herausforderungenButton.addEventHandler(ActionEvent.ACTION, (ActionEvent actionEvent) -> {
+            this.herausforderungenZeigen();
+        });
         Button leaderboardButton = new Button("🏅 Leaderboard 🏅");
         leaderboardButton.addEventHandler(ActionEvent.ACTION, (ActionEvent actionEvent) -> {
             this.leaderboard();
         });
         grid.add(backButton, 0, 0);
         grid.add(continueButton, 1, 0);
+        grid.add(herausforderungenButton, 3, 0);
         grid.add(leaderboardButton, 4, 0);
         return grid;
     }
@@ -177,6 +185,10 @@ public class ItemShopMenu {
         });
         guiUpgradeShop(UpgradeSpielZeit.class, "Upgrade Spiel Zeit", () -> {
             UpgradeSpielZeit upgrade = new UpgradeSpielZeit(ZUFALL.nextDouble()*10+0.5);
+            return upgrade;
+        });
+        guiUpgradeShop(UpgradePraktikant.class, "Praktikant", () -> {
+            UpgradePraktikant upgrade = new UpgradePraktikant(MultiUse.zufall(1d, 10d), MultiUse.zufall(1, 5), MultiUse.zufall(5, 10));
             return upgrade;
         });
         ScrollPane scroll = new ScrollPane();
@@ -263,7 +275,7 @@ public class ItemShopMenu {
             rect.setFill(new ImagePattern(img));
             grid.add(rect, i, 1);
         }
-        HintergrundMusik[] hintergrundMusiks = HintergrundMusik.values();
+		HintergrundMusik[] hintergrundMusiks = HintergrundMusik.values();
         for(int i = 0; i < hintergrundMusiks.length; i++){
             HintergrundMusik hintergrundMusik = hintergrundMusiks[i];
             Image img = new Image("de/wolc/gui/images/" + hintergrundMusik.getGuiBild());
@@ -291,7 +303,7 @@ public class ItemShopMenu {
         }
         return scroll;
     }
-
+	
     private <T extends LocherUpgrade> void upgradesZeigen(String name, List<T> list) {
         String upgrades;
         if (list.size() != 0) {
@@ -306,6 +318,28 @@ public class ItemShopMenu {
         info.setTitle(name);
         info.setHeaderText("Upgrades die in diesem Spiel gekaufen wurden werden hier angezeigt.");
         info.setContentText(upgrades);
+        info.setResult(ButtonType.OK);
+        info.showAndWait();
+    }
+
+    private void herausforderungenZeigen() {
+        String erreicht = "";
+        String nichtErreicht = "";
+        for(Herausforderung herausforderung: Gui.getHerausforderungen()) {
+            if (herausforderung.isErreicht()) {
+                erreicht += "  " + herausforderung.toString() + "\n";
+            } else {
+                nichtErreicht += "  " + herausforderung.toString() + "\n";
+            }
+        }
+        Alert info = new Alert(AlertType.INFORMATION);
+        info.setTitle("🏆 Herausforderungen 🏆");
+        info.setHeaderText("Hier werden alle aktiven und bereits erreichten Herausforderungen angezeigt.");
+        info.setContentText(
+            "⏱ Aktive Herausforderungen: ⏱\n" + 
+            (nichtErreicht.length() == 0 ? "Keine!\n" : nichtErreicht) +
+            "\n🏆 Erreichte Herausforderungen: 🏆\n"+ 
+            (erreicht.length() == 0 ? "Keine!\n" : erreicht) );
         info.setResult(ButtonType.OK);
         info.showAndWait();
     }
@@ -331,8 +365,8 @@ public class ItemShopMenu {
         this.locherVorschauAktualisieren();
         return true;
     }
-
-        /**
+	
+     /**
      * Checks if you can buy another/a new hintergrundMusik
      * @param hintergrundMusik die neu zu kaufende hintergrundMusik
      * @return  true wenn ja, sonst false
@@ -412,12 +446,13 @@ public class ItemShopMenu {
         zuteuer.setResult(ButtonType.OK);
         zuteuer.showAndWait();
     }
-
+	
     private void speichern() {
         try {
             Leaderboard gesendet = Leaderboard.scoreSenden(this.spieler);
             this.spieler.setName(gesendet.getName());
             Gui.DB.speichern("spieler", this.spieler);
+            Gui.DB.speichern("herausforderungen", Gui.getHerausforderungen());
         } catch (Exception e) {
             this.spieler = new Spieler();
             speichernFehler = new Alert(AlertType.WARNING);

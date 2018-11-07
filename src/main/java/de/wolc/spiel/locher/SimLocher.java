@@ -26,7 +26,7 @@ public class SimLocher implements Serializable
     private Class<? extends Papier> format;
     private double cooldown;
     private ArrayList<LocherUpgrade> upgrades;
-    
+
     public SimLocher() {
         this.upgrades = new ArrayList<LocherUpgrade>();
         this.skin = LocherSkin.LOCHER_BASE;

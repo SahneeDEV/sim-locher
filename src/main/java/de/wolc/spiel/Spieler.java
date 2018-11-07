@@ -128,7 +128,7 @@ public class Spieler implements Serializable {
 
     /**
      * Muss regelmäßig von der GUI aufgerufen werden um der Logik ein "Zeitgefühl" zu verschaffen.
-     * Ruft automatisch die "tick" Methode des Lochers auf!
+     * Ruft automatisch die "tick" Methode des Lochers & der Herausforderungen auf!
      * @param deltaZeit Die vergangene Zeit in Sekunden. (Kann/sollte auch Kommazahl sein!)
      */
     public void tick(double deltaZeit) {

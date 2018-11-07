@@ -37,6 +37,15 @@ public class MultiUse{
     }
 
     /**
+     * Rundet die gegebene Sekundenzahl auf eine Nachkommastelle.
+     * @param sekunden Die Sekunden.
+     * @return Die gerundeten Sekunden.
+     */
+    public static double sekundenRunden(double sekunden) {
+        return Math.round(sekunden * 10d) / 10d;
+    }
+
+    /**
      * Wandelt eine URL in einen von Java Verwendbaren URL-String um.
      * @param Die absolute URL vom root(de/wolc/...) aus.
      * @return Der Pfad dem man AudioClips, Images übergeben kann.
@@ -79,9 +88,15 @@ public class MultiUse{
     }
 
     /**
-     * Gibt einen ZUfallswert zwischen den beiden Werten zurück.
+     * Gibt einen Zufallswert zwischen den beiden Werten zurück.
      */
     public static double zufall(double min, double max) {
         return min + (max - min) * RANDOM.nextDouble();
+    }
+    /**
+     * Gibt einen Zufallswert zwischen den beiden Werten zurück.
+     */
+    public static int zufall(int min, int max) {
+        return min + RANDOM.nextInt(max - min);
     }
 }
