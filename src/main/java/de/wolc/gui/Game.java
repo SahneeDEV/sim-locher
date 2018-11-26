@@ -87,6 +87,8 @@ public class Game extends AnimationTimer {
     private long letzteNanoZeit = 0;
     private double timeToNextPapier = 0d;
     private double timeToPapierObjekt = 0.3d;
+    private double timeToNextAnimation = 0d;
+    private double timeToNextAnimationObject = 0.3d;
     private double fps = 0d;
 
     // Papierstapel erstellen
@@ -106,6 +108,13 @@ public class Game extends AnimationTimer {
     //Hintergrundmusik
     private Media hintergrundMusikMedia;
     private MediaPlayer hintergrundMusik;
+
+    //Audioclip
+    AudioClip clip;
+
+    //"Animation" des Lochers
+    private boolean kannLochen = false;
+    private boolean IsInitialized = false;
 	
 	//Nicht auswählen des Formats verhindern
     HBox formatBox = new HBox();
@@ -379,19 +388,23 @@ public class Game extends AnimationTimer {
                     if(prozess.getWarZuGross()) {
                         this.benachrichtigungZeigen("Es sind zu viele Papiere eingelegt - [RECHTSKLICK] auf Locher zum entfernen!");
                         if(Gui.getEinstellungen().entitySoundEnabled()){
-                            AudioClip clip = new AudioClip(MultiUse.url("de/wolc/gui/sounds/punch_error.wav"));
+                            clip = new AudioClip(MultiUse.url("de/wolc/gui/sounds/punch_error.wav"));
+                            this.IsInitialized = true;
                             clip.play(100);
                         }
                     } else {
                         if(Gui.getEinstellungen().entitySoundEnabled()){
-                            AudioClip clip = new AudioClip(MultiUse.url("de/wolc/gui/sounds/punch_1.wav"));
+                            clip = new AudioClip(MultiUse.url("de/wolc/gui/sounds/punch_1.wav"));
+                            this.IsInitialized = true;
+                            this.kannLochen = true;
                             clip.play(100);
                         }
                     }
                 } else {
                     this.benachrichtigungZeigen("Noch " + (Math.round(cooldown * 10d) / 10d) + "s auf Cooldown!");
                     if(Gui.getEinstellungen().entitySoundEnabled()){
-                        AudioClip clip = new AudioClip(MultiUse.url("de/wolc/gui/sounds/punch_error.wav"));
+                        clip = new AudioClip(MultiUse.url("de/wolc/gui/sounds/punch_error.wav"));
+                        this.IsInitialized = true;
                         clip.play(100);
                     }
                 }
@@ -650,7 +663,7 @@ public class Game extends AnimationTimer {
         if (this.deltaZeit < 1d / ZIEL_FPS) {
             return;
         } 
-        // FIXME: Hässlicher Workaround, gehört eigentlich in spielStart
+        // Geht leider nicht schöner....
         if (timeToPapierObjekt < 0 && timeToPapierObjekt != -100) {
             timeToPapierObjekt = -100;
             // Für alle bereits existierende Papiere ein LocherPapierObjekt spawnen um diese anzuzeigen.
@@ -675,6 +688,29 @@ public class Game extends AnimationTimer {
                 i--;
             }
         }
+
+        if(this.IsInitialized){
+            //"Locheranimation"
+            if(this.clip.isPlaying() && this.kannLochen){
+                //Dem Locher das andere Bild setzen
+                //TODO: Bilder für Locheranimation für jeden style
+                Image locher_skin = new Image("de/wolc/gui/images/locher_gedrueckt2.png");
+                locher_new.setFill(new ImagePattern(locher_skin));
+
+            }
+            else if(!this.clip.isPlaying() && this.kannLochen){
+
+                this.kannLochen = false;
+
+                //Dem Locher wieder den normalen Skin setzen
+                String skin = spieler.getLocher().getSkin().getGuiBild();
+
+                Image locher_skin = new Image("de/wolc/gui/images/" + skin);
+                locher_new.setFill(new ImagePattern(locher_skin));
+            }
+        }
+         
+
 
         this.timeToNextPapier -= this.deltaZeit;
         this.remainingTimeAvailable -= this.deltaZeit;
