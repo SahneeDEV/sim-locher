@@ -693,8 +693,9 @@ public class Game extends AnimationTimer {
             //"Locheranimation"
             if(this.clip.isPlaying() && this.kannLochen){
                 //Dem Locher das andere Bild setzen
-                //TODO: Bilder für Locheranimation für jeden style und dynamisch auswählen, basierend auf dem skin der gerade aktiv ist.
-                Image locher_skin = new Image("de/wolc/gui/images/locher_gedrueckt2.png");
+                //TODO: Bilder für Locheranimation für jeden style designen
+                String skin = spieler.getLocher().getSkin().getAnimationBild();
+                Image locher_skin = new Image("de/wolc/gui/images/" + skin);
                 locher_new.setFill(new ImagePattern(locher_skin));
 
             }
