@@ -87,8 +87,6 @@ public class Game extends AnimationTimer {
     private long letzteNanoZeit = 0;
     private double timeToNextPapier = 0d;
     private double timeToPapierObjekt = 0.3d;
-    private double timeToNextAnimation = 0d;
-    private double timeToNextAnimationObject = 0.3d;
     private double fps = 0d;
 
     // Papierstapel erstellen
@@ -478,7 +476,9 @@ public class Game extends AnimationTimer {
             e.printStackTrace();
         }
 		//HintergrundMusik beenden
-		hintergrundMusik.stop();
+        hintergrundMusik.stop();
+        //Animation stoppen
+        this.IsInitialized = false;
         // Zum Itemshop übergehen
         ItemShopMenu menu = new ItemShopMenu();
         this.stage.setScene(menu.ItemShopStage(this.stage));
@@ -693,7 +693,7 @@ public class Game extends AnimationTimer {
             //"Locheranimation"
             if(this.clip.isPlaying() && this.kannLochen){
                 //Dem Locher das andere Bild setzen
-                //TODO: Bilder für Locheranimation für jeden style
+                //TODO: Bilder für Locheranimation für jeden style und dynamisch auswählen, basierend auf dem skin der gerade aktiv ist.
                 Image locher_skin = new Image("de/wolc/gui/images/locher_gedrueckt2.png");
                 locher_new.setFill(new ImagePattern(locher_skin));
 
