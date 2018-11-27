@@ -388,6 +388,7 @@ public class Game extends AnimationTimer {
                         if(Gui.getEinstellungen().entitySoundEnabled()){
                             clip = new AudioClip(MultiUse.url("de/wolc/gui/sounds/punch_error.wav"));
                             this.IsInitialized = true;
+                            this.kannLochen = false;
                             clip.play(100);
                         }
                     } else {
@@ -403,6 +404,7 @@ public class Game extends AnimationTimer {
                     if(Gui.getEinstellungen().entitySoundEnabled()){
                         clip = new AudioClip(MultiUse.url("de/wolc/gui/sounds/punch_error.wav"));
                         this.IsInitialized = true;
+                        this.kannLochen = false;
                         clip.play(100);
                     }
                 }
@@ -689,17 +691,17 @@ public class Game extends AnimationTimer {
             }
         }
 
+        //Start der Locheranimation
         if(this.IsInitialized){
             //"Locheranimation"
             if(this.clip.isPlaying() && this.kannLochen){
                 //Dem Locher das andere Bild setzen
-                //TODO: Bilder für Locheranimation für jeden style designen
                 String skin = spieler.getLocher().getSkin().getAnimationBild();
                 Image locher_skin = new Image("de/wolc/gui/images/" + skin);
                 locher_new.setFill(new ImagePattern(locher_skin));
 
             }
-            else if(!this.clip.isPlaying() && this.kannLochen){
+            else if(!this.clip.isPlaying() && this.kannLochen || !this.kannLochen){
 
                 this.kannLochen = false;
 
@@ -709,6 +711,7 @@ public class Game extends AnimationTimer {
                 Image locher_skin = new Image("de/wolc/gui/images/" + skin);
                 locher_new.setFill(new ImagePattern(locher_skin));
             }
+            
         }
          
 
