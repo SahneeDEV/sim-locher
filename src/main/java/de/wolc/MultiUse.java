@@ -1,11 +1,13 @@
 package de.wolc;
 
-import java.awt.GraphicsEnvironment;
+//import java.awt.GraphicsEnvironment;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Random;
 import java.util.regex.Pattern;
-import java.awt.GraphicsDevice;
+import java.awt.Dimension;
+//import java.awt.GraphicsDevice;
+import java.awt.Toolkit;
 
 
 public class MultiUse{
@@ -19,6 +21,7 @@ public class MultiUse{
      * @return int[width_screen1, height_screen1, width_screen2, height_screen2,...]
      */
     public int[] GetScreenSize(){
+        /* Buggy Code
         //Define 
         GraphicsEnvironment graphEnv = GraphicsEnvironment.getLocalGraphicsEnvironment();
         GraphicsDevice[] graphDev = graphEnv.getScreenDevices();
@@ -31,7 +34,15 @@ public class MultiUse{
             screenSizes[count] = graphDev[i].getDisplayMode().getWidth();
             screenSizes[count + 1] = graphDev[i].getDisplayMode().getHeight();
             count = count + 2;
-        }
+        }*/
+
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+
+        int[] screenSizes = new int[2];
+        screenSizes[0] = screenSize.width;
+        screenSizes[1] = screenSize.height;
+
+
         
         return screenSizes;
     }
