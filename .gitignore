@@ -4,6 +4,8 @@
 *.ctxt
 #Photoshop originaldateien
 *.psd
+#Affinity originaldateien
+*.afphoto
 # JavaDoc
 doc/
 # Compiler meta
