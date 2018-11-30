@@ -11,7 +11,7 @@ public enum LocherSkin {
     LOCHER_BLUE("locher_blue.png", "Bright Blue", new Preis(Farbe.BLAU, 30), "locher_blue_gedrueckt.png"),
     LOCHER_COALLBLUE("locher_coallblue.png", "Eau de Toilette", new Preis(Farbe.BLAU, 15, Farbe.WEISS, 15), "locher_coallblue_gedrueckt.png"),
     LOCHER_COPPER("locher_copper.png", "Elektroschock Locher", new Preis(Farbe.ORANGE, 20, Farbe.WEISS, 10), "locher_copper_gedrueckt.png"),
-    LOCHER_DEUTSCHLAND("locher_deutschland.png", "Das Vaterland", new Preis(Farbe.BLAU, 30, Farbe.ROT, 30, Farbe.ORANGE, 30), "locher_deutschland_gedrueckt.png"),
+    LOCHER_DEUTSCHLAND("locher_deutschland.png", "Deutschlandlocher", new Preis(Farbe.BLAU, 30, Farbe.ROT, 30, Farbe.ORANGE, 30), "locher_deutschland_gedrueckt.png"),
     LOCHER_GOLD("locher_gold.png", "The-Million-Dollar-Hole-Puncher", new Preis(Farbe.ORANGE, 100), "locher_gold_gedrueckt.png"),
     LOCHER_GREEN("locher_green.png", "Gumball Green", new Preis(Farbe.GRUEN, 30), "locher_green_gedrueckt.png"),
     LOCHER_GRAY("locher_grey.png", "Gross Gray", new Preis(Farbe.WEISS, 30), "locher_grey_gedrueckt.png"),
