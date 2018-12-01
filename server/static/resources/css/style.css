@@ -1,0 +1,43 @@
+body {
+    background-color: gray;
+    font-family: 'Sedgwick Ave', cursive;
+}
+
+p {
+    color: white;
+    text-align: center;
+    text-shadow: 2px 2px 4px black;
+    font-size: 15px;
+
+}
+
+h1 {
+    text-align: center;
+    font-style: italic;
+}
+
+@media all and (max-width:  850px) {
+    img {
+        display: none;
+    }
+}
+
+img {
+    height: 50%;
+    z-index: -1;
+}
+
+#number1 {
+    color: gold;
+    font-size: 21px;
+}
+
+#number2 {
+    color: silver;
+    font-size: 19px;
+}
+
+#number3 {
+    color: #9b2903;
+    font-size: 17px;
+}

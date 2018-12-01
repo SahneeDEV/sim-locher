@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>sim-locher Leaderboard</title>
+    <link rel="icon" type="img" href="./public/img/locher_icon.ico" />
+    <link rel="stylesheet" type="text/css" href="./resources/css/style.css" />
+    <link href="https://fonts.googleapis.com/css?family=Sedgwick+Ave" rel="stylesheet">
+</head>
+
+<body>
+    <h1>👑Leaderboard:👑</h1>
+    <img src="./public/img/locher_animated.gif" alt="Cooler Locher" style="left: 20px; position: fixed"/>
+    <img src="./public/img/locher_animated.gif" alt="Cooler Locher" style="right: 20px; position: fixed; transform: rotateY(180deg);"/>
+    <script>
+        function getLeaderboard() {
+            //request the leaderboard
+            fetch("/api/leaderboard")
+            .then(response => response.text())
+            .then(str => (new window.DOMParser()).parseFromString(str, "text/xml"))
+            .then(data => {
+                var children_1 = data.children[0];
+                var counter = 0;
+                for (i = 0; i < children_1.children.length; i++) {
+                    var children_2 = children_1.children[i];
+                        
+                    var children_3_name = children_2.children[0];
+                    var children_3_value = children_2.children[1];
+
+                    counter++;
+                    var counter_text = document.createTextNode(counter + ". ")
+                    var name = document.createTextNode(children_3_name.innerHTML + ": ");
+                    var score = document.createTextNode(children_3_value.innerHTML);
+
+
+
+                    var para = document.createElement("P");
+                    
+                    para.appendChild(counter_text);
+                    para.appendChild(name); 
+                    para.appendChild(score);
+
+                    
+                    if (counter == 1) {
+                        para.setAttribute("id", "number1");
+                    }
+                    else if (counter == 2) {
+                        para.setAttribute("id", "number2");
+                    }
+                    else if (counter == 3) {
+                        para.setAttribute("id", "number3");
+                    }
+
+                    document.body.appendChild(para);
+                    
+                }
+            })
+
+        }
+        getLeaderboard();
+    </script>
+    
+
+</body>
+
+</html>
