@@ -18,7 +18,7 @@
     <script>
         function getLeaderboard() {
             //request the leaderboard
-            fetch("/api/leaderboard")
+            fetch("/api/leaderboard/top/100")
             .then(response => response.text())
             .then(str => (new window.DOMParser()).parseFromString(str, "text/xml"))
             .then(data => {
