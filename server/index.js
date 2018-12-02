@@ -4,6 +4,7 @@ const mongoose = require("mongoose");
 const bodyParser = require("express-xml-bodyparser");
 const BadWordFilter = require("bad-words");
 const xml2js = require("xml2js");
+const path = require("path");
 
 const js2xml = new xml2js.Builder();
 
@@ -51,6 +52,7 @@ mongoose.connection.once("open", () => {
   console.log(`Datenbank verbunden`);
   express()
     .use(bodyParser({ trim: true }))
+    .use(express.static(path.join(__dirname, "static")))
     .use((req, res, next) => {
       res.xml = payload => res
         .contentType("text/xml")
@@ -59,8 +61,8 @@ mongoose.connection.once("open", () => {
     })
 
     // Weiterleitung auf GitHub für index Dokument
-    .get("/", (req, res) => {
-      return res.redirect("https://github.com/PatrickSachs/sim-locher/");
+    .get("/github", (req, res) => {
+      return res.redirect("https://github.com/PatrickSachs/sim-locher/releases/latest");
     })
 
     // Score per POST speichern. (POST /ap/leaderboard { "name": "Spielername", "punkte": 3431 })

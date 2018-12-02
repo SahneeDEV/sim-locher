@@ -20,6 +20,7 @@ Je mehr Konfetti man erzeugt desto bessere Upgrades können für den eigenen Loc
 #### Verwenden
 
 Der Leaderboard REST Server ist unter https://sim-locher.herokuapp.com/ erreichbar.
+Es zeigt im Moment ein Leaderboard an. Richtig Nice. 
 
 Folgende HTTP Requests können verwendet werden(Alle Requests verwenden XML als Payload Format):
 
