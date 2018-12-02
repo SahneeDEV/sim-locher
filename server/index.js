@@ -107,7 +107,7 @@ mongoose.connection.once("open", () => {
     })
 
     .get("/api/leaderboard", (req, res) => {
-      Leaderboard.find((err, leaderboard) => {
+      Leaderboard.find({}).sort({ punkte: "descending" }).exec((err, leaderboard) => {
         if (err) {
           console.error(err);
           return res.xml({ fehler: err.errmsg }).status(500).end();
