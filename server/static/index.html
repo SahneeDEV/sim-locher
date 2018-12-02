@@ -57,13 +57,22 @@
                     document.body.appendChild(para);
                     
                 }
+
+                var urlAddition = window.location.search;
+                if (urlAddition == "?nobutton") {
+                    var footer = document.getElementsByClassName("footer");
+                    footer[0].classList.add("notShow");
+                }
+            
             })
 
         }
         getLeaderboard();
     </script>
-    
-
 </body>
+
+<div class="footer">
+    <a href="/github">Download des Spiels</a>
+</div>
 
 </html>

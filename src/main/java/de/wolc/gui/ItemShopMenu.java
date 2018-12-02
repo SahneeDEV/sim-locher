@@ -139,7 +139,11 @@ public class ItemShopMenu {
         });
         Button leaderboardButton = new Button("🏅 Leaderboard 🏅");
         leaderboardButton.addEventHandler(ActionEvent.ACTION, (ActionEvent actionEvent) -> {
-            this.leaderboard();
+            Stage stageLeaderboard = new Stage();
+            LeaderboardMenu sm = new LeaderboardMenu();
+            stageLeaderboard.setScene(sm.LeaderboardScene(stageLeaderboard));
+            stageLeaderboard.centerOnScreen();
+            stageLeaderboard.show();
         });
         grid.add(backButton, 0, 0);
         grid.add(continueButton, 1, 0);
