@@ -15,7 +15,7 @@ public enum LocherSkin {
     LOCHER_GOLD("locher_gold.png", "The-Million-Dollar-Hole-Puncher", new Preis(Farbe.ORANGE, 100), "locher_gold_gedrueckt.png"),
     LOCHER_GREEN("locher_green.png", "Gumball Green", new Preis(Farbe.GRUEN, 30), "locher_green_gedrueckt.png"),
     LOCHER_GRAY("locher_grey.png", "Gross Gray", new Preis(Farbe.WEISS, 30), "locher_grey_gedrueckt.png"),
-    LOCHER_HFLAGGE("locher_hflagge.png", "Toleranzlocher", new Preis(Farbe.PINK, 100), "locher_hflagge_gedrueckt.png"),
+    LOCHER_HFLAGGE("locher_hflagge.png", "Regenbogenlocher", new Preis(Farbe.PINK, 100), "locher_hflagge_gedrueckt.png"),
     LOCHER_KLETTBLATT("locher_kleeblatt.png", "Glückslocher", new Preis(Farbe.GRUEN, 25, Farbe.BLAU, 5), "locher_kleeblatt_gedrueckt.png"),
     LOCHER_LIGHTPURPLE("locher_lightpurple.png", "Lätschernes Lila", new Preis(Farbe.PINK, 15, Farbe.WEISS, 15), "locher_lightpurple_gedrueckt.png"),
     LOCHER_LILA("locher_lila.png", "Lustiges Lila", new Preis(Farbe.PINK, 20, Farbe.BLAU, 10), "locher_lila_gedrueckt.png"),

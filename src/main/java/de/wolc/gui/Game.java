@@ -460,10 +460,9 @@ public class Game extends AnimationTimer {
             }
         }
         // Spiel & Herausforderungen speichern
+        // Leaderboard ist deaktiviert (Server nicht mehr erreichbar), daher wird nicht mehr versucht
+        // den Score zu senden. Das lokale Speichern hängt nicht mehr vom Leaderboard ab.
         try {
-            // Name ändern um den Bad Word filter vom Server anzuwenden.
-            Leaderboard gesendet = Leaderboard.scoreSenden(this.spieler);
-            this.spieler.setName(gesendet.getName());
             Gui.DB.speichern("spieler", this.spieler);
             Gui.DB.speichern("herausforderungen", Gui.getHerausforderungen());
         } catch (Exception e) {

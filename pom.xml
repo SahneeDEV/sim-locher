@@ -6,10 +6,10 @@
 
   <groupId>de.wolc</groupId>
   <artifactId>wolc</artifactId>
-  <version>1.5.4</version>
+  <version>1.6.0</version>
 
   <name>wolc</name>
-  <url>https://github.com/PatrickSachs/sim-locher</url>
+  <url>https://github.com/SahneeDEV/sim-locher</url>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -95,4 +95,31 @@
       </plugins>
     </pluginManagement>
   </build>
+
+  <!-- Aktiviert nur mit -Djavafx.extdirs=... (z.B. beim Bauen in einem Docker Container
+       ohne Oracle JDK 8, wo JavaFX separat als OpenJFX Paket vorliegt). Ohne dieses Property
+       hat dieses Profile keinen Einfluss auf den normalen Build. -->
+  <profiles>
+    <profile>
+      <id>docker-javafx</id>
+      <activation>
+        <property>
+          <name>javafx.extdirs</name>
+        </property>
+      </activation>
+      <build>
+        <plugins>
+          <plugin>
+            <artifactId>maven-compiler-plugin</artifactId>
+            <configuration>
+              <compilerArgs>
+                <arg>-extdirs</arg>
+                <arg>${javafx.extdirs}</arg>
+              </compilerArgs>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
 </project>

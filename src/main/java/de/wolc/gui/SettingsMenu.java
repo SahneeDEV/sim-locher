@@ -25,7 +25,7 @@ public class SettingsMenu{
     //variables
     private final String[] baseSettingNames = new String[] {"Very Low", "Low", "Medium", "High", "Ultra", "MSAA 1x", "MSAA 2x", "MSAA 4x", "FXAA 1x", "FXAA 2x", "FXAA 4x", "FXAA 8x", "FXAA 16x"};
     private final String windowTitle = "World of Locher Craft - Einstellungen";
-    private final String creditsString = "Patrick Sachs, Jakob Heubl, Lukas Neubauer";
+    private final String creditsString = "Kaylee Sachs, Jakob Heubl, Lukas Neubauer";
 
 
     public Scene SettingsScene(Stage stage){

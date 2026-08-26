@@ -2,11 +2,30 @@
   "files.exclude": {
     "**/*.class": true,
     "**/*.ctxt": true,
-    "**/target": true,
     "**/*.bluej": true
   },
   "editor.tabSize": 4,
   "editor.rulers": [120],
   "java.configuration.updateBuildConfiguration": "automatic",
-  "git.enableCommitSigning": false
+  "git.enableCommitSigning": false,
+  "workbench.colorCustomizations": {
+    "activityBar.background": "#14350B",
+    "activityBar.activeBackground": "#14350B",
+    "activityBar.activeBorder": "#2C0B35",
+    "activityBar.foreground": "#F6FDF4",
+    "activityBar.inactiveForeground": "#F6FDF499",
+    "activityBarBadge.background": "#2C0B35",
+    "activityBarBadge.foreground": "#F6FDF4",
+    "titleBar.activeBackground": "#1B4A10",
+    "titleBar.activeForeground": "#F6FDF4",
+    "titleBar.inactiveBackground": "#1B4A1099",
+    "titleBar.inactiveForeground": "#F6FDF499",
+    "sash.hoverBorder": "#14350B",
+    "commandCenter.border": "#F6FDF499",
+    "statusBar.background": "#1B4A10",
+    "statusBar.foreground": "#F6FDF4",
+    "statusBarItem.hoverBackground": "#19420E",
+    "statusBarItem.remoteBackground": "#1B4A10",
+    "statusBarItem.remoteForeground": "#F6FDF4"
+  }
 }

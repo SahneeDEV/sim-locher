@@ -137,13 +137,15 @@ public class ItemShopMenu {
         herausforderungenButton.addEventHandler(ActionEvent.ACTION, (ActionEvent actionEvent) -> {
             this.herausforderungenZeigen();
         });
+        // Leaderboard ist deaktiviert, der Server dahinter ist nicht mehr erreichbar.
         Button leaderboardButton = new Button("🏅 Leaderboard 🏅");
         leaderboardButton.addEventHandler(ActionEvent.ACTION, (ActionEvent actionEvent) -> {
-            Stage stageLeaderboard = new Stage();
-            LeaderboardMenu sm = new LeaderboardMenu();
-            stageLeaderboard.setScene(sm.LeaderboardScene(stageLeaderboard));
-            stageLeaderboard.centerOnScreen();
-            stageLeaderboard.show();
+            Alert nichtVerfuegbar = new Alert(AlertType.INFORMATION);
+            nichtVerfuegbar.setTitle("🏅 Leaderboard 🏅");
+            nichtVerfuegbar.setHeaderText("Das Leaderboard ist derzeit nicht verfügbar.");
+            nichtVerfuegbar.setContentText("Der Leaderboard-Server ist offline.");
+            nichtVerfuegbar.setResult(ButtonType.OK);
+            nichtVerfuegbar.showAndWait();
         });
         grid.add(backButton, 0, 0);
         grid.add(continueButton, 1, 0);
@@ -451,10 +453,10 @@ public class ItemShopMenu {
         zuteuer.showAndWait();
     }
 	
+    // Leaderboard ist deaktiviert (Server nicht mehr erreichbar), daher wird nicht mehr versucht
+    // den Score zu senden. Das lokale Speichern hängt nicht mehr vom Leaderboard ab.
     private void speichern() {
         try {
-            Leaderboard gesendet = Leaderboard.scoreSenden(this.spieler);
-            this.spieler.setName(gesendet.getName());
             Gui.DB.speichern("spieler", this.spieler);
             Gui.DB.speichern("herausforderungen", Gui.getHerausforderungen());
         } catch (Exception e) {

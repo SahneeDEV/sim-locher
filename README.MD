@@ -1,6 +1,6 @@
 # sim-locher
 
-[![CircleCI](https://circleci.com/gh/PatrickSachs/sim-locher.svg?style=svg)](https://circleci.com/gh/PatrickSachs/sim-locher)
+[![CircleCI](https://circleci.com/gh/SahneeDEV/sim-locher.svg?style=svg)](https://circleci.com/gh/SahneeDEV/sim-locher)
 
 ## Was ist das?
 

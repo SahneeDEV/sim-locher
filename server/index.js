@@ -62,7 +62,7 @@ mongoose.connection.once("open", () => {
 
     // Weiterleitung auf GitHub für index Dokument
     .get("/github", (req, res) => {
-      return res.redirect("https://github.com/PatrickSachs/sim-locher/releases/latest");
+      return res.redirect("https://github.com/SahneeDEV/sim-locher/releases/latest");
     })
 
     // Score per POST speichern. (POST /ap/leaderboard { "name": "Spielername", "punkte": 3431 })
